@@ -2,16 +2,11 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "EnhancedInputSubsystems.h"
 #include "PawsInTheShell/Public/PITS_PlayerController.h"
-#include "PawsInTheShell/Public/PITS_PlayerCameraManager.h"
+#include "EnhancedInputSubsystems.h"
+#include "PawsInTheShell/Public/Utils/PITS_Logs.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
-
-APITS_PlayerController::APITS_PlayerController()
-{
-	PlayerCameraManagerClass = APITS_PlayerCameraManager::StaticClass();
-}
 
 void APITS_PlayerController::SetupInputComponent()
 {
@@ -23,11 +18,11 @@ void APITS_PlayerController::SetupInputComponent()
 		// Add Input Mapping Context
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		{
-			for (UInputMappingContext* CurrentContext : DefaultMappingContexts)
+			for (const UInputMappingContext* CurrentContext : DefaultMappingContexts)
 			{
 				Subsystem->AddMappingContext(CurrentContext, 0);
+				UE_LOG(LogPITS, Log, TEXT("'%s' Added Input Mapping Context '%s'"), *GetNameSafe(this), *GetNameSafe(CurrentContext));
 			}
 		}
 	}
-
 }

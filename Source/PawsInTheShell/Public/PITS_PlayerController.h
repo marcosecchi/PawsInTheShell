@@ -17,9 +17,6 @@ class PAWSINTHESHELL_API APITS_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
-	APITS_PlayerController();
-
 protected:
 	/** Input Mapping Contexts */
 	UPROPERTY(EditAnywhere, Category="Input|Input Mappings")
