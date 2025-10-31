@@ -17,7 +17,7 @@ APITS_Character::APITS_Character()
 	PrimaryActorTick.bCanEverTick = false;
 
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(35.f, 90.0f);
+	GetCapsuleComponent()->InitCapsuleSize(50.f, 140.0f);
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
