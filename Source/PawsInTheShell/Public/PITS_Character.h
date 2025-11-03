@@ -18,9 +18,6 @@ class PAWSINTHESHELL_API APITS_Character : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
-	APITS_Character();
-
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
@@ -28,6 +25,9 @@ public:
 	/** Camera boom */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> CameraBoom;
+
+public:
+	APITS_Character();
 
 protected:
 
