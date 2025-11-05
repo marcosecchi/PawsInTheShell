@@ -1,27 +1,33 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Mastering Unreal Engine 5 Game Development with C++ Scripting
+// Packt Publishing 2025
+// Author: Marco Secchi (https://github.com/marcosecchi)
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PITS_Projectile.generated.h"
+#include "PITS_BaseProjectile.generated.h"
 
-class USphereComponent;
+class UCapsuleComponent;
 class UProjectileMovementComponent;
 class UDamageType;
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_Projectile : public AActor
+class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor
 {
 	GENERATED_BODY()
 
 	/** Provides collision detection for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USphereComponent> CollisionComponent;
+	TObjectPtr<UCapsuleComponent> CollisionComponent;
 
 	/** Handles movement for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+
+	/** Handles movement for the projectile */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMeshComponent> Mesh;
 
 protected:
 	/** Loudness of the AI perception noise done by this projectile on hit */
@@ -73,7 +79,7 @@ protected:
 
 public:
 	// Sets default values for this actor's properties
-	APITS_Projectile();
+	APITS_BaseProjectile();
 
 protected:
 	virtual void BeginPlay() override;

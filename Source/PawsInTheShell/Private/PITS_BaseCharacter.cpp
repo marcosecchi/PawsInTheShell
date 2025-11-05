@@ -2,7 +2,7 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PawsInTheShell/Public/PITS_Character.h"
+#include "PawsInTheShell/Public/PITS_BaseCharacter.h"
 
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
@@ -12,7 +12,7 @@
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
 
 // Sets default values
-APITS_Character::APITS_Character()
+APITS_BaseCharacter::APITS_BaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -51,7 +51,53 @@ APITS_Character::APITS_Character()
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 }
 
-void APITS_Character::Move(const FInputActionValue& Value)
+void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	if (const FCharacterDataTableRow* Data = CharacterStatsType.GetRow<FCharacterDataTableRow>(FString()))
+	{
+		GetCharacterMovement()->JumpZVelocity = Data->JumpZVelocity;
+		GetCharacterMovement()->AirControl = Data->AirControl;
+		GetCharacterMovement()->MaxWalkSpeed = Data->MaxWalkSpeed;
+		GetCharacterMovement()->BrakingDecelerationWalking = Data->BrakingDecelerationWalking;
+		GetCharacterMovement()->BrakingDecelerationFalling = Data->BrakingDecelerationFalling;
+
+		MaxHealth = Data->MaxHealth;
+		CurrentHealth = FMath::Clamp(CurrentHealth, 1.0f, MaxHealth);
+		HealthRegenerationRate = FMath::Clamp(HealthRegenerationRate, 0.0f, MaxHealth);
+
+		CharacterName = Data->CharacterName;
+	}
+}
+
+void APITS_BaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (HealthRegenerationRate >= 0.0f)
+	{
+		// start the health regeneration timer
+		GetWorld()->GetTimerManager().SetTimer(RegenerationTimer, this, &APITS_BaseCharacter::RegenerateHealth, 1.0f, true);
+	}
+}
+
+void APITS_BaseCharacter::RegenerateHealth()
+{
+	UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health: %f + %f"), *GetNameSafe(this), CurrentHealth, HealthRegenerationRate);
+	CurrentHealth = FMath::Clamp(CurrentHealth + HealthRegenerationRate, 0.0f, MaxHealth);
+}
+
+
+void APITS_BaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	// clear the respawn timer
+	GetWorld()->GetTimerManager().ClearTimer(RegenerationTimer);
+}
+
+void APITS_BaseCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	const FVector2D MovementVector = Value.Get<FVector2D>();
@@ -60,7 +106,7 @@ void APITS_Character::Move(const FInputActionValue& Value)
 	DoMove(MovementVector.X, MovementVector.Y);
 }
 
-void APITS_Character::Look(const FInputActionValue& Value)
+void APITS_BaseCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -69,7 +115,7 @@ void APITS_Character::Look(const FInputActionValue& Value)
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
 }
 
-void APITS_Character::DoMove(float Right, float Forward)
+void APITS_BaseCharacter::DoMove(float Right, float Forward)
 {
 	if (GetController() != nullptr)
 	{
@@ -89,7 +135,7 @@ void APITS_Character::DoMove(float Right, float Forward)
 	}
 }
 
-void APITS_Character::DoLook(float Yaw, float Pitch)
+void APITS_BaseCharacter::DoLook(float Yaw, float Pitch)
 {
 	if (GetController() != nullptr)
 	{
@@ -99,40 +145,40 @@ void APITS_Character::DoLook(float Yaw, float Pitch)
 	}
 }
 
-void APITS_Character::DoJumpStart()
+void APITS_BaseCharacter::DoJumpStart()
 {
 	Jump();
 }
 
-void APITS_Character::DoJumpEnd()
+void APITS_BaseCharacter::DoJumpEnd()
 {
 	StopJumping();
 }
 
-void APITS_Character::DoShoot()
+void APITS_BaseCharacter::DoShoot()
 {
 }
 
-void APITS_Character::DoChangeWeapon()
+void APITS_BaseCharacter::DoChangeWeapon()
 {
 }
 
 // Called to bind functionality to input
-void APITS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APITS_Character::DoJumpStart);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &APITS_Character::DoJumpEnd);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APITS_BaseCharacter::DoJumpStart);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &APITS_BaseCharacter::DoJumpEnd);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APITS_Character::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Move);
 
 		// Looking/Aiming
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APITS_Character::Look);
-		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &APITS_Character::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Look);
+		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Look);
 	}
 	else
 	{

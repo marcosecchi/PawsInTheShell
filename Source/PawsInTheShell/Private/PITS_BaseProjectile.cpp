@@ -1,9 +1,10 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Mastering Unreal Engine 5 Game Development with C++ Scripting
+// Packt Publishing 2025
+// Author: Marco Secchi (https://github.com/marcosecchi)
 
+#include "PITS_BaseProjectile.h"
 
-#include "PITS_Projectile.h"
-
-#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,31 +16,36 @@
 #include "TimerManager.h"
 
 // Sets default values
-APITS_Projectile::APITS_Projectile()
+APITS_BaseProjectile::APITS_BaseProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
 	// create the collision component and assign it as the root
-	RootComponent = CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Component"));
+	RootComponent = CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision Component"));
 
-	CollisionComponent->SetSphereRadius(16.0f);
+	CollisionComponent->SetCapsuleSize(32.0f, 8.0f);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	CollisionComponent->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No;
 
+	// create the mesh component and attach it to the root component
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	// create the projectile movement component. No need to attach it because it's not a Scene Component
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
 
 	ProjectileMovement->InitialSpeed = 3000.0f;
 	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bShouldBounce = true;
-
+	
 	// set the default damage type
 	HitDamageType = UDamageType::StaticClass();
 }
 
 // Called when the game starts or when spawned
-void APITS_Projectile::BeginPlay()
+void APITS_BaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -47,7 +53,7 @@ void APITS_Projectile::BeginPlay()
 	CollisionComponent->IgnoreActorWhenMoving(GetInstigator(), true);
 }
 
-void APITS_Projectile::EndPlay(EEndPlayReason::Type EndPlayReason)
+void APITS_BaseProjectile::EndPlay(EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
@@ -55,7 +61,7 @@ void APITS_Projectile::EndPlay(EEndPlayReason::Type EndPlayReason)
 	GetWorld()->GetTimerManager().ClearTimer(DestructionTimer);
 }
 
-void APITS_Projectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
+void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
 	bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// ignore if we've already hit something else
@@ -91,7 +97,7 @@ void APITS_Projectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Othe
 	// check if we should schedule deferred destruction of the projectile
 	if (DeferredDestructionTime > 0.0f)
 	{
-		GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &APITS_Projectile::OnDeferredDestruction, DeferredDestructionTime, false);
+		GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &APITS_BaseProjectile::OnDeferredDestruction, DeferredDestructionTime, false);
 
 	} else {
 
@@ -99,7 +105,7 @@ void APITS_Projectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Othe
 		Destroy();
 	}}
 
-void APITS_Projectile::ExplosionCheck(const FVector& ExplosionCenter)
+void APITS_BaseProjectile::ExplosionCheck(const FVector& ExplosionCenter)
 {
 	// do a sphere overlap check look for nearby actors to damage
 	TArray<FOverlapResult> Overlaps;
@@ -141,7 +147,7 @@ void APITS_Projectile::ExplosionCheck(const FVector& ExplosionCenter)
 			
 	}}
 
-void APITS_Projectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation,
+void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation,
 	const FVector& HitDirection)
 {
 	// have we hit a character?
@@ -162,7 +168,7 @@ void APITS_Projectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp
 		HitComp->AddImpulseAtLocation(HitDirection * PhysicsForce, HitLocation);
 	}}
 
-void APITS_Projectile::OnDeferredDestruction()
+void APITS_BaseProjectile::OnDeferredDestruction()
 {
 	// destroy this actor
 	Destroy();
