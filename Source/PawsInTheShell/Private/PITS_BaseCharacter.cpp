@@ -75,7 +75,7 @@ void APITS_BaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HealthRegenerationRate >= 0.0f)
+	if (HealthRegenerationRate > 0.0f)
 	{
 		// start the health regeneration timer
 		GetWorld()->GetTimerManager().SetTimer(RegenerationTimer, this, &APITS_BaseCharacter::RegenerateHealth, 1.0f, true);
