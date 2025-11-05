@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
+#include "PITS_WorldSubsystem.h"
 
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
@@ -115,7 +116,7 @@ void APITS_BaseCharacter::Look(const FInputActionValue& Value)
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
 }
 
-void APITS_BaseCharacter::DoMove(float Right, float Forward)
+void APITS_BaseCharacter::DoMove(const float Right, const float Forward)
 {
 	if (GetController() != nullptr)
 	{
@@ -135,7 +136,7 @@ void APITS_BaseCharacter::DoMove(float Right, float Forward)
 	}
 }
 
-void APITS_BaseCharacter::DoLook(float Yaw, float Pitch)
+void APITS_BaseCharacter::DoLook(const float Yaw, const float Pitch)
 {
 	if (GetController() != nullptr)
 	{
@@ -159,8 +160,23 @@ void APITS_BaseCharacter::DoShoot()
 {
 }
 
-void APITS_BaseCharacter::DoChangeWeapon()
+void APITS_BaseCharacter::DoChangeCharacter()
 {
+	// Check if actor is moving or falling
+	if (GetVelocity().Size() > KINDA_SMALL_NUMBER)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while moving or jumping!"), *GetNameSafe(this));
+		return;
+	}
+	if (!bInSafeZone)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while outside safe zone!"), *GetNameSafe(this));
+		return;
+	}
+	if (UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	{
+		WorldSubsystem->ChangeCharacter();
+	}
 }
 
 // Called to bind functionality to input
@@ -179,6 +195,10 @@ void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		// Looking/Aiming
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Look);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Look);
+
+		// Additional bindings
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::DoShoot);
+		EnhancedInputComponent->BindAction(ChangeCharacterAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::DoChangeCharacter);
 	}
 	else
 	{

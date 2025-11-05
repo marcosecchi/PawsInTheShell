@@ -24,6 +24,4 @@ protected:
 
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
-
-	
 };

@@ -129,6 +129,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	UInputAction* ChangeCharacterAction;
 #pragma endregion
+
+	UPROPERTY()
+	bool bInSafeZone = false;
 	
 	/** Called from Input Actions for movement input */
 	void Move(const FInputActionValue& Value);
@@ -152,14 +155,15 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
-	/** Handles jump end inputs from either controls or UI interfaces */
+	/** Handles shoot inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoShoot();
 
+	/** Handles change character inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoChangeWeapon();
+	virtual void DoChangeCharacter();
 
-#pragma region Property Getters
+#pragma region Property Getters and Setters
 public:
 	
 	/** Returns the camera component **/
@@ -176,5 +180,14 @@ public:
 
 	/* Returns the maximum health of the character */
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+
+	/* Returns if the character has reached a safe zone */
+	UFUNCTION(BlueprintCallable, Category="Character")
+	FORCEINLINE bool IsInSafeZone() const { return bInSafeZone; }
+
+	/* Sets if the character has reached a safe zone */
+	UFUNCTION(BlueprintCallable, Category="Character")
+	FORCEINLINE void SetInSafeZone(const bool bNewInSafeZone) { bInSafeZone = bNewInSafeZone; }
+	
 #pragma endregion 
 };
