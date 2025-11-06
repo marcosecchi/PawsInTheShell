@@ -91,13 +91,8 @@ protected:
 	/** Timer to regenerate health */
 	FTimerHandle RegenerationTimer;
 
-	void RegenerateHealth();
-
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
-
-	/** Gameplay Initialization*/
-	virtual void BeginPlay() override;
 
 	/** Gameplay cleanup */
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -189,12 +184,15 @@ public:
 #pragma region HealthInterface Implementations
 public:
 	virtual bool IsDead_Implementation() const override;
-
 	virtual float GetCurrentHealth_Implementation() const override;
-
 	virtual float GetMaxHealth_Implementation() const override;
-
 	virtual float GetHealthPercentage_Implementation() const override;
+	virtual bool CanRegenerate_Implementation() override;
+	virtual void StartRegenerating_Implementation() override;
+	virtual void StopRegenerating_Implementation() override;
+
+	void RegenerateHealth();
+
 #pragma endregion
 
 };

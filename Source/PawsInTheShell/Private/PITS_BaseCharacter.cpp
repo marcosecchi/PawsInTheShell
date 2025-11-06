@@ -72,30 +72,11 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 	}
 }
 
-void APITS_BaseCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (HealthRegenerationRate > 0.0f)
-	{
-		// start the health regeneration timer
-		GetWorld()->GetTimerManager().SetTimer(RegenerationTimer, this, &APITS_BaseCharacter::RegenerateHealth, 1.0f, true);
-	}
-}
-
-void APITS_BaseCharacter::RegenerateHealth()
-{
-	UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health: %f + %f"), *GetNameSafe(this), CurrentHealth, HealthRegenerationRate);
-	CurrentHealth = FMath::Clamp(CurrentHealth + HealthRegenerationRate, 0.0f, MaxHealth);
-}
-
-
 void APITS_BaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	// clear the respawn timer
-	GetWorld()->GetTimerManager().ClearTimer(RegenerationTimer);
+	StopRegenerating_Implementation();
 }
 
 void APITS_BaseCharacter::Move(const FInputActionValue& Value)
@@ -224,5 +205,30 @@ float APITS_BaseCharacter::GetMaxHealth_Implementation() const
 float APITS_BaseCharacter::GetHealthPercentage_Implementation() const
 {
 	return (MaxHealth > 0.0f) ? (CurrentHealth / MaxHealth) : 0.0f;
+}
+
+bool APITS_BaseCharacter::CanRegenerate_Implementation()
+{
+	return HealthRegenerationRate > 0.0f && !IsDead_Implementation() && CurrentHealth < MaxHealth;
+}
+
+void APITS_BaseCharacter::StartRegenerating_Implementation()
+{
+	if (CanRegenerate_Implementation() && !GetWorld()->GetTimerManager().IsTimerActive(RegenerationTimer))
+	{
+		GetWorld()->GetTimerManager().SetTimer(RegenerationTimer, this, &APITS_BaseCharacter::RegenerateHealth, 1.0f, true);
+	}
+}
+
+void APITS_BaseCharacter::RegenerateHealth()
+{
+	UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health: %f + %f"), *GetNameSafe(this), CurrentHealth, HealthRegenerationRate);
+	CurrentHealth = FMath::Clamp(CurrentHealth + HealthRegenerationRate, 0.0f, MaxHealth);
+}
+
+void APITS_BaseCharacter::StopRegenerating_Implementation()
+{
+	// clear the regeneration timer
+	GetWorld()->GetTimerManager().ClearTimer(RegenerationTimer);
 }
 #pragma endregion

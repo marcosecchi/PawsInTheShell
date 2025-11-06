@@ -33,4 +33,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
 	float GetHealthPercentage() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	bool CanRegenerate();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	void StartRegenerating();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	void StopRegenerating();
 };
