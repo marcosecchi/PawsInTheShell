@@ -179,7 +179,6 @@ void APITS_BaseCharacter::DoChangeCharacter()
 	}
 }
 
-// Called to bind functionality to input
 void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -206,3 +205,24 @@ void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 }
 
+#pragma region HealthInterface Implementations
+bool APITS_BaseCharacter::IsDead_Implementation() const
+{
+	return CurrentHealth <= 0.0f;
+}
+
+float APITS_BaseCharacter::GetCurrentHealth_Implementation() const
+{
+	return CurrentHealth;
+}
+
+float APITS_BaseCharacter::GetMaxHealth_Implementation() const
+{
+	return MaxHealth;
+}
+
+float APITS_BaseCharacter::GetHealthPercentage_Implementation() const
+{
+	return (MaxHealth > 0.0f) ? (CurrentHealth / MaxHealth) : 0.0f;
+}
+#pragma endregion

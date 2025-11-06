@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
 class USpringArmComponent;
@@ -54,7 +55,7 @@ struct FCharacterDataTableRow : public FTableRowBase
 };
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter
+class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface
 {
 	GENERATED_BODY()
 
@@ -174,13 +175,7 @@ public:
 
 	/* Returns the character name from the data table */
 	FORCEINLINE FText GetCharacterName() const { return CharacterName; }
-
-	/* Returns the current health of the character */
-	FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
-
-	/* Returns the maximum health of the character */
-	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
-
+	
 	/* Returns if the character has reached a safe zone */
 	UFUNCTION(BlueprintCallable, Category="Character")
 	FORCEINLINE bool IsInSafeZone() const { return bInSafeZone; }
@@ -189,5 +184,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Character")
 	FORCEINLINE void SetInSafeZone(const bool bNewInSafeZone) { bInSafeZone = bNewInSafeZone; }
 	
-#pragma endregion 
+#pragma endregion
+
+#pragma region HealthInterface Implementations
+public:
+	virtual bool IsDead_Implementation() const override;
+
+	virtual float GetCurrentHealth_Implementation() const override;
+
+	virtual float GetMaxHealth_Implementation() const override;
+
+	virtual float GetHealthPercentage_Implementation() const override;
+#pragma endregion
+
 };
