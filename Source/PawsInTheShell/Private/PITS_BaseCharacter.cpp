@@ -4,6 +4,7 @@
 
 #include "PawsInTheShell/Public/PITS_BaseCharacter.h"
 
+#include "DamageType_Regeneration.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -12,6 +13,7 @@
 #include "Utils/PITS_Logs.h"
 #include "PITS_WorldSubsystem.h"
 #include "Components/PITS_HealthComponent.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
@@ -53,6 +55,26 @@ APITS_BaseCharacter::APITS_BaseCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+}
+
+float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	if (DamageEvent.DamageTypeClass != nullptr)
+	{
+		// Check if damage type is regeneration
+		if (DamageEvent.DamageTypeClass->IsChildOf(UDamageType_Regeneration::StaticClass()))
+		{
+			Health->AddHealth(DamageAmount);
+		}
+	}
+	else
+	{
+		const float EffectiveDamage = FMath::Max(0.0f, DamageAmount - ArmourAmount);
+		Health->RemoveHealth(EffectiveDamage);
+		return EffectiveDamage;
+	}
+	return 0.0f;
 }
 
 void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)

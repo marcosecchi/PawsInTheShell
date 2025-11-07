@@ -8,8 +8,10 @@
 #include "Components/ActorComponent.h"
 #include "PITS_HealthComponent.generated.h"
 
-// Declare dead delegate for health component
+// Declare delegates for health component
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPITS_ZeroHealthDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPITS_FullHealthDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPITS_HealthUpdateDelegate, float, HealthPercentage);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=("Paws In The Shell"), meta=(BlueprintSpawnableComponent))
 class PAWSINTHESHELL_API UPITS_HealthComponent : public UActorComponent
@@ -68,6 +70,12 @@ public:
 #pragma region Delegate Broadcasts
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FPITS_ZeroHealthDelegate OnZeroHealth;
+
+	UPROPERTY(BlueprintAssignable, Category="Health")
+	FPITS_FullHealthDelegate OnFullHealth;
+
+	UPROPERTY(BlueprintAssignable, Category="Health")
+	FPITS_HealthUpdateDelegate OnUpdateHealth;
 
 #pragma endregion
 

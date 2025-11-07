@@ -66,7 +66,7 @@ void APITS_RegenerationZone::RegenerateHealth()
 	{
 		FDamageEvent DamageEvent = FDamageEvent();
 		DamageEvent.DamageTypeClass = UDamageType_Regeneration::StaticClass();
-		RegeneratingActor->TakeDamage(RegenerationAmount, FDamageEvent(), nullptr, this);
+		RegeneratingActor->TakeDamage(RegenerationAmount, DamageEvent, nullptr, this);
 		UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health for Actor '%s'"), *GetNameSafe(this), *GetNameSafe(RegeneratingActor));
 	}
 }
