@@ -6,13 +6,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/DefenceInterface.h"
-#include "Interfaces/HealthInterface.h"
+#include "Interfaces/PITS_DefenceInterface.h"
+#include "Interfaces/PITS_HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class UPITS_HealthComponent;
 struct FInputActionValue;
 
 /**
@@ -35,8 +36,8 @@ struct FCharacterDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Character defensive amount that reduces incoming damage"))
 	float ArmourAmount = 0.0f;
 
-	UPROPERTY(EditAnywhere, meta=(ToolTip="Rate at which the character regenerates health over time (health per second)"))
-	float HealthRegenerationRate = 0.0f;
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Can the character regenerate when in a regeneration zone?"))
+	bool bCanRegenerate = false;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Maximum speed of the character when moving"))
 	float MaxWalkSpeed = 600.0f;
@@ -59,7 +60,7 @@ struct FCharacterDataTableRow : public FTableRowBase
 };
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface, public IDefenceInterface
+class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
 {
 	GENERATED_BODY()
 
@@ -71,39 +72,28 @@ class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealth
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> CameraBoom;
 
+	/** Health */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPITS_HealthComponent> Health;
+
 public:
 	APITS_BaseCharacter();
 
 protected:
 
 	/** Data on the type of picked weapon and visuals of this pickup */
-	UPROPERTY(EditAnywhere, Category="Character|Stats")
+	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
 	FDataTableRowHandle CharacterStatsType;
-
-	UPROPERTY()
-	float CurrentHealth = 1.0f;
-
-	UPROPERTY()
-	float MaxHealth = 1.0f;
-
-	UPROPERTY()
-	float HealthRegenerationRate = 0.0f;
-
+	
 	UPROPERTY()
 	FText CharacterName = FText::FromString("Unnamed");
 
 	UPROPERTY()
 	float ArmourAmount = 0.0f;
 	
-	/** Timer to regenerate health */
-	FTimerHandle RegenerationTimer;
-
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
-
-	/** Gameplay cleanup */
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -179,21 +169,15 @@ public:
 #pragma region HealthInterface Implementations
 public:
 	virtual bool IsDead_Implementation() const override;
-	virtual float GetCurrentHealth_Implementation() const override;
-	virtual float GetMaxHealth_Implementation() const override;
 	virtual float GetHealthPercentage_Implementation() const override;
 	virtual bool CanRegenerate_Implementation() override;
-	virtual void StartRegenerating_Implementation() override;
-	virtual void StopRegenerating_Implementation() override;
-
-	void RegenerateHealth();
 #pragma endregion
 
 #pragma region CharacterDefenceInterface Implementations
 public:
 	virtual bool IsInSafeZone_Implementation() const override;
-	virtual float GetArmourAmount_Implementation() const override;
 	virtual void SetIsInSafeZone_Implementation(const bool bNewInSafeZone) override;
+	virtual float GetArmourAmount_Implementation() const override;
 	
 #pragma endregion
 };

@@ -6,10 +6,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "DefenceInterface.generated.h"
+#include "PITS_DefenceInterface.generated.h"
 
 UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
-class UDefenceInterface : public UInterface
+class UPITS_DefenceInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,7 +17,7 @@ class UDefenceInterface : public UInterface
 /**
  *  Common interface for actor defence mechanisms
  */
-class PAWSINTHESHELL_API IDefenceInterface
+class PAWSINTHESHELL_API IPITS_DefenceInterface
 {
 	GENERATED_BODY()
 

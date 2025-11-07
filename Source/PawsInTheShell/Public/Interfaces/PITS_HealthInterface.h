@@ -6,10 +6,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "HealthInterface.generated.h"
+#include "PITS_HealthInterface.generated.h"
 
 UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
-class UHealthInterface : public UInterface
+class UPITS_HealthInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,29 +17,17 @@ class UHealthInterface : public UInterface
 /**
  *  Common interface for actor health status
  */
-class PAWSINTHESHELL_API IHealthInterface
+class PAWSINTHESHELL_API IPITS_HealthInterface
 {
 	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
 	bool IsDead() const;
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
-	float GetCurrentHealth() const;
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
-	float GetMaxHealth() const;
-
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
 	float GetHealthPercentage() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
 	bool CanRegenerate();
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
-	void StartRegenerating();
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
-	void StopRegenerating();
 };

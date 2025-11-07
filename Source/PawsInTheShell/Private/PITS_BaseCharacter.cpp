@@ -9,14 +9,17 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "PawsInTheShell/Public/Utils/PITS_Logs.h"
+#include "Utils/PITS_Logs.h"
 #include "PITS_WorldSubsystem.h"
+#include "Components/PITS_HealthComponent.h"
 
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	Health = CreateDefaultSubobject<UPITS_HealthComponent>(FName("Health"));
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(50.f, 140.0f);
 
@@ -64,19 +67,13 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		GetCharacterMovement()->BrakingDecelerationWalking = Data->BrakingDecelerationWalking;
 		GetCharacterMovement()->BrakingDecelerationFalling = Data->BrakingDecelerationFalling;
 
-		MaxHealth = Data->MaxHealth;
-		CurrentHealth = FMath::Clamp(CurrentHealth, 1.0f, MaxHealth);
-		HealthRegenerationRate = FMath::Clamp(HealthRegenerationRate, 0.0f, MaxHealth);
+		Health->SetMaxHealth(Data->MaxHealth);
+		Health->SetCurrentHealth(Data->StartingHealth);
+		Health->SetCanRegenerate(Data->bCanRegenerate);
+		
 		ArmourAmount = Data->ArmourAmount;
 		CharacterName = Data->CharacterName;
 	}
-}
-
-void APITS_BaseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	Super::EndPlay(EndPlayReason);
-
-	StopRegenerating_Implementation();
 }
 
 void APITS_BaseCharacter::Move(const FInputActionValue& Value)
@@ -179,47 +176,17 @@ void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 #pragma region HealthInterface Implementations
 bool APITS_BaseCharacter::IsDead_Implementation() const
 {
-	return CurrentHealth <= 0.0f;
-}
-
-float APITS_BaseCharacter::GetCurrentHealth_Implementation() const
-{
-	return CurrentHealth;
-}
-
-float APITS_BaseCharacter::GetMaxHealth_Implementation() const
-{
-	return MaxHealth;
+	return Health->IsDead();
 }
 
 float APITS_BaseCharacter::GetHealthPercentage_Implementation() const
 {
-	return (MaxHealth > 0.0f) ? (CurrentHealth / MaxHealth) : 0.0f;
+	return Health->GetHealthPercentage();
 }
 
 bool APITS_BaseCharacter::CanRegenerate_Implementation()
 {
-	return HealthRegenerationRate > 0.0f && !IsDead_Implementation() && CurrentHealth < MaxHealth;
-}
-
-void APITS_BaseCharacter::StartRegenerating_Implementation()
-{
-	if (CanRegenerate_Implementation() && !GetWorld()->GetTimerManager().IsTimerActive(RegenerationTimer))
-	{
-		GetWorld()->GetTimerManager().SetTimer(RegenerationTimer, this, &APITS_BaseCharacter::RegenerateHealth, 1.0f, true);
-	}
-}
-
-void APITS_BaseCharacter::RegenerateHealth()
-{
-	UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health: %f + %f"), *GetNameSafe(this), CurrentHealth, HealthRegenerationRate);
-	CurrentHealth = FMath::Clamp(CurrentHealth + HealthRegenerationRate, 0.0f, MaxHealth);
-}
-
-void APITS_BaseCharacter::StopRegenerating_Implementation()
-{
-	// clear the regeneration timer
-	GetWorld()->GetTimerManager().ClearTimer(RegenerationTimer);
+	return Health->CanRegenerate() && !IsDead_Implementation() && Health->GetHealthPercentage() > 0.0f;
 }
 #pragma endregion
 
