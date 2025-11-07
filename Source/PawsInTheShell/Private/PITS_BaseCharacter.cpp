@@ -67,7 +67,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		MaxHealth = Data->MaxHealth;
 		CurrentHealth = FMath::Clamp(CurrentHealth, 1.0f, MaxHealth);
 		HealthRegenerationRate = FMath::Clamp(HealthRegenerationRate, 0.0f, MaxHealth);
-
+		ArmourAmount = Data->ArmourAmount;
 		CharacterName = Data->CharacterName;
 	}
 }
@@ -230,5 +230,17 @@ void APITS_BaseCharacter::StopRegenerating_Implementation()
 {
 	// clear the regeneration timer
 	GetWorld()->GetTimerManager().ClearTimer(RegenerationTimer);
+}
+#pragma endregion
+
+#pragma region CharacterDefenceInterface Implementations
+bool APITS_BaseCharacter::IsInSafeZone_Implementation() const
+{
+	return bInSafeZone;
+}
+
+float APITS_BaseCharacter::GetArmourAmount_Implementation() const
+{
+	return ArmourAmount;
 }
 #pragma endregion

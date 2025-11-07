@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/CharacterDefenceInterface.h"
 #include "Interfaces/HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
@@ -31,6 +32,9 @@ struct FCharacterDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Character health at the start of the game"))
 	float StartingHealth = 100.0f;
 
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Character defensive amount that reduces incoming damage"))
+	float ArmourAmount = 0.0f;
+
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Rate at which the character regenerates health over time (health per second)"))
 	float HealthRegenerationRate = 0.0f;
 
@@ -55,7 +59,7 @@ struct FCharacterDataTableRow : public FTableRowBase
 };
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface
+class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface, public ICharacterDefenceInterface
 {
 	GENERATED_BODY()
 
@@ -88,6 +92,9 @@ protected:
 	UPROPERTY()
 	FText CharacterName = FText::FromString("Unnamed");
 
+	UPROPERTY()
+	float ArmourAmount = 0.0f;
+	
 	/** Timer to regenerate health */
 	FTimerHandle RegenerationTimer;
 
@@ -171,10 +178,6 @@ public:
 	/* Returns the character name from the data table */
 	FORCEINLINE FText GetCharacterName() const { return CharacterName; }
 	
-	/* Returns if the character has reached a safe zone */
-	UFUNCTION(BlueprintCallable, Category="Character")
-	FORCEINLINE bool IsInSafeZone() const { return bInSafeZone; }
-
 	/* Sets if the character has reached a safe zone */
 	UFUNCTION(BlueprintCallable, Category="Character")
 	FORCEINLINE void SetInSafeZone(const bool bNewInSafeZone) { bInSafeZone = bNewInSafeZone; }
@@ -192,7 +195,11 @@ public:
 	virtual void StopRegenerating_Implementation() override;
 
 	void RegenerateHealth();
-
 #pragma endregion
 
+#pragma region CharacterDefenceInterface Implementations
+public:
+	bool IsInSafeZone_Implementation() const override;
+	float GetArmourAmount_Implementation() const override;
+#pragma endregion
 };
