@@ -6,31 +6,28 @@
 
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Interfaces/DefenceInterface.h"
 #include "Interfaces/HealthInterface.h"
 #include "Utils/PITS_Logs.h"
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' entered Safe Zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
 
-	// Check if actor implements the Health Interface
-	if (OtherActor->GetClass()->ImplementsInterface(UHealthInterface::StaticClass()))
+	// Check if actor implements the Defence Interface
+	if (OtherActor->GetClass()->ImplementsInterface(UDefenceInterface::StaticClass()))
 	{
-		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' implements Health Interface"), *GetNameSafe(this), *GetNameSafe(OtherActor));
-		IHealthInterface::Execute_StartRegenerating(OtherActor);
-		UE_LOG(LogPITS, Log, TEXT("'%s' Started Health Regeneration for Actor '%s'"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' entered a safe zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		IDefenceInterface::Execute_SetIsInSafeZone(OtherActor, true);
 	}
 }
 
 void APITS_SafeZone::HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' exited Safe Zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
-	// Check if actor implements the Health Interface
-	if (OtherActor->GetClass()->ImplementsInterface(UHealthInterface::StaticClass()))
+	// Check if actor implements the Defence Interface
+	if (OtherActor->GetClass()->ImplementsInterface(UDefenceInterface::StaticClass()))
 	{
-		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s') implements Health Interface"), *GetNameSafe(this), *GetNameSafe(OtherActor));
-		IHealthInterface::Execute_StopRegenerating(OtherActor);
-		UE_LOG(LogPITS, Log, TEXT("'%s' Stopped Health Regeneration for Actor '%s'"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' exited a safe zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		IDefenceInterface::Execute_SetIsInSafeZone(OtherActor, false);
 	}
 }
 

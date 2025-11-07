@@ -27,8 +27,8 @@ protected:
 	TObjectPtr<UArrowComponent> Arrow;
 
 	UFUNCTION()
-	void HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION()
-	void HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 };

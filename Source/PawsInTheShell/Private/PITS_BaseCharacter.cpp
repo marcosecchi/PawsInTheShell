@@ -85,20 +85,6 @@ void APITS_BaseCharacter::Move(const FInputActionValue& Value)
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	// route the input
-	DoMove(MovementVector.X, MovementVector.Y);
-}
-
-void APITS_BaseCharacter::Look(const FInputActionValue& Value)
-{
-	// input is a Vector2D
-	const FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	// route the input
-	DoLook(LookAxisVector.X, LookAxisVector.Y);
-}
-
-void APITS_BaseCharacter::DoMove(const float Right, const float Forward)
-{
 	if (GetController() != nullptr)
 	{
 		// find out which way is forward
@@ -112,36 +98,40 @@ void APITS_BaseCharacter::DoMove(const float Right, const float Forward)
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		// add movement 
-		AddMovementInput(ForwardDirection, Forward);
-		AddMovementInput(RightDirection, Right);
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
 
-void APITS_BaseCharacter::DoLook(const float Yaw, const float Pitch)
+void APITS_BaseCharacter::Look(const FInputActionValue& Value)
 {
+	// input is a Vector2D
+	const FVector2D LookAxisVector = Value.Get<FVector2D>();
+
 	if (GetController() != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(Yaw);
-		AddControllerPitchInput(Pitch);
+		AddControllerYawInput(LookAxisVector.X);
+		AddControllerPitchInput(LookAxisVector.Y);
 	}
+
 }
 
-void APITS_BaseCharacter::DoJumpStart()
+void APITS_BaseCharacter::JumpStart()
 {
 	Jump();
 }
 
-void APITS_BaseCharacter::DoJumpEnd()
+void APITS_BaseCharacter::JumpEnd()
 {
 	StopJumping();
 }
 
-void APITS_BaseCharacter::DoShoot()
+void APITS_BaseCharacter::Shoot()
 {
 }
 
-void APITS_BaseCharacter::DoChangeCharacter()
+void APITS_BaseCharacter::ChangeCharacter()
 {
 	// Check if actor is moving or falling
 	if (GetVelocity().Size() > KINDA_SMALL_NUMBER)
@@ -166,8 +156,8 @@ void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APITS_BaseCharacter::DoJumpStart);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &APITS_BaseCharacter::DoJumpEnd);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APITS_BaseCharacter::JumpStart);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &APITS_BaseCharacter::JumpEnd);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Move);
@@ -177,8 +167,8 @@ void APITS_BaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Look);
 
 		// Additional bindings
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::DoShoot);
-		EnhancedInputComponent->BindAction(ChangeCharacterAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::DoChangeCharacter);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::Shoot);
+		EnhancedInputComponent->BindAction(ChangeCharacterAction, ETriggerEvent::Triggered, this, &APITS_BaseCharacter::ChangeCharacter);
 	}
 	else
 	{
@@ -242,5 +232,10 @@ bool APITS_BaseCharacter::IsInSafeZone_Implementation() const
 float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 {
 	return ArmourAmount;
+}
+
+void APITS_BaseCharacter::SetIsInSafeZone_Implementation(const bool bNewInSafeZone)
+{
+	bInSafeZone = bNewInSafeZone;
 }
 #pragma endregion

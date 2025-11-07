@@ -6,7 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interfaces/CharacterDefenceInterface.h"
+#include "Interfaces/DefenceInterface.h"
 #include "Interfaces/HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
@@ -48,10 +48,10 @@ struct FCharacterDataTableRow : public FTableRowBase
 	float AirControl = 0.35f;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Deceleration applied when walking and not applying acceleration"))
-	float BrakingDecelerationWalking = 0.35f;
+	float BrakingDecelerationWalking = 2000.f;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="LAteral deceleration applied when falling and not applying acceleration"))
-	float BrakingDecelerationFalling = 0.35f;
+	float BrakingDecelerationFalling = 1500.0f;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Additional notes about this character (for development purposes)"))
 	FString Notes;
@@ -59,7 +59,7 @@ struct FCharacterDataTableRow : public FTableRowBase
 };
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface, public ICharacterDefenceInterface
+class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IHealthInterface, public IDefenceInterface
 {
 	GENERATED_BODY()
 
@@ -141,30 +141,22 @@ protected:
 
 	/** Called from Input Actions for looking input */
 	void Look(const FInputActionValue& Value);
-	
-	/** Handles move inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoMove(float Right, float Forward);
-
-	/** Handles look inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoLook(float Yaw, float Pitch);
 
 	/** Handles jump start inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoJumpStart();
+	virtual void JumpStart();
 
 	/** Handles jump end inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoJumpEnd();
+	virtual void JumpEnd();
 
 	/** Handles shoot inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoShoot();
+	virtual void Shoot();
 
 	/** Handles change character inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void DoChangeCharacter();
+	virtual void ChangeCharacter();
 
 #pragma region Property Getters and Setters
 public:
@@ -199,7 +191,9 @@ public:
 
 #pragma region CharacterDefenceInterface Implementations
 public:
-	bool IsInSafeZone_Implementation() const override;
-	float GetArmourAmount_Implementation() const override;
+	virtual bool IsInSafeZone_Implementation() const override;
+	virtual float GetArmourAmount_Implementation() const override;
+	virtual void SetIsInSafeZone_Implementation(const bool bNewInSafeZone) override;
+	
 #pragma endregion
 };

@@ -6,10 +6,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "CharacterDefenceInterface.generated.h"
+#include "DefenceInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="ACharacter"))
-class UCharacterDefenceInterface : public UInterface
+UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
+class UDefenceInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,11 +17,14 @@ class UCharacterDefenceInterface : public UInterface
 /**
  *  Common interface for actor defence mechanisms
  */
-class PAWSINTHESHELL_API ICharacterDefenceInterface
+class PAWSINTHESHELL_API IDefenceInterface
 {
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
+	void SetIsInSafeZone(const bool bNewInSafeZone);
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
 	bool IsInSafeZone() const;
 
