@@ -5,12 +5,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PITS_BaseCharacter.h"
 #include "GameFramework/Actor.h"
 #include "PITS_BasePickup.generated.h"
 
 class USphereComponent;
 class UStaticMeshComponent;
 
+/**
+ * Base Pickup class
+ */
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_BasePickup : public AActor
 {
@@ -29,27 +33,17 @@ public:
 	APITS_BasePickup();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	/** Gameplay cleanup */
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	/** Handles collision overlap */
 	UFUNCTION()
-	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/** Called when it's time to respawn this pickup */
 	void RespawnPickup();
-
-	/** Passes control to Blueprint to animate the pickup respawn. Should end by calling FinishRespawn */
-	UFUNCTION(BlueprintImplementableEvent, Category="Pickup", meta = (DisplayName = "OnRespawn"))
-	void BP_OnRespawn();
-
-	/** Enables this pickup after respawning */
-	UFUNCTION(BlueprintCallable, Category="Pickup")
-	void FinishRespawn();
-
+	
 	/** Time to wait before respawning this pickup */
 	UPROPERTY(EditAnywhere, Category="Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s"))
 	float RespawnTime = 4.0f;
@@ -57,4 +51,15 @@ protected:
 	/** Timer to respawn the pickup */
 	FTimerHandle RespawnTimer;
 
+	/** Implement this function to handle the pickup logic */
+	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	void HandlePickup(APITS_BaseCharacter* OverlappedCharacter);
+	
+	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
+	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	void HandleRespawn();
+
+private:
+	/** Activate or Deactivate the pickup */
+	void SetPickupActive(bool bIsActive);
 };

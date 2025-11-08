@@ -4,8 +4,9 @@
 
 #include "PITS_BasePickup.h"
 
+#include "PITS_BaseCharacter.h"
 #include "Components/SphereComponent.h"
-
+#include "Utils/PITS_Logs.h"
 
 // Sets default values
 APITS_BasePickup::APITS_BasePickup()
@@ -27,20 +28,13 @@ APITS_BasePickup::APITS_BasePickup()
 	SphereCollision->bFillCollisionUnderneathForNavmesh = true;
 
 	// subscribe to the collision overlap on the sphere
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &APITS_BasePickup::OnOverlap);
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &APITS_BasePickup::HandleActorBeginOverlap);
 
 	// create the mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SphereCollision);
-
 	Mesh->SetCollisionProfileName(FName("NoCollision"));
 
-}
-
-// Called when the game starts or when spawned
-void APITS_BasePickup::BeginPlay()
-{
-	Super::BeginPlay();
 }
 
 void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -51,27 +45,39 @@ void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	GetWorld()->GetTimerManager().ClearTimer(RespawnTimer);
 }
 
-void APITS_BasePickup::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void APITS_BasePickup::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// TODO: handle base overlap
+	if (APITS_BaseCharacter* OverlappedCharacter = Cast<APITS_BaseCharacter>(OtherActor))
+	{
+		UE_LOG(LogPITS, Log, TEXT("'%s' Character '%s' overlapped a pickup"), *GetNameSafe(this), *GetNameSafe(OverlappedCharacter));
+		// Deactivate the pickup
+		SetPickupActive(false);
+
+		// Starts the respawn timer
+		GetWorld()->GetTimerManager().SetTimer(RespawnTimer, this, &APITS_BasePickup::RespawnPickup, RespawnTime, false);
+
+		// call the BP handler
+		HandlePickup(OverlappedCharacter);
+	}
 }
 
 void APITS_BasePickup::RespawnPickup()
 {
-	// unhide this pickup
-	SetActorHiddenInGame(false);
+	UE_LOG(LogPITS, Log, TEXT("'%s' Respawning pickup"), *GetNameSafe(this));
+	// Reactivate the pickup
+	SetPickupActive(true);
 
 	// call the BP handler
-	BP_OnRespawn();
+	HandleRespawn();
 }
 
-void APITS_BasePickup::FinishRespawn()
+void APITS_BasePickup::SetPickupActive(bool bIsActive)
 {
+	// unhide this pickup
+	SetActorHiddenInGame(!bIsActive);
+
 	// enable collision
-	SetActorEnableCollision(true);
+	SetActorEnableCollision(bIsActive);
 
-	// enable tick
-	SetActorTickEnabled(true);
 }
-
