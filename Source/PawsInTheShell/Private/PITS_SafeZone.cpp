@@ -6,6 +6,7 @@
 
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 #include "Interfaces/PITS_DefenceInterface.h"
 #include "Interfaces/PITS_HealthInterface.h"
 #include "Utils/PITS_Logs.h"
@@ -41,9 +42,13 @@ APITS_SafeZone::APITS_SafeZone()
 	Arrow->SetArrowColor(FLinearColor(0.0f, 1.0f, 1.0f));
 	Arrow->SetArrowLength(160.0f);
 
-	SafeZoneVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("SafeZoneVolume"));
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	SafeZoneVolume = CreateDefaultSubobject<USphereComponent>(TEXT("SafeZoneVolume"));
 	SafeZoneVolume->SetupAttachment(RootComponent);
-	SafeZoneVolume->SetBoxExtent(FVector(150.0f, 150.0f, 150.0f));
+	SafeZoneVolume->SetSphereRadius(500.0f);
 	OnActorBeginOverlap.AddDynamic(this, &APITS_SafeZone::HandleActorBeginOverlap);
 	OnActorEndOverlap.AddDynamic(this, &APITS_SafeZone::HandleActorEndOverlap);
 }

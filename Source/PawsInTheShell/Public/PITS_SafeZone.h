@@ -8,7 +8,7 @@
 #include "PITS_SafeZone.generated.h"
 
 class UArrowComponent;
-class UBoxComponent;
+class USphereComponent;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup="Pawns In The Shell")
 class PAWSINTHESHELL_API APITS_SafeZone : public AActor
@@ -21,11 +21,14 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
-	TObjectPtr<UBoxComponent> SafeZoneVolume;
+	TObjectPtr<USphereComponent> SafeZoneVolume;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
 	TObjectPtr<UArrowComponent> Arrow;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
+	TObjectPtr<UStaticMeshComponent> Mesh;
+	
 	UFUNCTION()
 	virtual void HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION()
