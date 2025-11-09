@@ -10,11 +10,7 @@
 #include "Interfaces/PITS_HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
-class USpringArmComponent;
-class UCameraComponent;
-class UInputAction;
 class UPITS_HealthComponent;
-struct FInputActionValue;
 
 /**
  *  Holds information about character stats and properties
@@ -59,29 +55,22 @@ struct FCharacterDataTableRow : public FTableRowBase
 
 };
 
-UCLASS(Abstract)
+UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
 {
 	GENERATED_BODY()
-
-	/** First person camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UCameraComponent> FollowCamera;
-
-	/** Camera boom */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USpringArmComponent> CameraBoom;
 
 	/** Health */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPITS_HealthComponent> Health;
 
 public:
+	// Sets default values for this character's properties
 	APITS_BaseCharacter();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-protected:
 
+protected:
 	/** Data on the type of picked weapon and visuals of this pickup */
 	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
 	FDataTableRowHandle CharacterStatsType;
@@ -94,77 +83,12 @@ protected:
 	
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
-	
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-#pragma region Actions
-	/** Input Action: Jump */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* JumpAction;
-
-	/** Input Action: Move */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* MoveAction;
-
-	/** Input Action: Look */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* LookAction;
-
-	/** Input Action: Mouse Look */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* MouseLookAction;
-
-	/** Input Action: Shoot */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* ShootAction;
-
-	/** Input Action: Change Character */
-	UPROPERTY(EditAnywhere, Category ="Input")
-	UInputAction* ChangeCharacterAction;
-#pragma endregion
-
-	UPROPERTY()
-	bool bInSafeZone = false;
-	
-	/** Called from Input Actions for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called from Input Actions for looking input */
-	void Look(const FInputActionValue& Value);
-
-	/** Handles jump start inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void JumpStart();
-
-	/** Handles jump end inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void JumpEnd();
-
-	/** Handles shoot inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void Shoot();
-
-	/** Handles change character inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
-	virtual void ChangeCharacter();
 
 #pragma region Property Getters and Setters
 public:
-	
-	/** Returns the camera component **/
-	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	/** Returns the camera boom component **/
-	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
 	/* Returns the character name from the data table */
 	FORCEINLINE FText GetCharacterName() const { return CharacterName; }
-	
-	/* Sets if the character has reached a safe zone */
-	UFUNCTION(BlueprintCallable, Category="Character")
-	FORCEINLINE void SetInSafeZone(const bool bNewInSafeZone) { bInSafeZone = bNewInSafeZone; }
-	
+
 #pragma endregion
 
 #pragma region HealthInterface Implementations
@@ -174,11 +98,10 @@ public:
 	virtual bool CanRegenerate_Implementation() override;
 #pragma endregion
 
-#pragma region CharacterDefenceInterface Implementations
+#pragma region DefenceInterface Implementations
 public:
-	virtual bool IsInSafeZone_Implementation() const override;
-	virtual void SetIsInSafeZone_Implementation(const bool bNewInSafeZone) override;
 	virtual float GetArmourAmount_Implementation() const override;
 	
 #pragma endregion
+
 };

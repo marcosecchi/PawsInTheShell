@@ -5,7 +5,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PITS_BaseCharacter.h"
+#include "PITS_BasePlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "PITS_BasePickup.generated.h"
 
@@ -53,7 +53,7 @@ protected:
 
 	/** Implement this function to handle the pickup logic */
 	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
-	void HandlePickup(APITS_BaseCharacter* OverlappedCharacter);
+	void HandlePickup(APITS_BasePlayerCharacter* OverlappedCharacter);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
 	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")

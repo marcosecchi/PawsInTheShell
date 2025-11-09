@@ -5,10 +5,9 @@
 #include "PITS_SafeZone.h"
 
 #include "Components/ArrowComponent.h"
-#include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Interfaces/PITS_DefenceInterface.h"
-#include "Interfaces/PITS_HealthInterface.h"
+#include "Interfaces/PITS_SafeZoneInterface.h"
 #include "Utils/PITS_Logs.h"
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -18,7 +17,7 @@ void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* Ot
 	if (OtherActor->GetClass()->ImplementsInterface(UPITS_DefenceInterface::StaticClass()))
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' entered a safe zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
-		IPITS_DefenceInterface::Execute_SetIsInSafeZone(OtherActor, true);
+		IPITS_SafeZoneInterface::Execute_SetIsInSafeZone(OtherActor, true);
 	}
 }
 
@@ -28,7 +27,7 @@ void APITS_SafeZone::HandleActorEndOverlap(AActor* OverlappedActor, AActor* Othe
 	if (OtherActor->GetClass()->ImplementsInterface(UPITS_DefenceInterface::StaticClass()))
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' exited a safe zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
-		IPITS_DefenceInterface::Execute_SetIsInSafeZone(OtherActor, false);
+		IPITS_SafeZoneInterface::Execute_SetIsInSafeZone(OtherActor, false);
 	}
 }
 

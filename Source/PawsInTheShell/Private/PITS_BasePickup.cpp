@@ -4,7 +4,7 @@
 
 #include "PITS_BasePickup.h"
 
-#include "PITS_BaseCharacter.h"
+#include "PITS_BasePlayerCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Utils/PITS_Logs.h"
 
@@ -47,7 +47,7 @@ void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void APITS_BasePickup::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (APITS_BaseCharacter* OverlappedCharacter = Cast<APITS_BaseCharacter>(OtherActor))
+	if (APITS_BasePlayerCharacter* OverlappedCharacter = Cast<APITS_BasePlayerCharacter>(OtherActor))
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Character '%s' overlapped a pickup"), *GetNameSafe(this), *GetNameSafe(OverlappedCharacter));
 		// Deactivate the pickup

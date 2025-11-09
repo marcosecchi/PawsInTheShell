@@ -6,22 +6,25 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "PITS_DefenceInterface.generated.h"
+#include "PITS_SafeZoneInterface.generated.h"
 
 UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
-class UPITS_DefenceInterface : public UInterface
+class UPITS_SafeZoneInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
 /**
- *  Common interface for actor defence mechanisms
+ *  Common interface for player character defence mechanisms
  */
-class PAWSINTHESHELL_API IPITS_DefenceInterface
+class PAWSINTHESHELL_API IPITS_SafeZoneInterface
 {
 	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
-	float GetArmourAmount() const;
+	void SetIsInSafeZone(const bool bNewInSafeZone);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
+	bool IsInSafeZone() const;
 };
