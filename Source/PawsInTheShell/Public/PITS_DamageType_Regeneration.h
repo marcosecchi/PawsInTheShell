@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/DamageType.h"
-#include "DamageType_Regeneration.generated.h"
+#include "PITS_DamageType_Regeneration.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PAWSINTHESHELL_API UDamageType_Regeneration : public UDamageType
+class PAWSINTHESHELL_API UPITS_DamageType_Regeneration : public UDamageType
 {
 	GENERATED_BODY()
 };

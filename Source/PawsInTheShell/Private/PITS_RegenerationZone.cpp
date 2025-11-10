@@ -4,7 +4,7 @@
 
 #include "PITS_RegenerationZone.h"
 
-#include "DamageType_Regeneration.h"
+#include "PITS_DamageType_Regeneration.h"
 #include "Engine/DamageEvents.h"
 #include "Interfaces/PITS_HealthInterface.h"
 #include "Utils/PITS_Logs.h"
@@ -65,7 +65,7 @@ void APITS_RegenerationZone::RegenerateHealth()
 	for (AActor* RegeneratingActor : RegeneratingActors)
 	{
 		FDamageEvent DamageEvent = FDamageEvent();
-		DamageEvent.DamageTypeClass = UDamageType_Regeneration::StaticClass();
+		DamageEvent.DamageTypeClass = UPITS_DamageType_Regeneration::StaticClass();
 		RegeneratingActor->TakeDamage(RegenerationAmount, DamageEvent, nullptr, this);
 		UE_LOG(LogPITS, Log, TEXT("'%s' Regenerating Health for Actor '%s'"), *GetNameSafe(this), *GetNameSafe(RegeneratingActor));
 	}

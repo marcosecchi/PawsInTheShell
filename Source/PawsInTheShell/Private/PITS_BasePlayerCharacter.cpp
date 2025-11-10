@@ -4,7 +4,7 @@
 
 #include "PawsInTheShell/Public/PITS_BasePlayerCharacter.h"
 
-#include "DamageType_Regeneration.h"
+#include "PITS_DamageType_Regeneration.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"

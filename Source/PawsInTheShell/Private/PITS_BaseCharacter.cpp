@@ -4,7 +4,7 @@
 
 #include "PITS_BaseCharacter.h"
 
-#include "DamageType_Regeneration.h"
+#include "PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -45,7 +45,7 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 	if (DamageEvent.DamageTypeClass != nullptr)
 	{
 		// Check if damage type is regeneration
-		if (DamageEvent.DamageTypeClass->IsChildOf(UDamageType_Regeneration::StaticClass()))
+		if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_Regeneration::StaticClass()))
 		{
 			Health->AddHealth(DamageAmount);
 		}
