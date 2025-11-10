@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "PITS_BaseCharacter.h"
+#include "Interfaces/PITS_AmmoInterface.h"
 #include "Interfaces/PITS_SafeZoneInterface.h"
 #include "PITS_BasePlayerCharacter.generated.h"
 
@@ -15,7 +16,7 @@ class UInputAction;
 struct FInputActionValue;
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter, public IPITS_SafeZoneInterface
+class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter, public IPITS_SafeZoneInterface, public IPITS_AmmoInterface
 {
 	GENERATED_BODY()
 
@@ -101,5 +102,12 @@ public:
 public:
 	virtual bool IsInSafeZone_Implementation() const override;
 	virtual void SetIsInSafeZone_Implementation(const bool bNewInSafeZone) override;
+#pragma endregion
+
+#pragma region AmmoInterface Implementations
+public:
+	virtual int GetCurrentAmmoAmount_Implementation() const override;
+	virtual int GetMaxAmmoAmount_Implementation() const override;
+	virtual int AddAmmo_Implementation(int Amount) override;
 #pragma endregion
 };

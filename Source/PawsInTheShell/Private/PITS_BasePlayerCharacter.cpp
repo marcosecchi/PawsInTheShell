@@ -165,3 +165,23 @@ void APITS_BasePlayerCharacter::SetIsInSafeZone_Implementation(const bool bNewIn
 	bInSafeZone = bNewInSafeZone;
 }
 #pragma endregion
+
+#pragma region AmmoInterface Implementations
+int APITS_BasePlayerCharacter::GetCurrentAmmoAmount_Implementation() const
+{
+	// TODO: implement ammo system
+	return 0;
+}
+
+int APITS_BasePlayerCharacter::GetMaxAmmoAmount_Implementation() const
+{
+	// TODO: implement ammo system
+	return 0;
+}
+
+int APITS_BasePlayerCharacter::AddAmmo_Implementation(int Amount)
+{
+	// TODO: implement ammo system
+	return 0;
+}
+#pragma endregion
