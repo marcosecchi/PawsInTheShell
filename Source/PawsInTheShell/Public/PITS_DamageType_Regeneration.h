@@ -1,4 +1,6 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Mastering Unreal Engine 5 Game Development with C++ Scripting
+// Packt Publishing 2025
+// Author: Marco Secchi (https://github.com/marcosecchi)
 
 #pragma once
 
@@ -9,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(meta=(DisplayName="DamageType_Regeneration"))
 class PAWSINTHESHELL_API UPITS_DamageType_Regeneration : public UDamageType
 {
 	GENERATED_BODY()
