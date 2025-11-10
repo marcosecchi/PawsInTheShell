@@ -8,7 +8,7 @@
 #include "UObject/Interface.h"
 #include "PITS_HealthInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
+UINTERFACE(BlueprintType, Blueprintable)
 class UPITS_HealthInterface : public UInterface
 {
 	GENERATED_BODY()

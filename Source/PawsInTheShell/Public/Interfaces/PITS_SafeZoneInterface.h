@@ -8,7 +8,7 @@
 #include "UObject/Interface.h"
 #include "PITS_SafeZoneInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable, MinimalAPI, meta=(RestrictedToClasses="AActor"))
+UINTERFACE(BlueprintType, Blueprintable)
 class UPITS_SafeZoneInterface : public UInterface
 {
 	GENERATED_BODY()
