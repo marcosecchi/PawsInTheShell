@@ -35,6 +35,9 @@ APITS_BasePickup::APITS_BasePickup()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(SphereCollision);
 	Mesh->SetCollisionProfileName(FName("NoCollision"));
+
+	// Assign the pickup tag
+	Tags.Add(UPITS_Globals::GetPickupTag());
 }
 
 void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)

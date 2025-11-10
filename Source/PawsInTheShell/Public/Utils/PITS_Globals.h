@@ -28,6 +28,8 @@ public:
 private:
 	inline static const FName PlayerTag = FName("Player");
 	inline static const FName EnemyTag = FName("Enemy");
+	inline static const FName BulletTag = FName("Bullet");
+	inline static const FName PickupTag = FName("Pickup");
 
 public:
 	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
@@ -35,6 +37,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
 	static FName GetEnemyTag() { return EnemyTag;}
+
+	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	static FName GetBulletTag() { return BulletTag;}
+
+	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	static FName GetPickupTag() { return PickupTag;}
 #pragma endregion
 	
 };

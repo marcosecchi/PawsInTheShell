@@ -2,10 +2,10 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
+#include "PITS_WorldSubsystem.h"
 #include "PITS_BasePlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
-#include "PITS_WorldSubsystem.h"
 
 void UPITS_WorldSubsystem::ChangeCharacter()
 {
