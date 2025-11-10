@@ -11,12 +11,6 @@ UPITS_WeaponSpawnPointComponent::UPITS_WeaponSpawnPointComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-void UPITS_WeaponSpawnPointComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void UPITS_WeaponSpawnPointComponent::Shoot()
 {
 	if (CurrentProjectileClass)

@@ -28,12 +28,21 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
+	virtual void BeginPlay() override;
+	
 	/** Data on the type of picked weapon and visuals of this pickup */
 	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
 	FDataTableRowHandle CharacterStatsType;
-	
+
+	/** Data on the type of picked weapon and visuals of this pickup */
+	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
+	FDataTableRowHandle WeaponStatsType;
+
 	UPROPERTY()
 	FText CharacterName = FText::FromString("Unnamed");
+
+	UPROPERTY()
+	FText WeaponName = FText::FromString("Unnamed");
 
 	UPROPERTY()
 	float ArmourAmount = 0.0f;
@@ -45,6 +54,9 @@ protected:
 public:
 	/* Returns the character name from the data table */
 	FORCEINLINE FText GetCharacterName() const { return CharacterName; }
+
+	/* Returns the weapon name from the data table */
+	FORCEINLINE FText GetWeaponName() const { return WeaponName; }
 
 #pragma endregion
 
@@ -58,7 +70,5 @@ public:
 #pragma region DefenceInterface Implementations
 public:
 	virtual float GetArmourAmount_Implementation() const override;
-	
 #pragma endregion
-
 };

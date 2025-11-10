@@ -14,6 +14,7 @@
 #include "PITS_WorldSubsystem.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Structs/PITS_WeaponDataTableRow.h"
 #include "Utils/PITS_Globals.h"
 
 // Sets default values
@@ -55,6 +56,17 @@ APITS_BasePlayerCharacter::APITS_BasePlayerCharacter()
 
 	// Assign the player tag
 	Tags.Add(UPITS_Globals::GetPlayerTag());
+}
+
+void APITS_BasePlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Sets the ammo amounts based on weapon data table
+	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
+	{
+		AmmoAmount = MaxAmmoAmount = WeaponData->MaxAmmo;
+	}
 }
 
 void APITS_BasePlayerCharacter::Move(const FInputActionValue& Value)
@@ -169,19 +181,23 @@ void APITS_BasePlayerCharacter::SetIsInSafeZone_Implementation(const bool bNewIn
 #pragma region AmmoInterface Implementations
 int APITS_BasePlayerCharacter::GetCurrentAmmoAmount_Implementation() const
 {
-	// TODO: implement ammo system
-	return 0;
+	return AmmoAmount;
 }
 
 int APITS_BasePlayerCharacter::GetMaxAmmoAmount_Implementation() const
 {
-	// TODO: implement ammo system
-	return 0;
+	return MaxAmmoAmount;
 }
 
-int APITS_BasePlayerCharacter::AddAmmo_Implementation(int Amount)
+int APITS_BasePlayerCharacter::AddAmmo_Implementation(const int Amount)
 {
-	// TODO: implement ammo system
-	return 0;
+	UE_LOG(LogPITS, Log, TEXT("'%s' Adding %d ammo. Current: %d / Max: %d"), *GetNameSafe(this), Amount, AmmoAmount, MaxAmmoAmount);
+	if (MaxAmmoAmount < 0)
+	{
+		return AmmoAmount;
+	}
+	AmmoAmount = FMath::Clamp(AmmoAmount + Amount, 0, MaxAmmoAmount);
+	UE_LOG(LogPITS, Log, TEXT("'%s' New ammo amount: %d / %d"), *GetNameSafe(this), AmmoAmount, MaxAmmoAmount);
+	return AmmoAmount;
 }
 #pragma endregion

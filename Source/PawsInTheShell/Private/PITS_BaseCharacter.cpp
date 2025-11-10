@@ -6,9 +6,11 @@
 
 #include "PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
+#include "Components/PITS_WeaponSpawnPointComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Structs/PITS_CharacterDataTableRow.h"
+#include "Structs/PITS_WeaponDataTableRow.h"
 
 
 // Sets default values
@@ -23,20 +25,25 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	if (const FPITS_CharacterDataTableRow* Data = CharacterStatsType.GetRow<FPITS_CharacterDataTableRow>(FString()))
+	if (const FPITS_CharacterDataTableRow* CharacterData = CharacterStatsType.GetRow<FPITS_CharacterDataTableRow>(FString()))
 	{
-		GetCharacterMovement()->JumpZVelocity = Data->JumpZVelocity;
-		GetCharacterMovement()->AirControl = Data->AirControl;
-		GetCharacterMovement()->MaxWalkSpeed = Data->MaxWalkSpeed;
-		GetCharacterMovement()->BrakingDecelerationWalking = Data->BrakingDecelerationWalking;
-		GetCharacterMovement()->BrakingDecelerationFalling = Data->BrakingDecelerationFalling;
+		GetCharacterMovement()->JumpZVelocity = CharacterData->JumpZVelocity;
+		GetCharacterMovement()->AirControl = CharacterData->AirControl;
+		GetCharacterMovement()->MaxWalkSpeed = CharacterData->MaxWalkSpeed;
+		GetCharacterMovement()->BrakingDecelerationWalking = CharacterData->BrakingDecelerationWalking;
+		GetCharacterMovement()->BrakingDecelerationFalling = CharacterData->BrakingDecelerationFalling;
 
-		Health->SetMaxHealth(Data->MaxHealth);
-		Health->SetCurrentHealth(Data->StartingHealth);
-		Health->SetCanRegenerate(Data->bCanRegenerate);
+		Health->SetMaxHealth(CharacterData->MaxHealth);
+		Health->SetCurrentHealth(CharacterData->StartingHealth);
+		Health->SetCanRegenerate(CharacterData->bCanRegenerate);
 		
-		ArmourAmount = Data->ArmourAmount;
-		CharacterName = Data->CharacterName;
+		ArmourAmount = CharacterData->ArmourAmount;
+		CharacterName = CharacterData->CharacterName;
+	}
+
+	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
+	{
+	WeaponName = WeaponData->WeaponName;
 	}
 }
 
@@ -60,6 +67,22 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 	return 0.0f;
 }
 
+void APITS_BaseCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Find all weapon components set their projectile class from the data table
+	TArray<UPITS_WeaponSpawnPointComponent*> WeaponSpawnPoints;
+	GetComponents<UPITS_WeaponSpawnPointComponent>(WeaponSpawnPoints);
+	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
+	{
+		for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)
+		{
+			SpawnPoint->SetCurrentProjectileClass(WeaponData->ProjectileClass);
+		}
+	}
+}
+
 #pragma region HealthInterface Implementations
 bool APITS_BaseCharacter::IsDead_Implementation() const
 {
@@ -78,12 +101,10 @@ bool APITS_BaseCharacter::CanRegenerate_Implementation()
 #pragma endregion
 
 #pragma region DefenceInterface Implementations
-
 float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 {
 	return ArmourAmount;
 }
-
 #pragma endregion
 
 

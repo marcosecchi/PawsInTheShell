@@ -20,9 +20,6 @@ public:
 	UPITS_WeaponSpawnPointComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
 	UPROPERTY()
 	TSubclassOf<APITS_BaseProjectile> CurrentProjectileClass;
 	

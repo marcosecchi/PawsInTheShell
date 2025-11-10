@@ -32,6 +32,8 @@ public:
 	APITS_BasePlayerCharacter();
 
 protected:
+
+	virtual void BeginPlay() override;
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -64,7 +66,13 @@ protected:
 
 	UPROPERTY()
 	bool bInSafeZone = false;
-	
+
+	UPROPERTY()
+	int AmmoAmount = 0.0f;	
+
+	UPROPERTY()
+	int MaxAmmoAmount = 0.0f;	
+
 	/** Called from Input Actions for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -108,6 +116,6 @@ public:
 public:
 	virtual int GetCurrentAmmoAmount_Implementation() const override;
 	virtual int GetMaxAmmoAmount_Implementation() const override;
-	virtual int AddAmmo_Implementation(int Amount) override;
+	virtual int AddAmmo_Implementation(const int Amount) override;
 #pragma endregion
 };

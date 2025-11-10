@@ -29,5 +29,5 @@ public:
 	int GetMaxAmmoAmount() const;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Ammo")
-	int AddAmmo(int Amount);
+	int AddAmmo(const int Amount);
 };
