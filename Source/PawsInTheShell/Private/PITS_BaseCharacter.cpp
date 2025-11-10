@@ -8,6 +8,7 @@
 #include "Components/PITS_HealthComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Structs/PITS_CharacterDataTableRow.h"
 
 
 // Sets default values
@@ -22,7 +23,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	if (const FCharacterDataTableRow* Data = CharacterStatsType.GetRow<FCharacterDataTableRow>(FString()))
+	if (const FPITS_CharacterDataTableRow* Data = CharacterStatsType.GetRow<FPITS_CharacterDataTableRow>(FString()))
 	{
 		GetCharacterMovement()->JumpZVelocity = Data->JumpZVelocity;
 		GetCharacterMovement()->AirControl = Data->AirControl;

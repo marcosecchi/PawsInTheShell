@@ -6,21 +6,31 @@
 
 #include "CoreMinimal.h"
 #include "Components/ArrowComponent.h"
-#include "WeaponSpawnPointComponent.generated.h"
+#include "PITS_WeaponSpawnPointComponent.generated.h"
 
+class APITS_BaseProjectile;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup=("Paws In The Shell"), meta=(BlueprintSpawnableComponent))
-class PAWSINTHESHELL_API UWeaponSpawnPointComponent : public UArrowComponent
+class PAWSINTHESHELL_API UPITS_WeaponSpawnPointComponent : public UArrowComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
-	UWeaponSpawnPointComponent();
+	UPITS_WeaponSpawnPointComponent();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY()
+	TSubclassOf<APITS_BaseProjectile> CurrentProjectileClass;
+	
 public:
+
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	void Shoot();
+
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	void SetCurrentProjectileClass(const TSubclassOf<APITS_BaseProjectile> NewProjectileClass);
 };
