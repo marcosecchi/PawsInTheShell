@@ -6,19 +6,14 @@
 
 #include "CoreMinimal.h"
 #include "PITS_BaseCharacter.h"
-#include "GameFramework/Character.h"
-#include "PITS_BaseNPCCharacter.generated.h"
+#include "PITS_BaseEnemyCharacter.generated.h"
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class PAWSINTHESHELL_API APITS_BaseNPCCharacter : public APITS_BaseCharacter
+class PAWSINTHESHELL_API APITS_BaseEnemyCharacter : public APITS_BaseCharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	APITS_BaseNPCCharacter();
-
-protected:
-
-public:
+	APITS_BaseEnemyCharacter();
 };

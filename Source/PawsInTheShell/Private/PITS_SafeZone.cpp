@@ -12,7 +12,6 @@
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-
 	// Check if actor implements the Defence Interface
 	if (OtherActor->GetClass()->ImplementsInterface(UPITS_DefenceInterface::StaticClass()))
 	{

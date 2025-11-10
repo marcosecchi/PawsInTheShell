@@ -14,6 +14,7 @@
 #include "PITS_WorldSubsystem.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Utils/PITS_Globals.h"
 
 // Sets default values
 APITS_BasePlayerCharacter::APITS_BasePlayerCharacter()
@@ -51,6 +52,9 @@ APITS_BasePlayerCharacter::APITS_BasePlayerCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+
+	// Assign the player tag
+	Tags.Add(UPITS_Globals::GetPlayerTag());
 }
 
 void APITS_BasePlayerCharacter::Move(const FInputActionValue& Value)
