@@ -15,7 +15,7 @@ class UPITS_SafeZoneInterface : public UInterface
 };
 
 /**
- *  Common interface for player character defence mechanisms
+ *  Common interface for player character defense mechanisms
  */
 class PAWSINTHESHELL_API IPITS_SafeZoneInterface
 {
