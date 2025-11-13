@@ -48,7 +48,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 }
 
 float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEvent const& DamageEvent,
-	AController* EventInstigator, AActor* DamageCauser)
+                                      AController* EventInstigator, AActor* DamageCauser)
 {
 	if (DamageEvent.DamageTypeClass != nullptr)
 	{
@@ -81,6 +81,10 @@ void APITS_BaseCharacter::BeginPlay()
 			SpawnPoint->SetCurrentProjectileClass(WeaponData->ProjectileClass);
 		}
 	}
+	
+	Health->OnFullHealth.AddDynamic(this, &APITS_BaseCharacter::HandleFullHealth);
+	Health->OnZeroHealth.AddDynamic(this, &APITS_BaseCharacter::HandleZeroHealth);
+	Health->OnUpdateHealth.AddDynamic(this, &APITS_BaseCharacter::HandleUpdateHealth);
 }
 
 #pragma region HealthInterface Implementations
@@ -107,4 +111,20 @@ float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 }
 #pragma endregion
 
+#pragma region Delegates
+void APITS_BaseCharacter::HandleFullHealth()
+{
+	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+}
+
+void APITS_BaseCharacter::HandleZeroHealth()
+{
+	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+}
+
+void APITS_BaseCharacter::HandleUpdateHealth(float HealthPercentage)
+{
+	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+}
+#pragma endregion 
 

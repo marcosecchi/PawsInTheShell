@@ -10,6 +10,8 @@
 #include "Interfaces/PITS_HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPITS_CharacterHealthUpdateDelegate, float, HealthPercentage);
+
 class UPITS_HealthComponent;
 
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
@@ -26,6 +28,9 @@ public:
 	APITS_BaseCharacter();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY(BlueprintAssignable, Category="Health")
+	FPITS_CharacterHealthUpdateDelegate OnUpdateHealth;
 
 protected:
 	virtual void BeginPlay() override;
@@ -50,6 +55,17 @@ protected:
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
+#pragma region Delegates
+	UFUNCTION()
+	void HandleFullHealth();
+	
+	UFUNCTION()
+	void HandleZeroHealth();
+	
+	UFUNCTION()
+	void HandleUpdateHealth(float HealthPercentage);
+#pragma endregion
+	
 #pragma region Property Getters and Setters
 public:
 	/* Returns the character name from the data table */

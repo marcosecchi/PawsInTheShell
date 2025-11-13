@@ -40,14 +40,8 @@ public:
 	UFUNCTION()
 	void SetCurrentHealth(const float NewCurrentHealth) { CurrentHealth = FMath::Clamp(NewCurrentHealth, 0.0f, MaxHealth); }
 
-	UFUNCTION(BlueprintCallable, Category="Health")
-	float GetCurrentHealth() const { return CurrentHealth; }
-	
 	UFUNCTION()
 	void SetMaxHealth(const float NewMaxHealth) { MaxHealth = FMath::Max(0.0f, NewMaxHealth); }
-
-	UFUNCTION(BlueprintCallable, Category="Health")
-	float GetMaxHealth() const { return MaxHealth; }
 	
 	UFUNCTION()
 	void SetCanRegenerate(const bool bNewCanRegenerate) {  bCanRegenerate = bNewCanRegenerate; }
@@ -68,6 +62,7 @@ public:
 	void RemoveHealth(const float HealthToRemove);	
 	
 #pragma region Delegate Broadcasts
+public:
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FPITS_ZeroHealthDelegate OnZeroHealth;
 
