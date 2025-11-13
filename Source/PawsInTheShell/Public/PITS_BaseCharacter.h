@@ -10,9 +10,9 @@
 #include "Interfaces/PITS_HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPITS_CharacterHealthUpdateDelegate, float, HealthPercentage);
-
 class UPITS_HealthComponent;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPITS_CharacterHealthUpdateDelegate, float, HealthPercentage);
 
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
@@ -42,7 +42,7 @@ protected:
 	/** Data on the type of picked weapon and visuals of this pickup */
 	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
 	FDataTableRowHandle WeaponStatsType;
-
+	
 	UPROPERTY()
 	FText CharacterName = FText::FromString("Unnamed");
 

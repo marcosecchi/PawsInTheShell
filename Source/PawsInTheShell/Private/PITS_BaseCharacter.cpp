@@ -12,7 +12,6 @@
 #include "Structs/PITS_CharacterDataTableRow.h"
 #include "Structs/PITS_WeaponDataTableRow.h"
 
-
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
 {
@@ -43,7 +42,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 
 	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
 	{
-	WeaponName = WeaponData->WeaponName;
+		WeaponName = WeaponData->WeaponName;
 	}
 }
 
