@@ -43,10 +43,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
 	FDataTableRowHandle WeaponStatsType;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category="Character|Stats")
 	FText CharacterName = FText::FromString("Unnamed");
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category="Character|Stats")
 	FText WeaponName = FText::FromString("Unnamed");
 
 	UPROPERTY()
