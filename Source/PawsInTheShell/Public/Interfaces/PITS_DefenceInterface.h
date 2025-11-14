@@ -22,6 +22,6 @@ class PAWSINTHESHELL_API IPITS_DefenceInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Defence")
 	float GetArmourAmount() const;
 };

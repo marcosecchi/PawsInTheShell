@@ -10,7 +10,7 @@
 class UArrowComponent;
 class USphereComponent;
 
-UCLASS(Blueprintable, BlueprintType, ClassGroup="Pawns In The Shell")
+UCLASS(Blueprintable, BlueprintType, ClassGroup="PawsInTheShell")
 class PAWSINTHESHELL_API APITS_SafeZone : public AActor
 {
 	GENERATED_BODY()

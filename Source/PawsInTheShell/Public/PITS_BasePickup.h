@@ -45,18 +45,18 @@ protected:
 	void RespawnPickup();
 	
 	/** Time to wait before respawning this pickup */
-	UPROPERTY(EditAnywhere, Category="Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s"))
 	float RespawnTime = 4.0f;
 
 	/** Timer to respawn the pickup */
 	FTimerHandle RespawnTimer;
 
 	/** Implement this function to handle the pickup logic */
-	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Pickup")
 	void HandlePickup(APITS_BasePlayerCharacter* OverlappedCharacter);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
-	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Pickup")
 	void HandleRespawn();
 
 private:

@@ -29,24 +29,24 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	UPROPERTY(BlueprintAssignable, Category="Health")
+	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
 	FPITS_CharacterHealthUpdateDelegate OnUpdateHealth;
 
 protected:
 	virtual void BeginPlay() override;
 	
 	/** Data on the type of picked weapon and visuals of this pickup */
-	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
+	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Stats")
 	FDataTableRowHandle CharacterStatsType;
 
 	/** Data on the type of picked weapon and visuals of this pickup */
-	UPROPERTY(EditDefaultsOnly, Category="Character|Stats")
+	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Stats")
 	FDataTableRowHandle WeaponStatsType;
 	
-	UPROPERTY(BlueprintReadOnly, Category="Character|Stats")
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText CharacterName = FText::FromString("Unnamed");
 
-	UPROPERTY(BlueprintReadOnly, Category="Character|Stats")
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText WeaponName = FText::FromString("Unnamed");
 
 	UPROPERTY()

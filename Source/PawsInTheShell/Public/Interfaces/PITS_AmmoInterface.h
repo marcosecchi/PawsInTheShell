@@ -22,12 +22,12 @@ class PAWSINTHESHELL_API IPITS_AmmoInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Ammo")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Ammo")
 	int GetCurrentAmmoAmount() const;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Ammo")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Ammo")
 	int GetMaxAmmoAmount() const;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Ammo")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Ammo")
 	int AddAmmo(const int Amount);
 };

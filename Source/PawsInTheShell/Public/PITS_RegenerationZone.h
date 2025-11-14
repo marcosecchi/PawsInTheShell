@@ -17,7 +17,7 @@ protected:
 	virtual void HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor) override;
 	virtual void HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor) override;
 
-	UPROPERTY(EditAnywhere, Category="Health", meta=(ToolTip="Amount of health to regenerate per second"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Health", meta=(ToolTip="Amount of health to regenerate per second"))
 	float RegenerationAmount = 1.0f;
 
 	UPROPERTY()

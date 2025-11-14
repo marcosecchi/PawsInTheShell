@@ -19,7 +19,7 @@ class PAWSINTHESHELL_API APITS_PlayerController : public APlayerController
 
 protected:
 	/** Input Mapping Contexts */
-	UPROPERTY(EditAnywhere, Category="Input|Input Mappings")
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|InputMappings")
 	TArray<UInputMappingContext*> DefaultMappingContexts;
 
 	/** Input mapping context setup */

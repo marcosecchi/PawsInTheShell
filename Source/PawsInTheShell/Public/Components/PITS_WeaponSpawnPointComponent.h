@@ -10,7 +10,7 @@
 
 class APITS_BaseProjectile;
 
-UCLASS(Blueprintable, BlueprintType, ClassGroup=("Paws In The Shell"), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
 class PAWSINTHESHELL_API UPITS_WeaponSpawnPointComponent : public UArrowComponent
 {
 	GENERATED_BODY()

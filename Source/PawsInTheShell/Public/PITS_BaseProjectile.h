@@ -31,47 +31,47 @@ class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor
 
 protected:
 	/** Loudness of the AI perception noise done by this projectile on hit */
-	UPROPERTY(EditAnywhere, Category="Projectile|Noise", meta = (ClampMin = 0, ClampMax = 100))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 100))
 	float NoiseLoudness = 3.0f;
 
 	/** Range of the AI perception noise done by this projectile on hit */
-	UPROPERTY(EditAnywhere, Category="Projectile|Noise", meta = (ClampMin = 0, ClampMax = 100000, Units = "cm"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 100000, Units = "cm"))
 	float NoiseRange = 3000.0f;
 
 	/** Tag of the AI perception noise done by this projectile on hit */
-	UPROPERTY(EditAnywhere, Category="Projectile|Noise")
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
 	FName NoiseTag = FName("Projectile");
 
 	/** Type of damage to apply. Can be used to represent specific types of damage such as fire, explosion, etc. */
-	UPROPERTY(EditAnywhere, Category="Projectile|Hit")
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
 	TSubclassOf<UDamageType> HitDamageType;
 
 	/** Physics force to apply on hit */
-	UPROPERTY(EditAnywhere, Category="Projectile|Hit", meta = (ClampMin = 0, ClampMax = 50000))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 50000))
 	float PhysicsForce = 100.0f;
 
 	/** Damage to apply on hit */
-	UPROPERTY(EditAnywhere, Category="Projectile|Hit", meta = (ClampMin = 0, ClampMax = 100))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 100))
 	float HitDamage = 25.0f;
 
 	/** If true, the projectile can damage the character that shot it */
 	// TODO: Change with Damage Players
-	UPROPERTY(EditAnywhere, Category="Projectile|Hit")
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
 	bool bDamageOwner = false;
 
 	/** If true, the projectile will explode and apply radial damage to all actors in range */
-	UPROPERTY(EditAnywhere, Category="Projectile|Explosion")
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
 	bool bExplodeOnHit = false;
 
 	/** Max distance for actors to be affected by explosion damage */
-	UPROPERTY(EditAnywhere, Category="Projectile|Explosion", meta = (ClampMin = 0, ClampMax = 5000, Units = "cm"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 5000, Units = "cm"))
 	float ExplosionRadius = 500.0f;	
 
 	/** If true, this projectile has already hit another surface */
 	bool bHit = false;
 
 	/** How long to wait after a hit before destroying this projectile */
-	UPROPERTY(EditAnywhere, Category="Projectile|Destruction", meta = (ClampMin = 0, ClampMax = 10, Units = "s"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 10, Units = "s"))
 	float DeferredDestructionTime = 5.0f;
 
 	/** Timer to handle deferred destruction of this projectile */
@@ -99,7 +99,7 @@ protected:
 	void ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation, const FVector& HitDirection);
 
 	/** Passes control to Blueprint to implement any effects on hit. */
-	UFUNCTION(BlueprintImplementableEvent, Category="Projectile", meta = (DisplayName = "On Projectile Hit"))
+	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Projectile", meta = (DisplayName = "On Projectile Hit"))
 	void BP_OnProjectileHit(const FHitResult& Hit);
 
 	/** Called from the destruction timer to destroy this projectile */

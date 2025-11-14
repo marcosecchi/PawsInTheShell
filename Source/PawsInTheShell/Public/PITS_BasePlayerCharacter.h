@@ -80,19 +80,19 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	/** Handles jump start inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
 	virtual void JumpStart();
 
 	/** Handles jump end inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
 	virtual void JumpEnd();
 
 	/** Handles shoot inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
 	virtual void Shoot();
 
 	/** Handles change character inputs from either controls or UI interfaces */
-	UFUNCTION(BlueprintCallable, Category="Input")
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
 	virtual void ChangeCharacter();
 
 #pragma region Property Getters and Setters

@@ -22,12 +22,12 @@ class PAWSINTHESHELL_API IPITS_HealthInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	bool IsDead() const;
 	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	float GetHealthPercentage() const;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Health")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	bool CanRegenerate();
 };

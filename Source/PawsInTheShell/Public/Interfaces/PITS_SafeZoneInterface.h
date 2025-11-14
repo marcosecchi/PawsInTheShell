@@ -22,9 +22,9 @@ class PAWSINTHESHELL_API IPITS_SafeZoneInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Defence")
 	void SetIsInSafeZone(const bool bNewInSafeZone);
 	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Character|Defence")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Defence")
 	bool IsInSafeZone() const;
 };
