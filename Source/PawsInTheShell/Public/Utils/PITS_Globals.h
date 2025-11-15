@@ -8,6 +8,8 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PITS_Globals.generated.h"
 
+#define PITS_PROJECT_VERSION "alpha 1.0.0"
+
 /**
  * Global constants and functions
  */
@@ -17,19 +19,18 @@ class PAWSINTHESHELL_API UPITS_Globals : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 private:
-	inline static const FString ProjectVersion = TEXT("Alpha 0.1");
 
 public:
 	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
-	static FString GetProjectVersion() { return ProjectVersion;}
+	static FString GetProjectVersion() { return PITS_PROJECT_VERSION;}
 
 
 #pragma region Tags
 private:
-	inline static const FName PlayerTag = FName("Player");
-	inline static const FName EnemyTag = FName("Enemy");
-	inline static const FName BulletTag = FName("Bullet");
-	inline static const FName PickupTag = FName("Pickup");
+	static constexpr const TCHAR* PlayerTag = TEXT("Player");
+	static constexpr const TCHAR* EnemyTag = TEXT("Enemy");
+	static constexpr const TCHAR* BulletTag = TEXT("Bullet");
+	static constexpr const TCHAR* PickupTag = TEXT("Pickup");
 
 public:
 	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")

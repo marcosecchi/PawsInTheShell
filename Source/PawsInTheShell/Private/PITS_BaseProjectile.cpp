@@ -14,6 +14,7 @@
 #include "Engine/OverlapResult.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Utils/PITS_Globals.h"
 
 // Sets default values
 APITS_BaseProjectile::APITS_BaseProjectile()
@@ -42,6 +43,9 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	
 	// set the default damage type
 	HitDamageType = UDamageType::StaticClass();
+	
+	// Assign the bullet tag
+	Tags.Add(UPITS_Globals::GetBulletTag());
 }
 
 // Called when the game starts or when spawned
