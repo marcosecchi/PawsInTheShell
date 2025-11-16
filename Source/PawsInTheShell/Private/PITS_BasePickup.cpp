@@ -63,8 +63,11 @@ void APITS_BasePickup::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedCo
 		// Deactivate the pickup
 		SetPickupActive(false);
 
-		// Starts the respawn timer
-		GetWorld()->GetTimerManager().SetTimer(RespawnTimer, this, &APITS_BasePickup::RespawnPickup, RespawnTime, false);
+		if (bWillRespawn)
+		{
+			// Starts the respawn timer
+			GetWorld()->GetTimerManager().SetTimer(RespawnTimer, this, &APITS_BasePickup::RespawnPickup, RespawnTime, false);
+		}
 
 		// call the BP handler
 		HandlePickup(OverlappedCharacter);

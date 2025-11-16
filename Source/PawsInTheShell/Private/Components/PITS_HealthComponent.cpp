@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Components/PITS_HealthComponent.h"
-
 #include "Utils/PITS_Logs.h"
 
 UPITS_HealthComponent::UPITS_HealthComponent()

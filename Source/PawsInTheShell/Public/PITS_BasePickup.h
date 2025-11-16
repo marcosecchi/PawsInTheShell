@@ -43,9 +43,13 @@ protected:
 
 	/** Called when it's time to respawn this pickup */
 	void RespawnPickup();
-	
+
 	/** Time to wait before respawning this pickup */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s"))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup")
+	bool bWillRespawn = true;
+
+	/** Time to wait before respawning this pickup */
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s", EditCondition = "bWillRespawn", EditConditionHides))
 	float RespawnTime = 4.0f;
 
 	/** Timer to respawn the pickup */
