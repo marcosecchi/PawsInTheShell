@@ -18,7 +18,10 @@ struct FPITS_CharacterDataTableRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Name of the character displayed in game"))
 	FText CharacterName;
-	
+
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Character role in the team"))
+	FText CharacterSpeciality;
+
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Maximum health reachable by the character"))
 	float MaxHealth = 100.0f;
 
