@@ -11,7 +11,7 @@
 /**
  *  Holds information about character stats and properties
  */
-USTRUCT(BlueprintType, meta=(DisplayName="WeaponDataTableRow"))
+USTRUCT(BlueprintType, meta=(DisplayName="CharacterDataTableRow"))
 struct FPITS_CharacterDataTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
