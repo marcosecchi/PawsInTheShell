@@ -24,6 +24,7 @@ void APITS_PlayerController::BeginPlay()
 			UE_LOG(LogPITS, Log, TEXT("'%s' Created Main Menu Widget '%s'"), *GetNameSafe(this), *GetNameSafe(MainWidget));
 		}
 	}
+	UpdateMainWidget();
 }
 
 void APITS_PlayerController::SetupInputComponent()
@@ -48,20 +49,26 @@ void APITS_PlayerController::SetupInputComponent()
 void APITS_PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	UpdateMainWidget();
+}
+
+void APITS_PlayerController::UpdateMainWidget()
+{
+	APawn* NewPawn = GetPawn();
+	if (!NewPawn) return;
 	
 	// cast to character
-	const APITS_BasePlayerCharacter* PossessedCharacter = Cast<APITS_BasePlayerCharacter>(InPawn);
+	const APITS_BasePlayerCharacter* PossessedCharacter = Cast<APITS_BasePlayerCharacter>(NewPawn);
 	if (!PossessedCharacter)
 	{
-		UE_LOG(LogPITS, Warning, TEXT("'%s' OnPossess(): Possessed Pawn '%s' is not a APITS_BasePlayerCharacter"), *GetNameSafe(this), *GetNameSafe(InPawn));
+		UE_LOG(LogPITS, Warning, TEXT("'%s' OnPossess(): Possessed Pawn '%s' is not a APITS_BasePlayerCharacter"), *GetNameSafe(this), *GetNameSafe(NewPawn));
 		return;
 	}
 	
 	if (MainWidget && MainWidget->GetClass()->ImplementsInterface(UPITS_StatsWidgetInterface::StaticClass()))
 	{
 		IPITS_StatsWidgetInterface::Execute_UpdateName(MainWidget, PossessedCharacter->GetCharacterName());
-	//	IPITS_StatsWidgetInterface::Execute_UpdateDescription(MainWidget, PossessedCharacter->GetCharacterDescription());
+		IPITS_StatsWidgetInterface::Execute_UpdateDescription(MainWidget, PossessedCharacter->GetCharacterDescription());
 		IPITS_StatsWidgetInterface::Execute_UpdateIcon(MainWidget, PossessedCharacter->GetCharacterIcon());
 	}
-
 }

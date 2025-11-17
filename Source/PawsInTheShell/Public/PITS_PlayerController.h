@@ -30,6 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|UI")
 	TSubclassOf<UUserWidget> MainWidgetClass;
 	
+	void UpdateMainWidget();
+	
 	virtual void BeginPlay() override;
 	
 	/** Input mapping context setup */
