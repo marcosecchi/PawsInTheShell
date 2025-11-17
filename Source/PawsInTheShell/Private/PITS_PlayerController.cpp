@@ -4,9 +4,27 @@
 
 #include "PawsInTheShell/Public/PITS_PlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "PITS_BasePlayerCharacter.h"
+#include "Blueprint/UserWidget.h"
+#include "Interfaces/PITS_StatsWidgetInterface.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
+
+void APITS_PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	if (MainWidgetClass)
+	{
+		MainWidget = CreateWidget<UUserWidget>(this, MainWidgetClass);
+		if (MainWidget)
+		{
+			MainWidget->AddToViewport();
+			UE_LOG(LogPITS, Log, TEXT("'%s' Created Main Menu Widget '%s'"), *GetNameSafe(this), *GetNameSafe(MainWidget));
+		}
+	}
+}
 
 void APITS_PlayerController::SetupInputComponent()
 {
@@ -25,4 +43,25 @@ void APITS_PlayerController::SetupInputComponent()
 			}
 		}
 	}
+}
+
+void APITS_PlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+	
+	// cast to character
+	const APITS_BasePlayerCharacter* PossessedCharacter = Cast<APITS_BasePlayerCharacter>(InPawn);
+	if (!PossessedCharacter)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("'%s' OnPossess(): Possessed Pawn '%s' is not a APITS_BasePlayerCharacter"), *GetNameSafe(this), *GetNameSafe(InPawn));
+		return;
+	}
+	
+	if (MainWidget && MainWidget->GetClass()->ImplementsInterface(UPITS_StatsWidgetInterface::StaticClass()))
+	{
+		IPITS_StatsWidgetInterface::Execute_UpdateName(MainWidget, PossessedCharacter->GetCharacterName());
+	//	IPITS_StatsWidgetInterface::Execute_UpdateDescription(MainWidget, PossessedCharacter->GetCharacterDescription());
+		IPITS_StatsWidgetInterface::Execute_UpdateIcon(MainWidget, PossessedCharacter->GetCharacterIcon());
+	}
+
 }

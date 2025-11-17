@@ -26,6 +26,12 @@ public:
 	void UpdateName(const FText &NewName);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|UI")
+	void UpdateDescription(const FText &NewDescription);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|UI")
+	void UpdateIcon(const UTexture2D* NewIcon);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|UI")
 	void UpdateHealth(const float Value);
 };
 

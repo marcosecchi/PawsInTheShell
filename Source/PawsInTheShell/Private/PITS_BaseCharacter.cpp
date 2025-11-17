@@ -38,6 +38,8 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		
 		ArmourAmount = CharacterData->ArmourAmount;
 		CharacterName = CharacterData->CharacterName;
+		CharacterDescription = CharacterData->CharacterDescription;
+		CharacterIcon = CharacterData->CharacterIcon;
 	}
 
 	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))

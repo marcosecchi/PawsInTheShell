@@ -4,6 +4,7 @@
 
 #include "PITS_WorldSubsystem.h"
 #include "PITS_BasePlayerCharacter.h"
+#include "Interfaces/PITS_StatsWidgetInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
 
@@ -31,7 +32,5 @@ void UPITS_WorldSubsystem::ChangeCharacter()
 				UE_LOG(LogPITS, Log, TEXT("'%s' Possessed Character '%s'"), *GetNameSafe(this), *GetNameSafe(NewCharacter));
 			}
 		}
-		
-		
 	}
 }

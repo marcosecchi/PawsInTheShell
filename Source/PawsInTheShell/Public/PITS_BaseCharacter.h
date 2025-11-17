@@ -47,6 +47,12 @@ protected:
 	FText CharacterName = FText::FromString("Unnamed");
 
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
+	FText CharacterDescription = FText::FromString("");
+
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
+	UTexture2D* CharacterIcon = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText WeaponName = FText::FromString("Unnamed");
 
 	UPROPERTY()
@@ -70,6 +76,12 @@ protected:
 public:
 	/* Returns the character name from the data table */
 	FORCEINLINE FText GetCharacterName() const { return CharacterName; }
+
+	/* Returns the character name from the data table */
+	FORCEINLINE FText GetCharacterDescription() const { return CharacterDescription; }
+
+	/* Returns the character name from the data table */
+	FORCEINLINE UTexture2D* GetCharacterIcon() const { return CharacterIcon; }
 
 	/* Returns the weapon name from the data table */
 	FORCEINLINE FText GetWeaponName() const { return WeaponName; }

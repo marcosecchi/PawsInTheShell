@@ -18,10 +18,22 @@ class PAWSINTHESHELL_API APITS_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 protected:
+	/** Main Viewport Widget Instance */
+	UPROPERTY()
+	UUserWidget* MainWidget;
+	
 	/** Input Mapping Contexts */
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|InputMappings")
 	TArray<UInputMappingContext*> DefaultMappingContexts;
 
+	/** Main Menu Widget Class to show character info */
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|UI")
+	TSubclassOf<UUserWidget> MainWidgetClass;
+	
+	virtual void BeginPlay() override;
+	
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
+	
+	virtual void OnPossess(APawn* InPawn) override;
 };
