@@ -5,19 +5,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Interface.h"
-#include "PITS_SafeZoneInterface.generated.h"
+
+#include "PITS_SafeZoneEligibleInterface.generated.h"
 
 UINTERFACE(BlueprintType, Blueprintable)
-class UPITS_SafeZoneInterface : public UInterface
+class UPITS_SafeZoneEligibleInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
 /**
- *  Common interface for player character defense mechanisms
+ *  Common interface for player character safe zones mechanisms
  */
-class PAWSINTHESHELL_API IPITS_SafeZoneInterface
+class PAWSINTHESHELL_API IPITS_SafeZoneEligibleInterface
 {
 	GENERATED_BODY()
 

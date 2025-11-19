@@ -22,12 +22,15 @@ class PAWSINTHESHELL_API IPITS_HealthInterface
 	GENERATED_BODY()
 
 public:
+	/** Returns true if the actor is dead */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	bool IsDead() const;
 	
+	/** Returns the current health percentage (0 to 1) of the actor */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	float GetHealthPercentage() const;
 
+	/** Returns true if the actor can regenerate health */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
 	bool CanRegenerate();
 };

@@ -104,7 +104,6 @@ void APITS_BasePlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
-
 }
 
 void APITS_BasePlayerCharacter::JumpStart()
@@ -166,7 +165,7 @@ void APITS_BasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 	}
 }
 
-#pragma region SafeZoneInterface Implementations
+#pragma region SafeZoneEligibleInterface Implementations
 bool APITS_BasePlayerCharacter::IsInSafeZone_Implementation() const
 {
 	return bInSafeZone;

@@ -7,7 +7,7 @@
 #include "CoreMinimal.h"
 #include "PITS_BaseCharacter.h"
 #include "Interfaces/PITS_AmmoInterface.h"
-#include "Interfaces/PITS_SafeZoneInterface.h"
+#include "Interfaces/PITS_SafeZoneEligibleInterface.h"
 #include "PITS_BasePlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -16,7 +16,7 @@ class UInputAction;
 struct FInputActionValue;
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
-class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter, public IPITS_SafeZoneInterface, public IPITS_AmmoInterface
+class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter, public IPITS_SafeZoneEligibleInterface, public IPITS_AmmoInterface
 {
 	GENERATED_BODY()
 
@@ -106,7 +106,7 @@ public:
 
 #pragma endregion
 
-#pragma region SafeZoneInterface Implementations
+#pragma region SafeZoneEligibleInterface Implementations
 public:
 	virtual bool IsInSafeZone_Implementation() const override;
 	virtual void SetIsInSafeZone_Implementation(const bool bNewInSafeZone) override;
