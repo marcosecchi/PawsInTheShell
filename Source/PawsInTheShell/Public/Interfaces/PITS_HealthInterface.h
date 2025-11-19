@@ -32,5 +32,5 @@ public:
 
 	/** Returns true if the actor can regenerate health */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Health")
-	bool CanRegenerate();
+	bool CanRegenerate() const;
 };

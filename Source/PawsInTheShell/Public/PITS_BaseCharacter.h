@@ -92,7 +92,7 @@ public:
 public:
 	virtual bool IsDead_Implementation() const override;
 	virtual float GetHealthPercentage_Implementation() const override;
-	virtual bool CanRegenerate_Implementation() override;
+	virtual bool CanRegenerate_Implementation() const override;
 #pragma endregion
 
 #pragma region DefenceInterface Implementations

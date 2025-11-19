@@ -99,7 +99,7 @@ float APITS_BaseCharacter::GetHealthPercentage_Implementation() const
 	return Health->GetHealthPercentage();
 }
 
-bool APITS_BaseCharacter::CanRegenerate_Implementation()
+bool APITS_BaseCharacter::CanRegenerate_Implementation() const
 {
 	return Health->CanRegenerate() && !IsDead_Implementation() && Health->GetHealthPercentage() > 0.0f;
 }
