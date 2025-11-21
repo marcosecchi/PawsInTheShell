@@ -57,7 +57,10 @@ protected:
 
 	UPROPERTY()
 	float ArmourAmount = 0.0f;
-	
+
+	UPROPERTY()
+	bool bIsAugmented = false;
+
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
@@ -98,5 +101,7 @@ public:
 #pragma region DefenceInterface Implementations
 public:
 	virtual float GetArmourAmount_Implementation() const override;
+	
+	virtual bool IsCybernetic_Implementation() const override;
 #pragma endregion
 };

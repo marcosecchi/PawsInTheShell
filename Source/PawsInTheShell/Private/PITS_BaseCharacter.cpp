@@ -4,9 +4,10 @@
 
 #include "PITS_BaseCharacter.h"
 
-#include "PITS_DamageType_Regeneration.h"
+#include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Components/PITS_WeaponSpawnPointComponent.h"
+#include "Damage/PITS_DamageType_PicoTech.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Structs/PITS_CharacterDataTableRow.h"
@@ -37,6 +38,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		Health->SetCanRegenerate(CharacterData->bCanRegenerate);
 		
 		ArmourAmount = CharacterData->ArmourAmount;
+		bIsAugmented = CharacterData->bCyberAugmented;
 		CharacterName = CharacterData->CharacterName;
 		CharacterDescription = CharacterData->CharacterDescription;
 		CharacterIcon = CharacterData->CharacterIcon;
@@ -58,12 +60,18 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 		{
 			Health->AddHealth(DamageAmount);
 		}
-	}
-	else
-	{
-		const float EffectiveDamage = FMath::Max(0.0f, DamageAmount - ArmourAmount);
-		Health->RemoveHealth(EffectiveDamage);
-		return EffectiveDamage;
+		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_PicoTech::StaticClass()) && IsCybernetic_Implementation())
+		{
+			// PicoTech damage ignores armour for cybernetic characters
+			Health->RemoveHealth(DamageAmount);
+			return DamageAmount;
+		}
+		else
+		{
+			const float EffectiveDamage = FMath::Max(0.0f, DamageAmount - ArmourAmount);
+			Health->RemoveHealth(EffectiveDamage);
+			return EffectiveDamage;
+		}
 	}
 	return 0.0f;
 }
@@ -109,6 +117,11 @@ bool APITS_BaseCharacter::CanRegenerate_Implementation() const
 float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 {
 	return ArmourAmount;
+}
+
+bool APITS_BaseCharacter::IsCybernetic_Implementation() const
+{
+	return bIsAugmented;
 }
 #pragma endregion
 

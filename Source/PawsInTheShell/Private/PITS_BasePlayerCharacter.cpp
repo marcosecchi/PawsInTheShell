@@ -4,7 +4,6 @@
 
 #include "PawsInTheShell/Public/PITS_BasePlayerCharacter.h"
 
-#include "PITS_DamageType_Regeneration.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -12,8 +11,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Utils/PITS_Logs.h"
 #include "PITS_WorldSubsystem.h"
-#include "Components/PITS_HealthComponent.h"
-#include "Engine/DamageEvents.h"
 #include "Structs/PITS_WeaponDataTableRow.h"
 #include "Utils/PITS_Globals.h"
 

@@ -24,4 +24,8 @@ class PAWSINTHESHELL_API IPITS_DefenceInterface
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Defence")
 	float GetArmourAmount() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Defence")
+	bool IsCybernetic() const;
+
 };

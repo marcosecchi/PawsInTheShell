@@ -34,6 +34,9 @@ struct FPITS_CharacterDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Character defensive amount that reduces incoming damage"))
 	float ArmourAmount = 0.0f;
 
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Is the character cybernetic or robotic?"))
+	bool bCyberAugmented = false;
+
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Can the character regenerate when in a regeneration zone?"))
 	bool bCanRegenerate = false;
 
