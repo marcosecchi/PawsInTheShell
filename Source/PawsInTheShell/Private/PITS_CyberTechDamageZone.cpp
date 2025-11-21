@@ -18,10 +18,6 @@ APITS_CyberTechDamageZone::APITS_CyberTechDamageZone()
 	RootComponent = Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->SetArrowColor(FLinearColor(1.0f, 0.0f, 1.0f));
 	Arrow->SetArrowLength(160.0f);
-
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(RootComponent);
-	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	DamageZoneVolume = CreateDefaultSubobject<USphereComponent>(TEXT("DamageZoneVolume"));
 	DamageZoneVolume->SetupAttachment(RootComponent);

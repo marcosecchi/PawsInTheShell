@@ -25,9 +25,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
 	TObjectPtr<UArrowComponent> Arrow;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
-	TObjectPtr<UStaticMeshComponent> Mesh;
 	
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Damage", meta=(ToolTip="Amount of damage provoked per second"))
 	float DamageAmount = 1.0f;

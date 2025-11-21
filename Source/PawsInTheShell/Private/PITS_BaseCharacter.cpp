@@ -38,7 +38,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		Health->SetCanRegenerate(CharacterData->bCanRegenerate);
 		
 		ArmourAmount = CharacterData->ArmourAmount;
-		bIsAugmented = CharacterData->bCyberAugmented;
+		bIsCybernetic = CharacterData->bCyberAugmented;
 		CharacterName = CharacterData->CharacterName;
 		CharacterDescription = CharacterData->CharacterDescription;
 		CharacterIcon = CharacterData->CharacterIcon;
@@ -60,8 +60,13 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 		{
 			Health->AddHealth(DamageAmount);
 		}
-		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_CyberTech::StaticClass()) && IsCybernetic_Implementation())
+		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_CyberTech::StaticClass()))
 		{
+			if (!bIsCybernetic)
+			{
+				// Non-cybernetic characters are unaffected by CyberTech damage
+				return 0.0f;
+			}
 			// PicoTech damage ignores armour for cybernetic characters
 			Health->RemoveHealth(DamageAmount);
 			return DamageAmount;
@@ -121,7 +126,7 @@ float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 
 bool APITS_BaseCharacter::IsCybernetic_Implementation() const
 {
-	return bIsAugmented;
+	return bIsCybernetic;
 }
 #pragma endregion
 

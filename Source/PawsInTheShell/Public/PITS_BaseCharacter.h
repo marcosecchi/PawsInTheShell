@@ -59,7 +59,7 @@ protected:
 	float ArmourAmount = 0.0f;
 
 	UPROPERTY()
-	bool bIsAugmented = false;
+	bool bIsCybernetic = false;
 
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
