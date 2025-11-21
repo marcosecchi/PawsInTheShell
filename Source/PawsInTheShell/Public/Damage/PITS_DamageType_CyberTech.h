@@ -6,13 +6,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/DamageType.h"
-#include "PITS_DamageType_PicoTech.generated.h"
+#include "PITS_DamageType_CyberTech.generated.h"
 
 /**
  * Damage type used by PicoTech weapons that will affect cybernetic characters
  */
 UCLASS(meta=(DisplayName="DamageType_CyberTech"))
-class PAWSINTHESHELL_API UPITS_DamageType_PicoTech : public UDamageType
+class PAWSINTHESHELL_API UPITS_DamageType_CyberTech : public UDamageType
 {
 	GENERATED_BODY()
 };

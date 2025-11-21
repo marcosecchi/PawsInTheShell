@@ -6,18 +6,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PITS_PicoTechDamageZone.generated.h"
+#include "PITS_CyberTechDamageZone.generated.h"
 
 class UArrowComponent;
 class USphereComponent;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup="PawsInTheShell")
-class PAWSINTHESHELL_API APITS_PicoTechDamageZone : public AActor
+class PAWSINTHESHELL_API APITS_CyberTechDamageZone : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	APITS_PicoTechDamageZone();
+	APITS_CyberTechDamageZone();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")

@@ -2,15 +2,15 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PITS_PicoTechDamageZone.h"
+#include "PITS_CyberTechDamageZone.h"
 
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
-#include "Damage/PITS_DamageType_PicoTech.h"
+#include "Damage/PITS_DamageType_CyberTech.h"
 #include "Engine/DamageEvents.h"
 #include "Utils/PITS_Logs.h"
 
-APITS_PicoTechDamageZone::APITS_PicoTechDamageZone()
+APITS_CyberTechDamageZone::APITS_CyberTechDamageZone()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -26,22 +26,22 @@ APITS_PicoTechDamageZone::APITS_PicoTechDamageZone()
 	DamageZoneVolume = CreateDefaultSubobject<USphereComponent>(TEXT("DamageZoneVolume"));
 	DamageZoneVolume->SetupAttachment(RootComponent);
 	DamageZoneVolume->SetSphereRadius(500.0f);
-	OnActorBeginOverlap.AddDynamic(this, &APITS_PicoTechDamageZone::HandleActorBeginOverlap);
-	OnActorEndOverlap.AddDynamic(this, &APITS_PicoTechDamageZone::HandleActorEndOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &APITS_CyberTechDamageZone::HandleActorBeginOverlap);
+	OnActorEndOverlap.AddDynamic(this, &APITS_CyberTechDamageZone::HandleActorEndOverlap);
 }
 
-void APITS_PicoTechDamageZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void APITS_CyberTechDamageZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	if (DamagedActors.Contains(OtherActor)) return;
 	DamagedActors.Add(OtherActor);
 	UE_LOG(LogPITS, Log, TEXT("'%s' Started PicoTech damage for Actor '%s'"), *GetNameSafe(this), *GetNameSafe(OtherActor));
 	if (!GetWorld()->GetTimerManager().IsTimerActive(DamageTimer))
 	{
-		GetWorld()->GetTimerManager().SetTimer(DamageTimer, this, &APITS_PicoTechDamageZone::ProvokeDamage, 1.0f, true);
+		GetWorld()->GetTimerManager().SetTimer(DamageTimer, this, &APITS_CyberTechDamageZone::ProvokeDamage, 1.0f, true);
 	}
 }
 
-void APITS_PicoTechDamageZone::HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void APITS_CyberTechDamageZone::HandleActorEndOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	if (DamagedActors.Contains(OtherActor))
 	{
@@ -54,25 +54,25 @@ void APITS_PicoTechDamageZone::HandleActorEndOverlap(AActor* OverlappedActor, AA
 	}
 }
 
-void APITS_PicoTechDamageZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void APITS_CyberTechDamageZone::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 	StopDamaging();
 }
 
-void APITS_PicoTechDamageZone::ProvokeDamage()
+void APITS_CyberTechDamageZone::ProvokeDamage()
 {
 	UE_LOG(LogPITS, Log, TEXT("'%s' Damaging %d Actors"), *GetNameSafe(this), DamagedActors.Num());
 	for (AActor* RegeneratingActor : DamagedActors)
 	{
 		FDamageEvent DamageEvent = FDamageEvent();
-		DamageEvent.DamageTypeClass = UPITS_DamageType_PicoTech::StaticClass();
+		DamageEvent.DamageTypeClass = UPITS_DamageType_CyberTech::StaticClass();
 		RegeneratingActor->TakeDamage(DamageAmount, DamageEvent, nullptr, this);
 		UE_LOG(LogPITS, Log, TEXT("'%s' Damaging Actor '%s'"), *GetNameSafe(this), *GetNameSafe(RegeneratingActor));
 	}
 }
 
-void APITS_PicoTechDamageZone::StopDamaging()
+void APITS_CyberTechDamageZone::StopDamaging()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimer);
 }
