@@ -72,3 +72,7 @@ void APITS_CyberTechDamageZone::StopDamaging()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimer);
 }
+
+void APITS_CyberTechDamageZone::Hack_Implementation()
+{
+}

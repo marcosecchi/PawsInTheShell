@@ -6,13 +6,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/PITS_HackableInterface.h"
 #include "PITS_CyberTechDamageZone.generated.h"
 
 class UArrowComponent;
 class USphereComponent;
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup="PawsInTheShell")
-class PAWSINTHESHELL_API APITS_CyberTechDamageZone : public AActor
+class PAWSINTHESHELL_API APITS_CyberTechDamageZone : public AActor, public IPITS_HackableInterface
 {
 	GENERATED_BODY()
 
@@ -49,4 +50,7 @@ protected:
 	UFUNCTION()
 	void StopDamaging();
 
+#pragma region Hackable Interface Implementations
+	virtual void Hack_Implementation() override;
+#pragma endregion
 };
