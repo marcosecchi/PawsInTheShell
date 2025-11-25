@@ -10,6 +10,8 @@
 
 #define PITS_PROJECT_VERSION "alpha 1.0.0"
 
+#define PITS_LOG_PROJECT_VERSION UE_LOG(LogTemp, Log, TEXT("Paws In The Shell - Project Version: %s"), TEXT(PITS_PROJECT_VERSION))
+
 /**
  * Global constants and functions
  */
