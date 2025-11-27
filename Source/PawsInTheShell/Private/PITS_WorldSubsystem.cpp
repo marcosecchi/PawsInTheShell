@@ -34,3 +34,8 @@ void UPITS_WorldSubsystem::ChangeCharacter()
 		}
 	}
 }
+
+void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount)
+{
+	OnDamageTaken.Broadcast(DamageType, Amount);
+}

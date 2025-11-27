@@ -4,6 +4,7 @@
 
 #include "PITS_BaseCharacter.h"
 
+#include "PITS_WorldSubsystem.h"
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Components/PITS_WeaponSpawnPointComponent.h"
@@ -53,13 +54,18 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEvent const& DamageEvent,
                                       AController* EventInstigator, AActor* DamageCauser)
 {
+	UPITS_WorldSubsystem *WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+
+	float EffectiveAmount = DamageAmount;
+	
 	if (DamageEvent.DamageTypeClass != nullptr)
 	{
 		// Check if damage type is regeneration
 		if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_Regeneration::StaticClass()))
 		{
-			Health->AddHealth(DamageAmount);
+			Health->AddHealth(EffectiveAmount);
 		}
+		// Check if damage type is cybertech
 		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_CyberTech::StaticClass()))
 		{
 			if (!bIsCybernetic)
@@ -67,18 +73,21 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 				// Non-cybernetic characters are unaffected by CyberTech damage
 				return 0.0f;
 			}
-			// PicoTech damage ignores armour for cybernetic characters
-			Health->RemoveHealth(DamageAmount);
-			return DamageAmount;
+			// PicoTech damage ignores armor for cybernetic characters
+			Health->RemoveHealth(EffectiveAmount);
 		}
 		else
 		{
-			const float EffectiveDamage = FMath::Max(0.0f, DamageAmount - ArmourAmount);
-			Health->RemoveHealth(EffectiveDamage);
-			return EffectiveDamage;
+			// Apply armor reduction
+			EffectiveAmount = FMath::Max(0.0f, DamageAmount - ArmourAmount);
+			Health->RemoveHealth(EffectiveAmount);
 		}
 	}
-	return 0.0f;
+	if (WorldSubsystem)
+	{
+		WorldSubsystem->NotifyDamageTaken(DamageEvent.DamageTypeClass, EffectiveAmount);
+	}
+	return EffectiveAmount;
 }
 
 void APITS_BaseCharacter::BeginPlay()
