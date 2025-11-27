@@ -39,3 +39,8 @@ void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& Dam
 {
 	OnDamageTaken.Broadcast(DamageType, Amount);
 }
+
+void UPITS_WorldSubsystem::NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType)
+{
+	OnDamageEnd.Broadcast(DamageType);
+}

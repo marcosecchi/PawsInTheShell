@@ -4,6 +4,7 @@
 
 #include "PITS_CyberTechDamageZone.h"
 
+#include "PITS_WorldSubsystem.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Damage/PITS_DamageType_CyberTech.h"
@@ -71,6 +72,10 @@ void APITS_CyberTechDamageZone::ProvokeDamage()
 void APITS_CyberTechDamageZone::StopDamaging()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimer);
+	if (UPITS_WorldSubsystem *WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	{
+		WorldSubsystem->NotifyDamageEnd(UPITS_DamageType_CyberTech::StaticClass());
+	}
 }
 
 void APITS_CyberTechDamageZone::Hack_Implementation()

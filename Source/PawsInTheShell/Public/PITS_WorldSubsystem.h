@@ -9,6 +9,7 @@
 #include "PITS_WorldSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDamageTaken, TSubclassOf<UDamageType>, DamageEvent, float, Amount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageEnd, TSubclassOf<UDamageType>, DamageEvent);
 
 /**
  * 
@@ -24,7 +25,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount);
-	
+
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
+	void NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType);
+
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
 	FOnDamageTaken OnDamageTaken;
+
+	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
+	FOnDamageEnd OnDamageEnd;
 };
