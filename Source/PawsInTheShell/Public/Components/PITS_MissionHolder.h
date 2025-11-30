@@ -14,7 +14,7 @@ class UPITS_MissionDataAsset;
 /* *
  * Component that holds a mission reference and can dispatch mission updates
  */
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
 class PAWSINTHESHELL_API UPITS_MissionHolder : public UActorComponent
 {
 	GENERATED_BODY()
