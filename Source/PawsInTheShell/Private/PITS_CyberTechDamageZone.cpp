@@ -4,7 +4,7 @@
 
 #include "PITS_CyberTechDamageZone.h"
 
-#include "PITS_WorldSubsystem.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Damage/PITS_DamageType_CyberTech.h"

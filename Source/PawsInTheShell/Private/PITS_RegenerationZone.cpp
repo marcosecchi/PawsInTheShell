@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_RegenerationZone.h"
-
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Engine/DamageEvents.h"
 #include "Interfaces/PITS_HealthInterface.h"

@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseEnemyCharacter.h"
-
 #include "Utils/PITS_Globals.h"
 
 APITS_BaseEnemyCharacter::APITS_BaseEnemyCharacter()

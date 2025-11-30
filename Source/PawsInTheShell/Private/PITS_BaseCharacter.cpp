@@ -4,7 +4,7 @@
 
 #include "PITS_BaseCharacter.h"
 
-#include "PITS_WorldSubsystem.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Components/PITS_WeaponSpawnPointComponent.h"

@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_SafeZone.h"
-
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Interfaces/PITS_SafeZoneEligibleInterface.h"

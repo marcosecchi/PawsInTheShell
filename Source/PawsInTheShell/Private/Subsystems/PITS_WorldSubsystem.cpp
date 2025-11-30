@@ -2,9 +2,8 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PITS_WorldSubsystem.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_BasePlayerCharacter.h"
-#include "Interfaces/PITS_StatsWidgetInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
 
