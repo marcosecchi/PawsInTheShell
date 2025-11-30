@@ -56,13 +56,15 @@ protected:
 	FTimerHandle RespawnTimer;
 
 	/** Implement this function to handle the pickup logic */
-	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Pickup")
+	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
 	void HandlePickup(APITS_BasePlayerCharacter* OverlappedCharacter);
+	virtual void HandlePickup_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BasePickup::HandlePickup_Implementation);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
-	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Pickup")
+	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
 	void HandleRespawn();
-
+	virtual void HandleRespawn_Implementation() PURE_VIRTUAL(APITS_BasePickup::HandleRespawn_Implementation);
+	
 private:
 	/** Activate or Deactivate the pickup */
 	void SetPickupActive(bool bIsActive);
