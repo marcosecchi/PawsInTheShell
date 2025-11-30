@@ -14,7 +14,7 @@ class UPITS_MissionDataAsset;
 /* *
  * Component that holds a mission reference and can dispatch mission updates
  */
-UCLASS(Blueprintable, BlueprintType, ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, DisplayName="MissionHolder", ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
 class PAWSINTHESHELL_API UPITS_MissionHolder : public UActorComponent
 {
 	GENERATED_BODY()
@@ -38,6 +38,11 @@ public:
 	void DispatchMissionUpdate();
 	
 	// Getter for the mission data asset
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Missions")
 	UPITS_MissionDataAsset* GetMission() const { return Mission; }
-	
+
+	// Getter for the mission increment value
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Missions")
+	uint8 GetMissionIncrement() const { return MissionIncrement; }
+
 };

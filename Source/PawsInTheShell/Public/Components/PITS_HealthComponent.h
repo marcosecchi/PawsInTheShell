@@ -13,7 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FZeroHealthDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFullHealthDelegate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthUpdateDelegate, float, HealthPercentage);
 
-UCLASS(Blueprintable, BlueprintType, ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, DisplayName="Health", ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
 class PAWSINTHESHELL_API UPITS_HealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
