@@ -30,7 +30,7 @@ protected:
 
 	// Amount to increment the mission progress by when dispatching an update
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Missions")
-	uint8 MissionIncrement = 1;
+	int MissionIncrement = 1;
 	
 public:
 	// Dispatch a mission update to the Mission Subsystem
@@ -43,6 +43,6 @@ public:
 
 	// Getter for the mission increment value
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Missions")
-	uint8 GetMissionIncrement() const { return MissionIncrement; }
+	int GetMissionIncrement() const { return MissionIncrement; }
 
 };

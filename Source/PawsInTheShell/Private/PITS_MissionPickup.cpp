@@ -6,7 +6,6 @@
 #include "Components/PITS_MissionHolder.h"
 #include "Subsystems/PITS_MissionSubsystem.h"
 
-
 APITS_MissionPickup::APITS_MissionPickup()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -20,5 +19,9 @@ void APITS_MissionPickup::HandleTrigger_Implementation(APITS_BasePlayerCharacter
 	{
 		MissionSubsystem->UpdateMission(MissionHolderComponent->GetMission(), MissionHolderComponent->GetMissionIncrement());
 	}
+}
+
+void APITS_MissionPickup::HandleRespawn_Implementation()
+{
 }
 

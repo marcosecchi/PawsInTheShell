@@ -27,13 +27,14 @@ void UPITS_MissionSubsystem::InitializeMissions(const TArray<UPITS_MissionDataAs
 	OnMissionsInitialize.Broadcast();
 }
 
-void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, uint8 ProgressIncrement)
+void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, const int ProgressIncrement)
 {
 	// Check if the mission exists in the map
 	if (MissionMap.Contains(Mission))
 	{
 		// Update the mission progress
-		MissionMap[Mission]++;
+		MissionMap[Mission] += ProgressIncrement;
+		MissionMap[Mission] = FMath::Clamp(MissionMap[Mission], 0, Mission->CompleteCount);
 		
 		// Check if the mission is complete
 		if (MissionMap[Mission] >= Mission->CompleteCount)

@@ -52,7 +52,7 @@ struct FPITS_CharacterDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Deceleration applied when walking and not applying acceleration"))
 	float BrakingDecelerationWalking = 2000.f;
 
-	UPROPERTY(EditAnywhere, meta=(ToolTip="LAteral deceleration applied when falling and not applying acceleration"))
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Lateral deceleration applied when falling and not applying acceleration"))
 	float BrakingDecelerationFalling = 1500.0f;
 
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Additional notes about this character (for development purposes)"))

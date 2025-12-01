@@ -26,5 +26,5 @@ public:
 	FText MissionDescription;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PawsInTheShell")
-	uint8 CompleteCount;
+	int CompleteCount;
 };

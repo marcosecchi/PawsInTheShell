@@ -35,7 +35,7 @@ public:
 	void InitializeMissions(const TArray<UPITS_MissionDataAsset*> Missions);
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|MissionSubsystem")
-	void UpdateMission(UPITS_MissionDataAsset* Mission, uint8 ProgressIncrement = 1);
+	void UpdateMission(UPITS_MissionDataAsset* Mission, const int ProgressIncrement = 1);
 	
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
 	FOnMissionComplete OnMissionComplete;
