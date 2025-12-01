@@ -5,13 +5,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PITS_BasePickup.h"
+#include "PITS_BaseTrigger.h"
 #include "PITS_MissionPickup.generated.h"
 
 class UPITS_MissionHolder;
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_MissionPickup : public APITS_BasePickup
+class PAWSINTHESHELL_API APITS_MissionPickup : public APITS_BaseTrigger
 {
 	GENERATED_BODY()
 
@@ -24,7 +24,7 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UPITS_MissionHolder> MissionHolderComponent;
 	
-	virtual void HandlePickup_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) override;
+	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) override;
 	
 public:
 	FORCEINLINE UPITS_MissionHolder* GetMissionHolderComponent() const { return MissionHolderComponent; }

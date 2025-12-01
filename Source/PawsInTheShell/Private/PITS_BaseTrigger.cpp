@@ -2,7 +2,7 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PITS_BasePickup.h"
+#include "PITS_BaseTrigger.h"
 
 #include "PITS_BasePlayerCharacter.h"
 #include "Components/SphereComponent.h"
@@ -10,7 +10,7 @@
 #include "Utils/PITS_Logs.h"
 
 // Sets default values
-APITS_BasePickup::APITS_BasePickup()
+APITS_BaseTrigger::APITS_BaseTrigger()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -29,7 +29,7 @@ APITS_BasePickup::APITS_BasePickup()
 	SphereCollision->bFillCollisionUnderneathForNavmesh = true;
 
 	// subscribe to the collision overlap on the sphere
-	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &APITS_BasePickup::HandleActorBeginOverlap);
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &APITS_BaseTrigger::HandleActorBeginOverlap);
 
 	// create the mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -40,7 +40,7 @@ APITS_BasePickup::APITS_BasePickup()
 	Tags.Add(UPITS_Globals::GetPickupTag());
 }
 
-void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void APITS_BaseTrigger::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
@@ -48,7 +48,7 @@ void APITS_BasePickup::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	GetWorld()->GetTimerManager().ClearTimer(RespawnTimer);
 }
 
-void APITS_BasePickup::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void APITS_BaseTrigger::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!OtherActor->ActorHasTag(UPITS_Globals::GetPlayerTag()))
@@ -61,30 +61,30 @@ void APITS_BasePickup::HandleActorBeginOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Character '%s' overlapped a pickup"), *GetNameSafe(this), *GetNameSafe(OverlappedCharacter));
 		// Deactivate the pickup
-		SetPickupActive(false);
+		SetTriggerActive(false);
 
 		if (bWillRespawn)
 		{
 			// Starts the respawn timer
-			GetWorld()->GetTimerManager().SetTimer(RespawnTimer, this, &APITS_BasePickup::RespawnPickup, RespawnTime, false);
+			GetWorld()->GetTimerManager().SetTimer(RespawnTimer, this, &APITS_BaseTrigger::Respawn, RespawnTime, false);
 		}
 
 		// call the BP handler
-		HandlePickup(OverlappedCharacter);
+		HandleTrigger(OverlappedCharacter);
 	}
 }
 
-void APITS_BasePickup::RespawnPickup()
+void APITS_BaseTrigger::Respawn()
 {
 	UE_LOG(LogPITS, Log, TEXT("'%s' Respawning pickup"), *GetNameSafe(this));
 	// Reactivate the pickup
-	SetPickupActive(true);
+	SetTriggerActive(true);
 
 	// call the BP handler
 	HandleRespawn();
 }
 
-void APITS_BasePickup::SetPickupActive(bool bIsActive)
+void APITS_BaseTrigger::SetTriggerActive(bool bIsActive)
 {
 	// unhide this pickup
 	SetActorHiddenInGame(!bIsActive);

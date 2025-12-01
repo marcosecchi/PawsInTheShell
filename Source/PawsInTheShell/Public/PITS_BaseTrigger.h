@@ -7,16 +7,16 @@
 #include "CoreMinimal.h"
 #include "PITS_BasePlayerCharacter.h"
 #include "GameFramework/Actor.h"
-#include "PITS_BasePickup.generated.h"
+#include "PITS_BaseTrigger.generated.h"
 
 class USphereComponent;
 class UStaticMeshComponent;
 
 /**
- * Base Pickup class
+ * Base trigger class for pickups and triggerable zones
  */
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BasePickup : public AActor
+class PAWSINTHESHELL_API APITS_BaseTrigger : public AActor
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,7 @@ class PAWSINTHESHELL_API APITS_BasePickup : public AActor
 
 public:
 	// Sets default values for this actor's properties
-	APITS_BasePickup();
+	APITS_BaseTrigger();
 
 protected:
 
@@ -42,7 +42,7 @@ protected:
 	virtual void HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/** Called when it's time to respawn this pickup */
-	void RespawnPickup();
+	void Respawn();
 
 	/** Time to wait before respawning this pickup */
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup")
@@ -57,8 +57,8 @@ protected:
 
 	/** Implement this function to handle the pickup logic */
 	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
-	void HandlePickup(APITS_BasePlayerCharacter* OverlappedCharacter);
-	virtual void HandlePickup_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BasePickup::HandlePickup_Implementation);
+	void HandleTrigger(APITS_BasePlayerCharacter* OverlappedCharacter);
+	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BasePickup::HandlePickup_Implementation);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
 	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
@@ -67,5 +67,5 @@ protected:
 	
 private:
 	/** Activate or Deactivate the pickup */
-	void SetPickupActive(bool bIsActive);
+	void SetTriggerActive(bool bIsActive);
 };
