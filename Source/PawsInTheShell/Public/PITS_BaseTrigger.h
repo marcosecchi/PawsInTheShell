@@ -24,9 +24,12 @@ class PAWSINTHESHELL_API APITS_BaseTrigger : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USphereComponent> SphereCollision;
 
-	/** Pickup mesh. */
+	/** Trigger mesh. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
+
+	/** Activate or Deactivate the trigger */
+	void SetTriggerActive(bool bIsActive);
 
 public:
 	// Sets default values for this actor's properties
@@ -41,31 +44,32 @@ protected:
 	UFUNCTION()
 	virtual void HandleActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	/** Called when it's time to respawn this pickup */
+	/** Called when it's time to respawn this trigger */
 	void Respawn();
 
-	/** Time to wait before respawning this pickup */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup")
+	/** Time to wait before respawning this trigger */
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Trigger")
 	bool bWillRespawn = true;
 
 	/** Time to wait before respawning this pickup */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Pickup", meta = (ClampMin = 0, ClampMax = 120, Units = "s", EditCondition = "bWillRespawn", EditConditionHides))
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Trigger",
+		meta = (ClampMin = 0, ClampMax = 120, Units = "s", EditCondition = "bWillRespawn", EditConditionHides))
 	float RespawnTime = 4.0f;
 
-	/** Timer to respawn the pickup */
+	/** Timer to respawn the trigger */
 	FTimerHandle RespawnTimer;
 
-	/** Implement this function to handle the pickup logic */
-	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
+	/** Implement this function to handle the trigger logic */
+	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Trigger")
 	void HandleTrigger(APITS_BasePlayerCharacter* OverlappedCharacter);
-	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BasePickup::HandlePickup_Implementation);
+	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BaseTrigger::HandleTrigger_Implementation);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
-	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Pickup")
+	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Trigger")
 	void HandleRespawn();
-	virtual void HandleRespawn_Implementation() PURE_VIRTUAL(APITS_BasePickup::HandleRespawn_Implementation);
+	virtual void HandleRespawn_Implementation() PURE_VIRTUAL(APITS_BaseTrigger::HandleRespawn_Implementation);
 	
-private:
-	/** Activate or Deactivate the pickup */
-	void SetTriggerActive(bool bIsActive);
+public:
+	FORCEINLINE USphereComponent* GetSphereCollision() const { return SphereCollision; }
+	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
 };
