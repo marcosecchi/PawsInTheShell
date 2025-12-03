@@ -25,12 +25,12 @@ void APITS_ExitZone::BeginPlay()
 	{
 		GetMesh()->SetVisibility(false);
 		GetSphereCollision()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
-	else if (bWaitForMissionsCompletion)
-	{
-		if (UPITS_MissionSubsystem* MissionSubsystem = GetWorld()->GetSubsystem<UPITS_MissionSubsystem>())
+		if (bWaitForMissionsCompletion)
 		{
-			MissionSubsystem->OnAllMissionsComplete.AddDynamic(this, &APITS_ExitZone::ActivateTrigger);
+			if (UPITS_MissionSubsystem* MissionSubsystem = GetWorld()->GetSubsystem<UPITS_MissionSubsystem>())
+			{
+				MissionSubsystem->OnAllMissionsComplete.AddDynamic(this, &APITS_ExitZone::ActivateTrigger);
+			}
 		}
 	}
 }

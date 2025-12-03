@@ -29,7 +29,7 @@ class PAWSINTHESHELL_API APITS_BaseTrigger : public AActor
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	/** Activate or Deactivate the trigger */
-	void SetTriggerActive(bool bIsActive);
+	void SetTriggerActive(const bool bIsActive);
 
 public:
 	// Sets default values for this actor's properties

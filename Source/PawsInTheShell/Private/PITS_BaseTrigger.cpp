@@ -84,12 +84,11 @@ void APITS_BaseTrigger::Respawn()
 	HandleRespawn();
 }
 
-void APITS_BaseTrigger::SetTriggerActive(bool bIsActive)
+void APITS_BaseTrigger::SetTriggerActive(const bool bIsActive)
 {
 	// unhide this pickup
 	SetActorHiddenInGame(!bIsActive);
 
 	// enable collision
 	SetActorEnableCollision(bIsActive);
-
 }
