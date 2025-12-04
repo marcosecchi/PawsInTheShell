@@ -62,12 +62,12 @@ protected:
 	/** Implement this function to handle the trigger logic */
 	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Trigger")
 	void HandleTrigger(APITS_BasePlayerCharacter* OverlappedCharacter);
-	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) PURE_VIRTUAL(APITS_BaseTrigger::HandleTrigger_Implementation);
+	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter);
 	
 	/** Implement this function to handle respawn logic (Vfx, Sfx, etc.) */
 	UFUNCTION(BlueprintNativeEvent, Category="PawsInTheShell|Trigger")
 	void HandleRespawn();
-	virtual void HandleRespawn_Implementation() PURE_VIRTUAL(APITS_BaseTrigger::HandleRespawn_Implementation);
+	virtual void HandleRespawn_Implementation();
 	
 public:
 	FORCEINLINE USphereComponent* GetSphereCollision() const { return SphereCollision; }

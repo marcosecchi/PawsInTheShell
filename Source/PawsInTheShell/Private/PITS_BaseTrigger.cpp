@@ -84,6 +84,18 @@ void APITS_BaseTrigger::Respawn()
 	HandleRespawn();
 }
 
+void APITS_BaseTrigger::HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter)
+{
+	UE_LOG(LogPITS, Error, TEXT("'%s' HandleTrigger not implemented in in subclass"), *GetNameSafe(this));
+	checkNoEntry();
+}
+
+void APITS_BaseTrigger::HandleRespawn_Implementation()
+{
+	UE_LOG(LogPITS, Error, TEXT("'%s' HandleRespawn not implemented in in subclass"), *GetNameSafe(this));
+	checkNoEntry();
+}
+
 void APITS_BaseTrigger::SetTriggerActive(const bool bIsActive)
 {
 	// unhide this pickup
