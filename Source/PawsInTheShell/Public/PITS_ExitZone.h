@@ -24,7 +24,6 @@ protected:
 
 	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) override;
 	
-	
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Trigger")
 	bool bActiveAtStart = true;
 

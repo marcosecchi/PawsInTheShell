@@ -16,7 +16,6 @@ class PAWSINTHESHELL_API APITS_MissionPickup : public APITS_BaseTrigger
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	APITS_MissionPickup();
 
 protected:
@@ -25,8 +24,6 @@ protected:
 	TObjectPtr<UPITS_MissionHolder> MissionHolderComponent;
 	
 	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) override;
-	
-	virtual void HandleRespawn_Implementation() override;
 	
 public:
 	FORCEINLINE UPITS_MissionHolder* GetMissionHolderComponent() const { return MissionHolderComponent; }

@@ -21,7 +21,3 @@ void APITS_MissionPickup::HandleTrigger_Implementation(APITS_BasePlayerCharacter
 	}
 }
 
-void APITS_MissionPickup::HandleRespawn_Implementation()
-{
-}
-
