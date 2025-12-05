@@ -10,7 +10,7 @@
 #include "PITS_MissionSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMissionComplete, UPITS_MissionDataAsset*, Mission);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMissionUpdate, UPITS_MissionDataAsset*, Mission, uint8, CurrentProgress);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMissionUpdate, UPITS_MissionDataAsset*, Mission, int, CurrentProgress);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllMissionsComplete);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMissionsInitialize);
 
@@ -22,13 +22,18 @@ class PAWSINTHESHELL_API UPITS_MissionSubsystem final : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
-	/* List of Active Missions */
 	UPROPERTY()
-	TArray<UPITS_MissionDataAsset*> ActiveMissions;
+	TArray<UPITS_MissionDataAsset*> ActiveMissionList;
+
+protected:
+	/* List of Active Missions */
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|MissionSubsystem")
+	TArray<UPITS_MissionDataAsset*> MissionList;
 	
 	/* Map of Missions and their current progress */
-	UPROPERTY()
-	TMap<UPITS_MissionDataAsset*, uint8> MissionMap;
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|MissionSubsystem")
+	TMap<UPITS_MissionDataAsset*, int> MissionMap;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|MissionSubsystem")

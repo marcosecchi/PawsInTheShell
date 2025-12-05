@@ -9,13 +9,16 @@
 void UPITS_MissionSubsystem::InitializeMissions(const TArray<UPITS_MissionDataAsset*> Missions)
 {
 	// Clear any existing missions
-	ActiveMissions.Empty();
+	MissionList.Empty();
 	// Add new missions
-	ActiveMissions.Append(Missions);
+	MissionList.Append(Missions);
+	
+	ActiveMissionList.Empty();
+	ActiveMissionList.Append(Missions);
 	
 	// Initialize mission map
 	MissionMap.Empty();
-	for (UPITS_MissionDataAsset* Mission : ActiveMissions)
+	for (UPITS_MissionDataAsset* Mission : Missions)
 	{
 		if (Mission)
 		{
@@ -23,7 +26,7 @@ void UPITS_MissionSubsystem::InitializeMissions(const TArray<UPITS_MissionDataAs
 		}
 	}
 	
-	UE_LOG(LogPITS, Log, TEXT("'%s' Initialized %d Missions"), *GetNameSafe(this), ActiveMissions.Num());
+	UE_LOG(LogPITS, Log, TEXT("'%s' Initialized %d Missions"), *GetNameSafe(this), Missions.Num());
 	OnMissionsInitialize.Broadcast();
 }
 
@@ -42,11 +45,11 @@ void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, cons
 			// Notify mission complete and perform cleanup
 			UE_LOG(LogPITS, Log, TEXT("'%s' Mission '%s' completed"), *GetNameSafe(this), *GetNameSafe(Mission));
 			OnMissionComplete.Broadcast(Mission);
-			MissionMap.Remove(Mission);
-			ActiveMissions.Remove(Mission);
+	//		MissionMap.Remove(Mission);
+			ActiveMissionList.Remove(Mission);
 			
 			// Check if all missions are complete
-			if (ActiveMissions.Num() == 0)
+			if (ActiveMissionList.Num() == 0)
 			{
 				UE_LOG(LogPITS, Log, TEXT("'%s' All missions completed"), *GetNameSafe(this));
 				// Notify all missions complete
@@ -57,7 +60,7 @@ void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, cons
 		{
 			// Notify mission update
 			UE_LOG(LogPITS, Log, TEXT("'%s' Mission '%s' updated: %d/%d"), *GetNameSafe(this), *GetNameSafe(Mission), MissionMap[Mission], Mission->CompleteCount);
-			OnMissionUpdate.Broadcast(Mission, ProgressIncrement);
+			OnMissionUpdate.Broadcast(Mission, MissionMap[Mission]);
 		}
 	}
 }
