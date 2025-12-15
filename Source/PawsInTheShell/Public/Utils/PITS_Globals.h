@@ -18,7 +18,7 @@
 	{                                                                          \
 		if ((Ptr) == nullptr)                                                  \
 		{                                                                      \
-			UE_LOG(LogGF, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
+			UE_LOG(LogPITS, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
 				   TEXT(#Ptr), TEXT(__FILE__), __LINE__);                      \
 		}                                                                      \
 	} while (0)
@@ -29,7 +29,7 @@
 	{                                                                          \
 		if ((Ptr) == nullptr)                                                  \
 		{                                                                      \
-			UE_LOG(LogGF, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
+			UE_LOG(LogPITS, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
 				   TEXT(#Ptr), TEXT(__FILE__), __LINE__);                      \
 			return;                                                            \
 		}                                                                      \
@@ -41,7 +41,7 @@
 	{                                                                          \
 		if ((Ptr) == nullptr)                                                  \
 		{                                                                      \
-			UE_LOG(LogGF, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
+			UE_LOG(LogPITS, Warning, TEXT("Null pointer detected: %s [%s:%d]"),  \
 				   TEXT(#Ptr), TEXT(__FILE__), __LINE__);                      \
 			(Ptr) = (FallbackValue);                                           \
 		}                                                                      \

@@ -8,12 +8,19 @@
 #include "PITS_BaseCharacter.h"
 #include "PITS_BaseEnemyCharacter.generated.h"
 
+class APITS_EnemySpawner;
+
 UCLASS(Abstract, BlueprintType, Blueprintable)
 class PAWSINTHESHELL_API APITS_BaseEnemyCharacter : public APITS_BaseCharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY()
+	TObjectPtr<APITS_EnemySpawner> OwningSpawner;
+	
 public:
 	// Sets default values for this character's properties
 	APITS_BaseEnemyCharacter();
+	
+	void SetOwningSpawner(APITS_EnemySpawner* Spawner) { OwningSpawner = Spawner; }
 };
