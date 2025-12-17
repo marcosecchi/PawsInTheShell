@@ -7,15 +7,15 @@
 #include "CoreMinimal.h"
 #include "PITS_BaseEnemyCharacter.h"
 #include "GameFramework/Actor.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_EnemySpawner.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_EnemySpawner : public AActor
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	APITS_EnemySpawner();
 
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
@@ -25,20 +25,26 @@ public:
 	TSubclassOf<APITS_BaseEnemyCharacter> EnemySpawnableClass;
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|PoolSystem")
-	APITS_BaseEnemyCharacter* GetEnemyFromPool();
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|PoolSystem")
-	void ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy);
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|PoolSystem")
-	bool HasAvailableEnemiesInPool() const;
-	
+	void SpawnEnemy();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category="PawsInTheShell|PoolSystem")
+	FTransform GetSpawnTransform();
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
 	void InitializePool();
 	
-	TArray<TObjectPtr<APITS_BaseEnemyCharacter>> EnemyPool;
+	UPROPERTY()
+	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem;
+
+	UFUNCTION()
+	APITS_BaseEnemyCharacter* GetEnemyFromPool() const;
+	
+	UFUNCTION()
+	void ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) const;
+	
+	UFUNCTION()
+	void OnEnemyDeath(AActor* DeadEnemy);
+
 };

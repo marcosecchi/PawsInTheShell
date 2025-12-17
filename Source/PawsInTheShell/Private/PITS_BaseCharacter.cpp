@@ -148,7 +148,7 @@ void APITS_BaseCharacter::HandleFullHealth()
 void APITS_BaseCharacter::HandleZeroHealth()
 {
 	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-	OnDeath.Broadcast();
+	OnDeath.Broadcast(this);
 }
 
 void APITS_BaseCharacter::HandleUpdateHealth(float HealthPercentage)

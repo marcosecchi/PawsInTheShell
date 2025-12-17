@@ -13,7 +13,7 @@
 class UPITS_HealthComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthUpdateDelegate, float, HealthPercentage);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCharacterDeathDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterDeathDelegate, AActor*, DeadCharacter);
 
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface

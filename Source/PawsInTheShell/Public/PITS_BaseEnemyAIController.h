@@ -50,6 +50,7 @@ public:
 
 protected:
 	/** Enemy currently being targeted */
+	UPROPERTY()
 	TObjectPtr<APITS_BasePlayerCharacter> TargetCharacter;
 
 	/** Pawn initialization */
@@ -57,7 +58,7 @@ protected:
 
 	/** Called when the possessed pawn dies */
 	UFUNCTION()
-	void OnDeath();
+	void OnDeath(AActor* DeadActor);
 
 	/** Called when the AI perception component updates a perception on a given actor */
 	UFUNCTION()

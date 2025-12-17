@@ -46,7 +46,7 @@ void APITS_BaseEnemyAIController::OnPossess(APawn* InPawn)
 	}
 }
 
-void APITS_BaseEnemyAIController::OnDeath()
+void APITS_BaseEnemyAIController::OnDeath(AActor* DeadActor)
 {
 	// stop movement
 	GetPathFollowingComponent()->AbortMove(*this, FPathFollowingResultFlags::UserAbort);
