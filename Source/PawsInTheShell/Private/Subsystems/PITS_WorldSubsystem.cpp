@@ -107,3 +107,13 @@ bool UPITS_WorldSubsystem::HasAvailablePooledObjects(const TSubclassOf<AActor> S
 	}
 	return GetObjectPool(SpawnableClass)->HasAvailableObjectsInPool();
 }
+
+bool UPITS_WorldSubsystem::IsObjectPooled(const AActor* Actor) const
+{
+	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
+	{
+		const UPITS_ActorPool* Pool = GetObjectPool(Class);
+		return Pool->IsObjectPooled(Actor);
+	}
+	return false;
+}

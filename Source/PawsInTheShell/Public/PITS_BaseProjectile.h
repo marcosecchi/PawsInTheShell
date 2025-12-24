@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/PITS_PooledObjectInterface.h"
 #include "PITS_BaseProjectile.generated.h"
 
 class UCapsuleComponent;
@@ -13,10 +14,10 @@ class UProjectileMovementComponent;
 class UDamageType;
 
 UCLASS(Abstract)
-class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor
+class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor, public IPITS_PooledObjectInterface
 {
 	GENERATED_BODY()
-
+	
 	/** Provides collision detection for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCapsuleComponent> CollisionComponent;
@@ -100,10 +101,15 @@ protected:
 
 	/** Passes control to Blueprint to implement any effects on hit. */
 	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Projectile", meta = (DisplayName = "On Projectile Hit"))
-	void BP_OnProjectileHit(const FHitResult& Hit);
+	void HandleProjectileHit(const FHitResult& Hit);
 
 	/** Called from the destruction timer to destroy this projectile */
-	void OnDeferredDestruction();
+	void OnDestruction();
+
 
 public:
+	/** IPITS_PooledObjectInterface implementations */
+	virtual void HandleAcquire_Implementation();
+	virtual void HandleRelease_Implementation();
+
 };

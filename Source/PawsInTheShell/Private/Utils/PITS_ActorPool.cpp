@@ -73,6 +73,11 @@ bool UPITS_ActorPool::HasAvailableObjectsInPool() const
 	});
 }
 
+bool UPITS_ActorPool::IsObjectPooled(const AActor* Actor) const
+{
+	return (ActorPool.Contains(Actor));
+}
+
 void UPITS_ActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
 	if (!SpawnableClass)

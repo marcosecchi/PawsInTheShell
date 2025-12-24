@@ -14,7 +14,9 @@
 #include "Engine/OverlapResult.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "Utils/PITS_Globals.h"
+#include "Utils/PITS_Logs.h"
 
 // Sets default values
 APITS_BaseProjectile::APITS_BaseProjectile()
@@ -40,6 +42,7 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	ProjectileMovement->InitialSpeed = 3000.0f;
 	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bShouldBounce = true;
+	ProjectileMovement->ProjectileGravityScale = 0.f;
 	
 	// set the default damage type
 	HitDamageType = UDamageType::StaticClass();
@@ -96,18 +99,19 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 	}
 
 	// pass control to BP for any extra effects
-	BP_OnProjectileHit(Hit);
+	HandleProjectileHit(Hit);
 
 	// check if we should schedule deferred destruction of the projectile
 	if (DeferredDestructionTime > 0.0f)
 	{
-		GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &APITS_BaseProjectile::OnDeferredDestruction, DeferredDestructionTime, false);
+		GetWorld()->GetTimerManager().SetTimer(DestructionTimer, this, &APITS_BaseProjectile::OnDestruction, DeferredDestructionTime, false);
 
-	} else {
-
-		// destroy the projectile right away
-		Destroy();
-	}}
+	}
+	else
+	{
+		OnDestruction();
+	}
+}
 
 void APITS_BaseProjectile::ExplosionCheck(const FVector& ExplosionCenter)
 {
@@ -172,9 +176,27 @@ void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* Hit
 		HitComp->AddImpulseAtLocation(HitDirection * PhysicsForce, HitLocation);
 	}}
 
-void APITS_BaseProjectile::OnDeferredDestruction()
+void APITS_BaseProjectile::OnDestruction()
 {
-	// destroy this actor
-	Destroy();
+	UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+	CHECK_PTR_AND_LOG(WorldSubsystem);
+	if (WorldSubsystem->IsObjectPooled(this))
+	{
+		WorldSubsystem->ReleasePooledObject(this);
+	}
+	else
+	{
+		Destroy();
+	}
+}
+
+void APITS_BaseProjectile::HandleAcquire_Implementation()
+{
+	UE_LOG(LogPITS, Log, TEXT("'%s' Acquired from pool."), *GetNameSafe(this));
+}
+
+void APITS_BaseProjectile::HandleRelease_Implementation()
+{
+	UE_LOG(LogPITS, Log, TEXT("'%s' Released to pool."), *GetNameSafe(this));
 }
 

@@ -52,6 +52,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const;
+
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
+	bool IsObjectPooled(const AActor* Actor) const;
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	AActor* GetPooledObject(const TSubclassOf<AActor> SpawnableClass);

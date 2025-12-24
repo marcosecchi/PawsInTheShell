@@ -34,5 +34,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|PoolSystem")
 	bool HasAvailableObjectsInPool() const;
 
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|PoolSystem")
+	bool IsObjectPooled(const AActor* Actor) const;
+
 	void InitializePool(TSubclassOf<AActor> SpawnableClass, int32 PoolSize);
 };
