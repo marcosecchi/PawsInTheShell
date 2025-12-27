@@ -10,7 +10,6 @@
 #include "GameFramework/DamageType.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
-#include "TimerManager.h"
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
@@ -42,6 +41,7 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	ProjectileMovement->MaxSpeed = 3000.0f;
 	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
+	ProjectileMovement->bRotationFollowsVelocity = true;
 	
 	// set the default damage type
 	HitDamageType = UDamageType::StaticClass();
@@ -66,7 +66,6 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 	
 	ProcessHit(Other, OtherComp, Hit.ImpactPoint, -Hit.ImpactNormal);
 
-	// pass control to BP for any extra effects
 	HandleProjectileHit(Hit);
 
 	OnDestruction();
@@ -75,16 +74,7 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation,
 	const FVector& HitDirection)
 {
-	// have we hit a character?
-	if (ACharacter* HitCharacter = Cast<ACharacter>(HitActor))
-	{
-		// ignore the owner of this projectile
-		if (HitCharacter != GetOwner() || bDamageOwner)
-		{
-			// apply damage to the character
-			UGameplayStatics::ApplyDamage(HitCharacter, HitDamage, GetInstigator()->GetController(), this, HitDamageType);
-		}
-	}
+	UGameplayStatics::ApplyDamage(HitActor, HitDamage, GetInstigator()->GetController(), this, HitDamageType);
 
 	// have we hit a physics object?
 	if (HitComp->IsSimulatingPhysics())
@@ -108,28 +98,30 @@ void APITS_BaseProjectile::OnDestruction()
 	}
 }
 
-void APITS_BaseProjectile::HandleAcquire_Implementation()
+void APITS_BaseProjectile::HandleAfterAcquire_Implementation()
 {
 	UE_LOG(LogPITS, Log, TEXT("'%s' Acquired from pool."), *GetNameSafe(this));
-//	ProjectileMovement->StopSimulating(FHitResult());
-//	ProjectileMovement->InitialSpeed = Speed;
-//	ProjectileMovement->MaxSpeed = ProjectileMovement->InitialSpeed;
 	
-	// TODO: Improve. Rotation has issues.
-	ProjectileMovement->StopMovementImmediately(); // Eliminate prior velocity/state
-	ProjectileMovement->Velocity = GetActorForwardVector() * 3000; // Set explicit velocity
-	ProjectileMovement->InitialSpeed = 3000;
-	ProjectileMovement->MaxSpeed = 3000;
-	ProjectileMovement->SetUpdatedComponent(CollisionComponent);
-	ProjectileMovement->Activate(true);
-	ProjectileMovement->ResetInterpolation();
+	if (ProjectileMovement)
+	{
+		ProjectileMovement->StopMovementImmediately();
+		ProjectileMovement->Deactivate();
+		ProjectileMovement->ResetInterpolation();
 	
-	ProjectileMovement->Velocity = GetActorForwardVector() * ProjectileMovement->MaxSpeed;
-//	ProjectileMovement->ResetInterpolation();
+		SetActorRotation(GetActorForwardVector().Rotation());
+	
+		ProjectileMovement->SetUpdatedComponent(CollisionComponent);
+		ProjectileMovement->Velocity = GetActorForwardVector() * ProjectileMovement->MaxSpeed;
+
+		ProjectileMovement->Activate(true);
+		ProjectileMovement->ResetInterpolation();
+		ProjectileMovement->SetComponentTickEnabled(true);
+	}
 }
 
 void APITS_BaseProjectile::HandleRelease_Implementation()
 {
+	ProjectileMovement->StopMovementImmediately();
 	UE_LOG(LogPITS, Log, TEXT("'%s' Released to pool."), *GetNameSafe(this));
 }
 

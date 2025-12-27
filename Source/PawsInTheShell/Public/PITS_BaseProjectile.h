@@ -71,7 +71,6 @@ protected:
 
 // IPITS_PooledObjectInterface implementations
 public:
-	virtual void HandleAcquire_Implementation();
+	virtual void HandleAfterAcquire_Implementation();
 	virtual void HandleRelease_Implementation();
-
 };

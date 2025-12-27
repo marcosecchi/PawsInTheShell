@@ -27,5 +27,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Object Pool")
 	void HandleRelease();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Object Pool")
+	void HandleAfterAcquire();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Object Pool")
+	void HandleAfterRelease();
 };
 
