@@ -74,7 +74,7 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation,
 	const FVector& HitDirection)
 {
-	UGameplayStatics::ApplyDamage(HitActor, HitDamage, GetInstigator()->GetController(), this, HitDamageType);
+	UGameplayStatics::ApplyDamage(HitActor, HitDamage, nullptr, this, HitDamageType);
 
 	// have we hit a physics object?
 	if (HitComp->IsSimulatingPhysics())
