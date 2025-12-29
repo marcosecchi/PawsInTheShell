@@ -26,6 +26,18 @@ void APITS_BaseCharacter::HandleShoot()
 {
 	TArray<UPITS_WeaponSpawnPointComponent*> WeaponSpawnPoints;
 	GetComponents<UPITS_WeaponSpawnPointComponent>(WeaponSpawnPoints);
+	if (ShootDelay > 0.f && (GetVelocity().Size() <= KINDA_SMALL_NUMBER))
+	{
+		FTimerHandle ShootDelayTimerHandle;
+		GetWorldTimerManager().SetTimer(ShootDelayTimerHandle, [this, WeaponSpawnPoints]()
+		{
+			for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)
+			{
+				SpawnPoint->Shoot();
+			}
+		}, ShootDelay, false);
+		return;
+	}
 	for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)
 	{
 		SpawnPoint->Shoot();

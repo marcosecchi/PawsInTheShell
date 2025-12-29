@@ -62,6 +62,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	float WeaponCooldownTime = 0.0f;
 
+	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Weapon")
+	float ShootDelay = 0.0f;
+	
 	UPROPERTY()
 	float ArmourAmount = 0.0f;
 
