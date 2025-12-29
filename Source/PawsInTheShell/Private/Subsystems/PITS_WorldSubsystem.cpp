@@ -7,7 +7,7 @@
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utils/PITS_Logs.h"
-#include "Utils/PITS_ActorPool.h"
+#include "Utils/PITS_ActorPool_Fixed.h"
 #include "Utils/PITS_Globals.h"
 
 void UPITS_WorldSubsystem::ChangeCharacter()
@@ -61,7 +61,7 @@ void UPITS_WorldSubsystem::CreateObjectPool(const TSubclassOf<AActor> SpawnableC
 		return;
 	}
 
-	if (UPITS_ActorPool* NewPool = NewObject<UPITS_ActorPool>(this))
+	if (UPITS_ActorPool_Fixed* NewPool = NewObject<UPITS_ActorPool_Fixed>(this))
 	{
 		NewPool->InitializePool(SpawnableClass, PoolSize);
 		ActorsPoolMap.Add(SpawnableClass, NewPool);
@@ -109,7 +109,7 @@ void UPITS_WorldSubsystem::ReleasePooledObject(AActor* Actor)
 	}
 }
 
-UPITS_ActorPool* UPITS_WorldSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
+UPITS_ActorPool_Fixed* UPITS_WorldSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
 {
 	return ActorsPoolMap.FindRef(SpawnableClass);
 }
@@ -128,7 +128,7 @@ bool UPITS_WorldSubsystem::IsObjectPooled(const AActor* Actor) const
 {
 	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
 	{
-		const UPITS_ActorPool* Pool = GetObjectPool(Class);
+		const UPITS_ActorPool_Fixed* Pool = GetObjectPool(Class);
 		return Pool->IsObjectPooled(Actor);
 	}
 	return false;

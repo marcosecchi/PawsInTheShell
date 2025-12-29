@@ -2,12 +2,12 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PawsInTheShell/Public/Utils/PITS_ActorPool.h"
+#include "PawsInTheShell/Public/Utils/PITS_ActorPool_Fixed.h"
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
-AActor* UPITS_ActorPool::GetObjectFromPool()
+AActor* UPITS_ActorPool_Fixed::GetObjectFromPool()
 {
 	for (TObjectPtr<AActor>& ActorPtr : ActorPool)
 	{
@@ -31,7 +31,7 @@ AActor* UPITS_ActorPool::GetObjectFromPool()
 
 }
 
-void UPITS_ActorPool::ReleaseObjectToPool(AActor* Actor)
+void UPITS_ActorPool_Fixed::ReleaseObjectToPool(AActor* Actor)
 {
 	// Macro to guard against null pointers and log a message if null.
 	CHECK_PTR_AND_LOG_RETURN(Actor);
@@ -53,7 +53,7 @@ void UPITS_ActorPool::ReleaseObjectToPool(AActor* Actor)
 	UE_LOG(LogPITS, Warning, TEXT("Attempted to release an actor not from this pool %s"), *GetName());
 }
 
-bool UPITS_ActorPool::HasAvailableObjectsInPool() const
+bool UPITS_ActorPool_Fixed::HasAvailableObjectsInPool() const
 {
 	return ActorPool.ContainsByPredicate([](const TObjectPtr<AActor>& ActorPtr)
 	{
@@ -61,12 +61,12 @@ bool UPITS_ActorPool::HasAvailableObjectsInPool() const
 	});
 }
 
-bool UPITS_ActorPool::IsObjectPooled(const AActor* Actor) const
+bool UPITS_ActorPool_Fixed::IsObjectPooled(const AActor* Actor) const
 {
 	return (ActorPool.Contains(Actor));
 }
 
-void UPITS_ActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
+void UPITS_ActorPool_Fixed::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
 	if (!SpawnableClass)
 	{

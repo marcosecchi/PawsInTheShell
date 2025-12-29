@@ -5,13 +5,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "PITS_ActorPool.generated.h"
+#include "PITS_ActorPool_Fixed.generated.h"
 
 /**
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PAWSINTHESHELL_API UPITS_ActorPool : public UObject
+class PAWSINTHESHELL_API UPITS_ActorPool_Fixed : public UObject
 {
 	GENERATED_BODY()
 
