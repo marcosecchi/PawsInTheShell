@@ -21,14 +21,12 @@ class PAWSINTHESHELL_API UPITS_WorldSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	TMap<TSubclassOf<AActor>, TObjectPtr<class UPITS_FixedActorPool>> ActorsPoolMap;
-	
 public:
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void ChangeCharacter();
 	
+#pragma region "Damage"
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount);
 
@@ -40,26 +38,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
 	FOnDamageEnd OnDamageEnd;
+#pragma endregion
 	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void CreateObjectPool(TSubclassOf<AActor> SpawnableClass, int32 PoolSize = 20);
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	bool HasObjectPool(TSubclassOf<AActor> SpawnableClass) const;
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	UPITS_FixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
 
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	bool HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const;
-
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	bool IsObjectPooled(const AActor* Actor) const;
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	AActor* AcquirePooledObject(const TSubclassOf<AActor> SpawnableClass, const FTransform ObjectTransform);
-	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void ReleasePooledObject(AActor* Actor);
-	
 };

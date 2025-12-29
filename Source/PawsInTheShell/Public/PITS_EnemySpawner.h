@@ -5,10 +5,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PITS_BaseEnemyCharacter.h"
 #include "GameFramework/Actor.h"
-#include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_EnemySpawner.generated.h"
+
+class UPITS_ObjectPoolSubsystem;
+class APITS_BaseEnemyCharacter;
 
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_EnemySpawner : public AActor
@@ -36,7 +37,7 @@ protected:
 	void InitializePool();
 	
 	UPROPERTY()
-	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem;
+	TObjectPtr<UPITS_ObjectPoolSubsystem> PoolSubsystem;
 
 	UFUNCTION()
 	APITS_BaseEnemyCharacter* AcquireEnemyFromPool(const FTransform Transform) const;

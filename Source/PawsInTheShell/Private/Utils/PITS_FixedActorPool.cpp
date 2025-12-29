@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PawsInTheShell/Public/Utils/PITS_FixedActorPool.h"
-#include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 

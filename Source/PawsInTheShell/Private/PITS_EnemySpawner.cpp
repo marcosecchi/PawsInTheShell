@@ -3,6 +3,9 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_EnemySpawner.h"
+
+#include "PITS_BaseEnemyCharacter.h"
+#include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
@@ -19,12 +22,12 @@ APITS_EnemySpawner::APITS_EnemySpawner()
 // When an enemy is acquired it is unhidden and collision is enabled.
 APITS_BaseEnemyCharacter* APITS_EnemySpawner::AcquireEnemyFromPool(const FTransform Transform) const
 {
-    if (WorldSubsystem == nullptr)
+    if (PoolSubsystem == nullptr)
     {
         UE_LOG(LogPITS, Warning, TEXT("WorldSubsystem is null in EnemySpawner %s"), *GetName());
         return nullptr;
     }
-    AActor* Actor = WorldSubsystem->AcquirePooledObject(EnemySpawnableClass, Transform);
+    AActor* Actor = PoolSubsystem->AcquirePooledObject(EnemySpawnableClass, Transform);
     return Cast<APITS_BaseEnemyCharacter>(Actor);
 }
 
@@ -33,8 +36,8 @@ APITS_BaseEnemyCharacter* APITS_EnemySpawner::AcquireEnemyFromPool(const FTransf
 void APITS_EnemySpawner::ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) const
 {
     // Macro to guard against null pointers and log a message if null.
-    CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
-    WorldSubsystem->ReleasePooledObject(Enemy);
+    CHECK_PTR_AND_LOG_RETURN(PoolSubsystem);
+    PoolSubsystem->ReleasePooledObject(Enemy);
 }
 
 void APITS_EnemySpawner::OnEnemyDeath(AActor* DeadEnemy)
@@ -73,12 +76,12 @@ void APITS_EnemySpawner::InitializePool()
     // Guard against missing world context.
     CHECK_PTR_AND_LOG_RETURN(World);
 
-    WorldSubsystem = World->GetSubsystem<UPITS_WorldSubsystem>();
-    CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
+    PoolSubsystem = World->GetSubsystem<UPITS_ObjectPoolSubsystem>();
+    CHECK_PTR_AND_LOG_RETURN(PoolSubsystem);
     
     // Create the object pool in the world subsystem if it doesn't exist.
-    if (!WorldSubsystem->HasObjectPool(EnemySpawnableClass))
+    if (!PoolSubsystem->HasObjectPool(EnemySpawnableClass))
     {
-        WorldSubsystem->CreateObjectPool(EnemySpawnableClass, PoolSize);
+        PoolSubsystem->CreateObjectPool(EnemySpawnableClass, PoolSize);
     }
 }

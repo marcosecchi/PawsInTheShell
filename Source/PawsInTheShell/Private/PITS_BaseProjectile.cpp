@@ -9,7 +9,7 @@
 #include "GameFramework/DamageType.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
-#include "Subsystems/PITS_WorldSubsystem.h"
+#include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
@@ -72,11 +72,11 @@ void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* Hit
 
 void APITS_BaseProjectile::OnDestruction()
 {
-	UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
-	CHECK_PTR_AND_LOG(WorldSubsystem);
-	if (WorldSubsystem->IsObjectPooled(this))
+	UPITS_ObjectPoolSubsystem* PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
+	CHECK_PTR_AND_LOG(PoolSubsystem);
+	if (PoolSubsystem->IsObjectPooled(this))
 	{
-		WorldSubsystem->ReleasePooledObject(this);
+		PoolSubsystem->ReleasePooledObject(this);
 	}
 	else
 	{

@@ -6,9 +6,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ArrowComponent.h"
-#include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_WeaponSpawnPointComponent.generated.h"
 
+class UPITS_ObjectPoolSubsystem;
 class APITS_BaseProjectile;
 
 UCLASS(Blueprintable, BlueprintType, DisplayName="WeaponSpawnPoint", ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
@@ -28,7 +28,7 @@ protected:
 	TSubclassOf<APITS_BaseProjectile> CurrentProjectileClass;
 
 	UPROPERTY();
-	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem; 
+	TObjectPtr<UPITS_ObjectPoolSubsystem> PoolSubsystem; 
 
 	virtual void BeginPlay() override;
 	

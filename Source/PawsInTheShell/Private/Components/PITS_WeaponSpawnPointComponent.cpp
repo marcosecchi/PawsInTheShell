@@ -3,8 +3,8 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Components/PITS_WeaponSpawnPointComponent.h"
-
 #include "PITS_BaseProjectile.h"
+#include "Subsystems/PITS_ObjectPoolSubsystem.h"
 
 UPITS_WeaponSpawnPointComponent::UPITS_WeaponSpawnPointComponent()
 {
@@ -15,7 +15,7 @@ void UPITS_WeaponSpawnPointComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+	PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
 }
 
 void UPITS_WeaponSpawnPointComponent::Shoot()
@@ -29,7 +29,7 @@ void UPITS_WeaponSpawnPointComponent::Shoot()
 			const FVector SpawnLocation = GetComponentLocation();
 			const FRotator SpawnRotation = GetComponentRotation();
 			const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
-			WorldSubsystem->AcquirePooledObject(CurrentProjectileClass, SpawnTransform);
+			PoolSubsystem->AcquirePooledObject(CurrentProjectileClass, SpawnTransform);
 		}
 	}
 }
@@ -38,8 +38,8 @@ void UPITS_WeaponSpawnPointComponent::SetCurrentProjectileClass(
 	const TSubclassOf<APITS_BaseProjectile> NewProjectileClass)
 {
 	CurrentProjectileClass = NewProjectileClass;
-	if (WorldSubsystem)
+	if (PoolSubsystem)
 	{
-		WorldSubsystem->CreateObjectPool(CurrentProjectileClass, RequestedPoolSize);
+		PoolSubsystem->CreateObjectPool(CurrentProjectileClass, RequestedPoolSize);
 	}
 }
