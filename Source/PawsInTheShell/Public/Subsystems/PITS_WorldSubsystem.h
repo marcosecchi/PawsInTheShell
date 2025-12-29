@@ -8,7 +8,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PITS_WorldSubsystem.generated.h"
 
-class UPITS_ActorPool_Fixed;
+class UPITS_FixedActorPool;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDamageTaken, TSubclassOf<UDamageType>, DamageEvent, float, Amount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDamageEnd, TSubclassOf<UDamageType>, DamageEvent);
@@ -22,7 +22,7 @@ class PAWSINTHESHELL_API UPITS_WorldSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TMap<TSubclassOf<AActor>, TObjectPtr<class UPITS_ActorPool_Fixed>> ActorsPoolMap;
+	TMap<TSubclassOf<AActor>, TObjectPtr<class UPITS_FixedActorPool>> ActorsPoolMap;
 	
 public:
 	
@@ -48,7 +48,7 @@ public:
 	bool HasObjectPool(TSubclassOf<AActor> SpawnableClass) const;
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	UPITS_ActorPool_Fixed* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
+	UPITS_FixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const;
