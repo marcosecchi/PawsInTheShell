@@ -20,12 +20,10 @@ class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_H
 {
 	GENERATED_BODY()
 
-	/** Health */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPITS_HealthComponent> Health;
 
 public:
-	// Sets default values for this character's properties
 	APITS_BaseCharacter();
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
