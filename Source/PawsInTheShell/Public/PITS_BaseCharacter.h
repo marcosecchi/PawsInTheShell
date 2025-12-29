@@ -65,6 +65,9 @@ protected:
 	UPROPERTY()
 	bool bIsCybernetic = false;
 
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Weapon")
+	void HandleShoot();
+	
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
 

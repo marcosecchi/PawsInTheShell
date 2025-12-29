@@ -11,6 +11,13 @@ UPITS_WeaponSpawnPointComponent::UPITS_WeaponSpawnPointComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void UPITS_WeaponSpawnPointComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+}
+
 void UPITS_WeaponSpawnPointComponent::Shoot()
 {
 	if (CurrentProjectileClass)
@@ -21,7 +28,8 @@ void UPITS_WeaponSpawnPointComponent::Shoot()
 			SpawnParams.Owner = GetOwner();
 			const FVector SpawnLocation = GetComponentLocation();
 			const FRotator SpawnRotation = GetComponentRotation();
-			World->SpawnActor<APITS_BaseProjectile>(CurrentProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+			const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
+			WorldSubsystem->AcquirePooledObject(CurrentProjectileClass, SpawnTransform);
 		}
 	}
 }
@@ -30,4 +38,8 @@ void UPITS_WeaponSpawnPointComponent::SetCurrentProjectileClass(
 	const TSubclassOf<APITS_BaseProjectile> NewProjectileClass)
 {
 	CurrentProjectileClass = NewProjectileClass;
+	if (WorldSubsystem)
+	{
+		WorldSubsystem->CreateObjectPool(CurrentProjectileClass, RequestedPoolSize);
+	}
 }

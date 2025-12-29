@@ -22,6 +22,16 @@ APITS_BaseCharacter::APITS_BaseCharacter()
 	Health = CreateDefaultSubobject<UPITS_HealthComponent>(FName("Health"));
 }
 
+void APITS_BaseCharacter::HandleShoot()
+{
+	TArray<UPITS_WeaponSpawnPointComponent*> WeaponSpawnPoints;
+	GetComponents<UPITS_WeaponSpawnPointComponent>(WeaponSpawnPoints);
+	for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)
+	{
+		SpawnPoint->Shoot();
+	}
+}
+
 void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
@@ -48,6 +58,12 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
 	{
 		WeaponName = WeaponData->WeaponName;
+		TArray<UPITS_WeaponSpawnPointComponent*> WeaponSpawnPoints;
+		GetComponents<UPITS_WeaponSpawnPointComponent>(WeaponSpawnPoints);
+		for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)
+		{
+			SpawnPoint->SetCurrentProjectileClass(WeaponData->ProjectileClass);
+		}
 	}
 }
 

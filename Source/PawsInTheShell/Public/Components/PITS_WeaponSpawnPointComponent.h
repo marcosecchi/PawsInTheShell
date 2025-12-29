@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ArrowComponent.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_WeaponSpawnPointComponent.generated.h"
 
 class APITS_BaseProjectile;
@@ -20,8 +21,16 @@ public:
 	UPITS_WeaponSpawnPointComponent();
 
 protected:
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Weapon")
+	int32 RequestedPoolSize = 50;
+	
 	UPROPERTY()
 	TSubclassOf<APITS_BaseProjectile> CurrentProjectileClass;
+
+	UPROPERTY();
+	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem; 
+
+	virtual void BeginPlay() override;
 	
 public:
 

@@ -38,6 +38,9 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PawsInTheShell|Animations")
+	TObjectPtr<UAnimMontage> ShootMontage;
+	
 #pragma region Actions
 	/** Input Action: Jump */
 	UPROPERTY(EditAnywhere, Category ="Input")
