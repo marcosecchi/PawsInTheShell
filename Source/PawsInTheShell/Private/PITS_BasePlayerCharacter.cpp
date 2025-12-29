@@ -115,9 +115,15 @@ void APITS_BasePlayerCharacter::JumpEnd()
 
 void APITS_BasePlayerCharacter::Shoot()
 {
-	// TODO: Temporary, handle ammo consumption and check
-	// TODO: Temporary, shot when montage sends the notify
-	HandleShoot();
+	// TODO: Handle ammo consumption and check
+	if (ShootMontage && GetMesh())
+	{
+		PlayAnimMontage(ShootMontage);
+	}
+	else
+	{
+		HandleShoot();
+	}
 }
 
 void APITS_BasePlayerCharacter::ChangeCharacter()
