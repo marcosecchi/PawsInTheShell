@@ -9,7 +9,7 @@
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "PITS_BaseProjectile.generated.h"
 
-class UCapsuleComponent;
+class UBoxComponent;
 class UProjectileMovementComponent;
 class UDamageType;
 
@@ -20,7 +20,7 @@ class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor, public IPITS_Pool
 	
 	/** Provides collision detection for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UCapsuleComponent> CollisionComponent;
+	TObjectPtr<UBoxComponent> CollisionComponent;
 
 	/** Handles movement for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
@@ -68,9 +68,8 @@ protected:
 	/** Called from the destruction timer to destroy this projectile */
 	void OnDestruction();
 
-
 // IPITS_PooledObjectInterface implementations
 public:
-	virtual void HandleAfterAcquire_Implementation();
-	virtual void HandleRelease_Implementation();
+	virtual void HandleAcquire_Implementation() override;
+	virtual void HandleRelease_Implementation() override;
 };

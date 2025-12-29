@@ -57,7 +57,7 @@ public:
 	bool IsObjectPooled(const AActor* Actor) const;
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	AActor* GetPooledObject(const TSubclassOf<AActor> SpawnableClass);
+	AActor* AcquirePooledObject(const TSubclassOf<AActor> SpawnableClass, const FTransform ObjectTransform);
 	
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void ReleasePooledObject(AActor* Actor);

@@ -17,14 +17,14 @@ APITS_EnemySpawner::APITS_EnemySpawner()
 // Acquire an available enemy from the pool.
 // Iterates over the weak pointers in the pool and returns the first valid, hidden enemy.
 // When an enemy is acquired it is unhidden and collision is enabled.
-APITS_BaseEnemyCharacter* APITS_EnemySpawner::GetEnemyFromPool() const
+APITS_BaseEnemyCharacter* APITS_EnemySpawner::AcquireEnemyFromPool(const FTransform Transform) const
 {
     if (WorldSubsystem == nullptr)
     {
         UE_LOG(LogPITS, Warning, TEXT("WorldSubsystem is null in EnemySpawner %s"), *GetName());
         return nullptr;
     }
-    AActor* Actor = WorldSubsystem->GetPooledObject(EnemySpawnableClass);
+    AActor* Actor = WorldSubsystem->AcquirePooledObject(EnemySpawnableClass, Transform);
     return Cast<APITS_BaseEnemyCharacter>(Actor);
 }
 
@@ -46,11 +46,9 @@ void APITS_EnemySpawner::OnEnemyDeath(AActor* DeadEnemy)
 
 void APITS_EnemySpawner::SpawnEnemy()
 {
-    APITS_BaseEnemyCharacter* Enemy = GetEnemyFromPool();
+    APITS_BaseEnemyCharacter* Enemy = AcquireEnemyFromPool(GetSpawnTransform());
     CHECK_PTR_AND_LOG_RETURN(Enemy);
     Enemy->OnDeath.AddDynamic(this, &APITS_EnemySpawner::OnEnemyDeath);
-
-    Enemy->SetActorTransform(GetSpawnTransform());
 }
 
 // Called when the game starts or when spawned.

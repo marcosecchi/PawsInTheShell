@@ -4,6 +4,7 @@
 
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "PITS_BasePlayerCharacter.h"
+#include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utils/PITS_Logs.h"
 #include "Utils/PITS_ActorPool.h"
@@ -73,11 +74,21 @@ bool UPITS_WorldSubsystem::HasObjectPool(const TSubclassOf<AActor> SpawnableClas
 	return ActorsPoolMap.Contains(SpawnableClass);
 }
 
-AActor* UPITS_WorldSubsystem::GetPooledObject(const TSubclassOf<AActor> SpawnableClass)
+AActor* UPITS_WorldSubsystem::AcquirePooledObject(const TSubclassOf<AActor> SpawnableClass, const FTransform ObjectTransform)
 {
-	// Ensure the pool exists
 	if (!HasObjectPool(SpawnableClass)) CreateObjectPool(SpawnableClass);
-	return GetObjectPool(SpawnableClass)->GetObjectFromPool();
+	if (AActor* PooledActor = GetObjectPool(SpawnableClass)->GetObjectFromPool())
+	{
+		PooledActor->SetActorTransform(ObjectTransform);
+		// If Actor implements UPITS_PooledObjectInterface, notify that it has been acquired from the pool.
+		if (PooledActor->GetClass()->ImplementsInterface(UPITS_PooledObjectInterface::StaticClass()))
+		{
+			IPITS_PooledObjectInterface::Execute_HandleAcquire(PooledActor);
+		}
+
+		return PooledActor;
+	}
+	return nullptr;
 }
 
 void UPITS_WorldSubsystem::ReleasePooledObject(AActor* Actor)
@@ -86,6 +97,11 @@ void UPITS_WorldSubsystem::ReleasePooledObject(AActor* Actor)
 	if (const TSubclassOf<AActor> ActorClass = Actor->GetClass(); HasObjectPool(ActorClass))
 	{
 		GetObjectPool(ActorClass)->ReleaseObjectToPool(Actor);
+		// If Actor implements UPITS_PooledObjectInterface, notify that it has been released from the pool.
+		if (Actor->GetClass()->ImplementsInterface(UPITS_PooledObjectInterface::StaticClass()))
+		{
+			IPITS_PooledObjectInterface::Execute_HandleRelease(Actor);
+		}
 	}
 	else
 	{

@@ -39,7 +39,7 @@ protected:
 	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem;
 
 	UFUNCTION()
-	APITS_BaseEnemyCharacter* GetEnemyFromPool() const;
+	APITS_BaseEnemyCharacter* AcquireEnemyFromPool(const FTransform Transform) const;
 	
 	UFUNCTION()
 	void ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) const;

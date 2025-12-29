@@ -18,13 +18,7 @@ AActor* UPITS_ActorPool::GetObjectFromPool()
 			{
 				Actor->SetActorHiddenInGame(false);
 				Actor->SetActorEnableCollision(true);
-
-				// If Actor implements UPITS_PooledObjectInterface, notify that it has been acquired from the pool.
-				if (Actor->GetClass()->ImplementsInterface(UPITS_PooledObjectInterface::StaticClass()))
-				{
-					IPITS_PooledObjectInterface::Execute_HandleAcquire(Actor);
-				}
-
+				
 				UE_LOG(LogPITS, Log, TEXT("Acquired actor %s from pool %s"), *Actor->GetName(), *GetName());
 				return Actor;
 			}
@@ -49,13 +43,7 @@ void UPITS_ActorPool::ReleaseObjectToPool(AActor* Actor)
 			// Mark the actor as inactive so it can be reused later.
 			Actor->SetActorHiddenInGame(true);
 			Actor->SetActorEnableCollision(false);
-
-			// If Actor implements UPITS_PooledObjectInterface, notify that it has been released from the pool.
-			if (Actor->GetClass()->ImplementsInterface(UPITS_PooledObjectInterface::StaticClass()))
-			{
-				IPITS_PooledObjectInterface::Execute_HandleRelease(Actor);
-			}
-
+			
 			UE_LOG(LogPITS, Log, TEXT("Released actor %s back to pool in %s"), *Actor->GetName(), *GetName());
 			return;
 		}
