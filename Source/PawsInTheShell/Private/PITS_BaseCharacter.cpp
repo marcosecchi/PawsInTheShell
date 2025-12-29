@@ -58,6 +58,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
 	{
 		WeaponName = WeaponData->WeaponName;
+		WeaponCooldownTime = WeaponData->CooldownBetweenShots;
 		TArray<UPITS_WeaponSpawnPointComponent*> WeaponSpawnPoints;
 		GetComponents<UPITS_WeaponSpawnPointComponent>(WeaponSpawnPoints);
 		for (UPITS_WeaponSpawnPointComponent* SpawnPoint : WeaponSpawnPoints)

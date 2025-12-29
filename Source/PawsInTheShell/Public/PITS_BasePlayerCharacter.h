@@ -76,6 +76,9 @@ protected:
 	UPROPERTY()
 	int MaxAmmoAmount = 0.0f;	
 
+	UPROPERTY()
+	bool bCoolingDown = false;	
+
 	/** Called from Input Actions for movement input */
 	void Move(const FInputActionValue& Value);
 

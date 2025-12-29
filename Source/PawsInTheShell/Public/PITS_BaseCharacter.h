@@ -59,6 +59,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText WeaponName = FText::FromString("Unnamed");
 
+	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
+	float WeaponCooldownTime = 0.0f;
+
 	UPROPERTY()
 	float ArmourAmount = 0.0f;
 
@@ -96,6 +99,9 @@ public:
 	/* Returns the weapon name from the data table */
 	FORCEINLINE FText GetWeaponName() const { return WeaponName; }
 
+	/* Returns the weapon cooldown time from the data table */
+	FORCEINLINE float GetWeaponCooldownTime() const { return WeaponCooldownTime; }
+	
 #pragma endregion
 
 #pragma region HealthInterface Implementations

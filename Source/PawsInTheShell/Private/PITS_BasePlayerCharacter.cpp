@@ -115,15 +115,27 @@ void APITS_BasePlayerCharacter::JumpEnd()
 
 void APITS_BasePlayerCharacter::Shoot()
 {
-	// TODO: Handle ammo consumption and check
-	if (ShootMontage && GetMesh())
+	if (bCoolingDown)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot shoot while cooling down!"), *GetNameSafe(this));
+		return;
+	}
+	// Will play montage only if character is still
+	if (ShootMontage && GetMesh() && GetVelocity().Size() <= KINDA_SMALL_NUMBER)
 	{
 		PlayAnimMontage(ShootMontage);
 	}
-	else
+	if (GetWeaponCooldownTime() > 0.f)
 	{
-		HandleShoot();
+		bCoolingDown = true;
+		FTimerHandle CooldownTimerHandle;
+		GetWorldTimerManager().SetTimer(CooldownTimerHandle, [this]()
+		{
+			bCoolingDown = false;
+			UE_LOG(LogPITS, Log, TEXT("'%s' Weapon cooldown finished."), *GetNameSafe(this));
+		}, GetWeaponCooldownTime(), false);
 	}
+	HandleShoot();
 }
 
 void APITS_BasePlayerCharacter::ChangeCharacter()
