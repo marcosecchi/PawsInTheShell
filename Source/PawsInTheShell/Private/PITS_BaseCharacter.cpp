@@ -1,9 +1,8 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.// Mastering Unreal Engine 5 Game Development with C++ Scripting
+﻿// Mastering Unreal Engine 5 Game Development with C++ Scripting
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseCharacter.h"
-
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
