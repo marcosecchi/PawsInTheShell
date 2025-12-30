@@ -6,7 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "Utils/PITS_FixedActorPool_Weak.h"
+#include "Utils/PITS_WeakFixedActorPool.h"
 #include "PITS_WeakObjectPoolSubsystem.generated.h"
 
 /**
@@ -26,7 +26,7 @@ class PAWSINTHESHELL_API UPITS_WeakObjectPoolSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 	// TUniquePtr is not a reflected type, so we don't add UPROPERTY() here.
-	TMap<TSubclassOf<AActor>, TUniquePtr<FPITS_FixedActorPool_Weak>> ActorsPoolMap;
+	TMap<TSubclassOf<AActor>, TUniquePtr<FPITS_WeakFixedActorPool>> ActorsPoolMap;
 
 public:
 	
@@ -39,7 +39,7 @@ public:
 	bool HasObjectPool(TSubclassOf<AActor> SpawnableClass) const;
 	
 	/** Retrieves the object pool for the specified actor class. */
-	FPITS_FixedActorPool_Weak* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
+	FPITS_WeakFixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
 
 	/** Checks if there are available pooled objects for the specified actor class. */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")

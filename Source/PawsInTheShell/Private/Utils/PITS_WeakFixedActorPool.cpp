@@ -2,13 +2,13 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "Utils/PITS_FixedActorPool_Weak.h"
+#include "Utils/PITS_WeakFixedActorPool.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
-void FPITS_FixedActorPool_Weak::InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize)
+void FPITS_WeakFixedActorPool::InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize)
 {
     // Store pool configuration
     TheWorld = InWorld;
@@ -53,7 +53,7 @@ void FPITS_FixedActorPool_Weak::InitializePool(UWorld* InWorld, const TSubclassO
     }
 }
 
-AActor* FPITS_FixedActorPool_Weak::GetObjectFromPool()
+AActor* FPITS_WeakFixedActorPool::GetObjectFromPool()
 {
     // Pop indices until we find a valid actor or run out of free indices
     while (FreeIndices.Num() > 0)
@@ -78,7 +78,7 @@ AActor* FPITS_FixedActorPool_Weak::GetObjectFromPool()
     return nullptr;
 }
 
-void FPITS_FixedActorPool_Weak::ReleaseObjectToPool(AActor* Actor)
+void FPITS_WeakFixedActorPool::ReleaseObjectToPool(AActor* Actor)
 {
     // Guard against null pointers
     CHECK_PTR_AND_LOG_RETURN(Actor);
@@ -101,7 +101,7 @@ void FPITS_FixedActorPool_Weak::ReleaseObjectToPool(AActor* Actor)
     }
 }
 
-bool FPITS_FixedActorPool_Weak::HasAvailableObjectsInPool() const
+bool FPITS_WeakFixedActorPool::HasAvailableObjectsInPool() const
 {
     // Clean invalid indices lazily is left to user; here just check if any free index refers to a valid actor.
     for (int32 i = FreeIndices.Num() - 1; i >= 0; --i)
@@ -113,7 +113,7 @@ bool FPITS_FixedActorPool_Weak::HasAvailableObjectsInPool() const
     return false;
 }
 
-bool FPITS_FixedActorPool_Weak::IsObjectPooled(const AActor* Actor) const
+bool FPITS_WeakFixedActorPool::IsObjectPooled(const AActor* Actor) const
 {
     return Actor && ActorToIndex.Contains(const_cast<AActor*>(Actor));
 }

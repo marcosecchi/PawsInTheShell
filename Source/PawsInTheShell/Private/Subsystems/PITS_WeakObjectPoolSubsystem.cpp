@@ -6,7 +6,7 @@
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
-#include "Utils/PITS_FixedActorPool_Weak.h"
+#include "Utils/PITS_WeakFixedActorPool.h"
 
 void UPITS_WeakObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
@@ -25,7 +25,7 @@ void UPITS_WeakObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> S
 	}
 
 	// Create and initialize new pool
-	if (TUniquePtr<FPITS_FixedActorPool_Weak> NewPool = MakeUnique<FPITS_FixedActorPool_Weak>())
+	if (TUniquePtr<FPITS_WeakFixedActorPool> NewPool = MakeUnique<FPITS_WeakFixedActorPool>())
 	{
 		NewPool->InitializePool(GetWorld(), SpawnableClass, PoolSize);
 		ActorsPoolMap.Add(SpawnableClass, MoveTemp(NewPool));
@@ -79,10 +79,10 @@ void UPITS_WeakObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 	}
 }
 
-FPITS_FixedActorPool_Weak* UPITS_WeakObjectPoolSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
+FPITS_WeakFixedActorPool* UPITS_WeakObjectPoolSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
 {
 	// Return the raw pointer owned by the TUniquePtr in the map
-	if (const TUniquePtr<FPITS_FixedActorPool_Weak>* Ptr = ActorsPoolMap.Find(SpawnableClass))
+	if (const TUniquePtr<FPITS_WeakFixedActorPool>* Ptr = ActorsPoolMap.Find(SpawnableClass))
 	{
 		return Ptr->Get();
 	}
@@ -106,7 +106,7 @@ bool UPITS_WeakObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
 	{
 		// Check if actor is in the pool and return result
-		const FPITS_FixedActorPool_Weak* Pool = GetObjectPool(Class);
+		const FPITS_WeakFixedActorPool* Pool = GetObjectPool(Class);
 		return Pool->IsObjectPooled(Actor);
 	}
 	return false;

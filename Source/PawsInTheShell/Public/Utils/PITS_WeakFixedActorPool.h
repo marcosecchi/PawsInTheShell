@@ -18,7 +18,7 @@
  * - Caller must ensure the provided UWorld remains valid while the pool is used.
  * - Not thread-safe.
  */
-class FPITS_FixedActorPool_Weak
+class FPITS_WeakFixedActorPool
 {
 	/* The world context for spawning actors. */
 	UWorld* TheWorld = nullptr;
@@ -36,8 +36,8 @@ class FPITS_FixedActorPool_Weak
 	TMap<AActor*, int32> ActorToIndex;
 	
 public:
-	FPITS_FixedActorPool_Weak() = default;
-	~FPITS_FixedActorPool_Weak() = default;
+	FPITS_WeakFixedActorPool() = default;
+	~FPITS_WeakFixedActorPool() = default;
 
 	/* Initialize the pool with the given world, actor class, and pool size. */
 	void InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize = 10);
