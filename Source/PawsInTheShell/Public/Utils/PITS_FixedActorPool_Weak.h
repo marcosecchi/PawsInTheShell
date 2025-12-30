@@ -20,6 +20,21 @@
  */
 class FPITS_FixedActorPool_Weak
 {
+	/* The world context for spawning actors. */
+	UWorld* TheWorld = nullptr;
+	
+	/* The class of actors to spawn and pool. */
+	TSubclassOf<AActor> TheSpawnableClass;
+	
+	/* The pool of weak actor pointers. */
+	TArray<TWeakObjectPtr<AActor>> TheActorPool;
+	
+	/* Stack of free indices for quick allocation. */
+	TArray<int32> FreeIndices;
+	
+	/* Map from actor to its index in the pool for quick lookup. */
+	TMap<AActor*, int32> ActorToIndex;
+	
 public:
 	FPITS_FixedActorPool_Weak() = default;
 	~FPITS_FixedActorPool_Weak() = default;
@@ -38,20 +53,5 @@ public:
 	
 	/* Check whether the given actor belongs to this pool. */
 	bool IsObjectPooled(const AActor* Actor) const;
-
-private:
-	/* The world context for spawning actors. */
-	UWorld* TheWorld = nullptr;
 	
-	/* The class of actors to spawn and pool. */
-	TSubclassOf<AActor> TheSpawnableClass;
-	
-	/* The pool of weak actor pointers. */
-	TArray<TWeakObjectPtr<AActor>> TheActorPool;
-	
-	/* Stack of free indices for quick allocation. */
-	TArray<int32> FreeIndices;
-	
-	/* Map from actor to its index in the pool for quick lookup. */
-	TMap<AActor*, int32> ActorToIndex;
 };
