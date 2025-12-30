@@ -20,12 +20,6 @@
  */
 class FPITS_WeakFixedActorPool
 {
-	/* The world context for spawning actors. */
-	UWorld* TheWorld = nullptr;
-	
-	/* The class of actors to spawn and pool. */
-	TSubclassOf<AActor> TheSpawnableClass;
-	
 	/* The pool of weak actor pointers. */
 	TArray<TWeakObjectPtr<AActor>> TheActorPool;
 	
@@ -40,7 +34,7 @@ public:
 	~FPITS_WeakFixedActorPool() = default;
 
 	/* Initialize the pool with the given world, actor class, and pool size. */
-	void InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize = 10);
+	void InitializePool(UWorld* World, const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize = 10);
 
 	/* Acquire an actor from the pool. Returns nullptr if none are available. */
 	AActor* GetObjectFromPool();

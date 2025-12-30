@@ -8,36 +8,32 @@
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
-void FPITS_WeakFixedActorPool::InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize)
+void FPITS_WeakFixedActorPool::InitializePool(UWorld* World, const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
-    // Store pool configuration
-    TheWorld = InWorld;
-    TheSpawnableClass = InSpawnableClass;
-
     // Clear any existing pool entries
     TheActorPool.Reset();
     FreeIndices.Reset();
     ActorToIndex.Empty();
 
     // Validate input parameters
-    if (!TheWorld || !TheSpawnableClass || InPoolSize <= 0)
+    if (!World || !SpawnableClass || PoolSize <= 0)
     {
         UE_LOG(LogPITS, Warning, TEXT("Invalid parameters provided to InitializePool. Pool won't be initialized."));
         return;
     }
 
     // Pre-spawn the specified number of actors and add them to the pool
-    TheActorPool.Reserve(InPoolSize);
-    FreeIndices.Reserve(InPoolSize);
+    TheActorPool.Reserve(PoolSize);
+    FreeIndices.Reserve(PoolSize);
 
-    // Spawn parameters to always spawn actors
+	// Always spawn even if collisions might overlap during initialization.
     FActorSpawnParameters Params;
     Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
     // Spawn actors and add them to the pool
-    for (int32 i = 0; i < InPoolSize; ++i)
+    for (int32 i = 0; i < PoolSize; ++i)
     {
-        AActor* NewActor = TheWorld->SpawnActor<AActor>(TheSpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, Params);
+        AActor* NewActor = World->SpawnActor<AActor>(SpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, Params);
         TheActorPool.Add(TWeakObjectPtr<AActor>(NewActor));
         // If spawn succeeded, deactivate the actor and track its index
         if (NewActor)

@@ -85,10 +85,15 @@ void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableCla
 		UE_LOG(LogPITS, Warning, TEXT("SpawnableClass is not set in %s. Pool won't be initialized."), *GetName());
 		return;
 	}
-	// Store pool configuration.
-	ThePoolSize = PoolSize;
-	TheSpawnableClass = SpawnableClass;
 	
+	// Validate input parameters
+	if (!SpawnableClass || PoolSize <= 0)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("Invalid parameters provided to InitializePool. Pool won't be initialized."));
+		return;
+	}
+	
+	// Get the world context from the UObject.
 	UWorld* World = GetWorld();
 	
 	// Guard against missing world context.
@@ -98,14 +103,14 @@ void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableCla
 	TheActorPool.Empty();
 
 	// Pre-spawn the specified number of actors and add them to the pool.
-	for (int32 i = 0; i < ThePoolSize; ++i)
+	for (int32 i = 0; i < PoolSize; ++i)
 	{
-		FActorSpawnParameters SpawnParams;
 		// Always spawn even if collisions might overlap during initialization.
+		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		// Spawn the actor and, if successful, deactivate it for pooling.
-		if (AActor* NewActor = World->SpawnActor<AActor>(TheSpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams))
+		if (AActor* NewActor = World->SpawnActor<AActor>(SpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams))
 		{
 			// Ensure the actor is inactive until explicitly acquired.
 			NewActor->SetActorEnableCollision(false);

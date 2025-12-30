@@ -26,16 +26,9 @@ class PAWSINTHESHELL_API UPITS_FixedActorPool : public UObject
 	UPROPERTY(Transient)
 	TArray<TObjectPtr<AActor>> TheActorPool;
 
-	/* The class of actors to spawn and pool */
-	TSubclassOf<AActor> TheSpawnableClass;
-
-	/* Size of the pool */
-	UPROPERTY()
-	int32 ThePoolSize = 10;
-
 public:
 	/* Initialize with the actor class to spawn and desired pool size. */
-	void InitializePool(TSubclassOf<AActor> SpawnableClass, int32 PoolSize);
+	void InitializePool(TSubclassOf<AActor> SpawnableClass, const int32 PoolSize = 10);
 	
 	/*  Acquire an actor from the pool. Returns nullptr if none are available. */
 	AActor* GetObjectFromPool();
