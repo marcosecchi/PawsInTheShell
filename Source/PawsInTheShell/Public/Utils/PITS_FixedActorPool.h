@@ -24,7 +24,7 @@ class PAWSINTHESHELL_API UPITS_FixedActorPool : public UObject
 
 	/* The pool of actors */
 	UPROPERTY(Transient)
-	TArray<TObjectPtr<AActor>> ActorPool;
+	TArray<TObjectPtr<AActor>> TheActorPool;
 
 	/* The class of actors to spawn and pool */
 	TSubclassOf<AActor> TheSpawnableClass;

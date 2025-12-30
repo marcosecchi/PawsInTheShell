@@ -10,18 +10,21 @@
 
 void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
+	// Validate input
 	if (!SpawnableClass)
 	{
 		UE_LOG(LogPITS, Warning, TEXT("CreateObjectPool called with null SpawnableClass"));
 		return;
 	}
 
+	// Check if pool already exists
 	if (HasObjectPool(SpawnableClass))
 	{
 		UE_LOG(LogPITS, Warning, TEXT("Object pool for class %s already exists"), *GetNameSafe(SpawnableClass));
 		return;
 	}
 
+	// Create and initialize new pool
 	if (UPITS_FixedActorPool* NewPool = NewObject<UPITS_FixedActorPool>(this))
 	{
 		NewPool->InitializePool(SpawnableClass, PoolSize);
@@ -37,7 +40,10 @@ bool UPITS_ObjectPoolSubsystem::HasObjectPool(const TSubclassOf<AActor> Spawnabl
 
 AActor* UPITS_ObjectPoolSubsystem::AcquirePooledObject(const TSubclassOf<AActor> SpawnableClass, const FTransform ObjectTransform)
 {
+	// Ensure pool exists
 	if (!HasObjectPool(SpawnableClass)) CreateObjectPool(SpawnableClass);
+	
+	// Try to get an object from the pool
 	if (AActor* PooledActor = GetObjectPool(SpawnableClass)->GetObjectFromPool())
 	{
 		PooledActor->SetActorTransform(ObjectTransform);
@@ -54,7 +60,10 @@ AActor* UPITS_ObjectPoolSubsystem::AcquirePooledObject(const TSubclassOf<AActor>
 
 void UPITS_ObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 {
+	// Validate input
 	CHECK_PTR_AND_LOG_RETURN(Actor);
+	
+	// Release actor back to its pool
 	if (const TSubclassOf<AActor> ActorClass = Actor->GetClass(); HasObjectPool(ActorClass))
 	{
 		GetObjectPool(ActorClass)->ReleaseObjectToPool(Actor);
@@ -77,6 +86,7 @@ UPITS_FixedActorPool* UPITS_ObjectPoolSubsystem::GetObjectPool(const TSubclassOf
 
 bool UPITS_ObjectPoolSubsystem::HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const
 {
+	// Check pool existence
 	if (!HasObjectPool(SpawnableClass))
 	{
 		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s"), *GetNameSafe(SpawnableClass));
@@ -87,8 +97,10 @@ bool UPITS_ObjectPoolSubsystem::HasAvailablePooledObjects(const TSubclassOf<AAct
 
 bool UPITS_ObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 {
+	// Validate input
 	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
 	{
+		// Check if actor is in the pool and return result
 		const UPITS_FixedActorPool* Pool = GetObjectPool(Class);
 		return Pool->IsObjectPooled(Actor);
 	}

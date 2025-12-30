@@ -10,18 +10,21 @@
 
 void UPITS_WeakObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
+	// Validate input
 	if (!SpawnableClass)
 	{
 		UE_LOG(LogPITS, Warning, TEXT("CreateObjectPool called with null SpawnableClass"));
 		return;
 	}
 
+	// Check if pool already exists
 	if (HasObjectPool(SpawnableClass))
 	{
 		UE_LOG(LogPITS, Warning, TEXT("Object pool for class %s already exists"), *GetNameSafe(SpawnableClass));
 		return;
 	}
 
+	// Create and initialize new pool
 	if (TUniquePtr<FPITS_FixedActorPool_Weak> NewPool = MakeUnique<FPITS_FixedActorPool_Weak>())
 	{
 		NewPool->InitializePool(GetWorld(), SpawnableClass, PoolSize);
@@ -37,7 +40,10 @@ bool UPITS_WeakObjectPoolSubsystem::HasObjectPool(const TSubclassOf<AActor> Spaw
 
 AActor* UPITS_WeakObjectPoolSubsystem::AcquirePooledObject(const TSubclassOf<AActor> SpawnableClass, const FTransform ObjectTransform)
 {
+	// Ensure pool exists
 	if (!HasObjectPool(SpawnableClass)) CreateObjectPool(SpawnableClass);
+	
+	// Try to get an object from the pool and return it
 	if (AActor* PooledActor = GetObjectPool(SpawnableClass)->GetObjectFromPool())
 	{
 		PooledActor->SetActorTransform(ObjectTransform);
@@ -54,7 +60,10 @@ AActor* UPITS_WeakObjectPoolSubsystem::AcquirePooledObject(const TSubclassOf<AAc
 
 void UPITS_WeakObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 {
+	// Validate input
 	CHECK_PTR_AND_LOG_RETURN(Actor);
+	
+	// Release the actor back to its pool
 	if (const TSubclassOf<AActor> ActorClass = Actor->GetClass(); HasObjectPool(ActorClass))
 	{
 		GetObjectPool(ActorClass)->ReleaseObjectToPool(Actor);
@@ -72,6 +81,7 @@ void UPITS_WeakObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 
 FPITS_FixedActorPool_Weak* UPITS_WeakObjectPoolSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
 {
+	// Return the raw pointer owned by the TUniquePtr in the map
 	if (const TUniquePtr<FPITS_FixedActorPool_Weak>* Ptr = ActorsPoolMap.Find(SpawnableClass))
 	{
 		return Ptr->Get();
@@ -81,6 +91,7 @@ FPITS_FixedActorPool_Weak* UPITS_WeakObjectPoolSubsystem::GetObjectPool(const TS
 
 bool UPITS_WeakObjectPoolSubsystem::HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const
 {
+	// Check pool existence
 	if (!HasObjectPool(SpawnableClass))
 	{
 		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s"), *GetNameSafe(SpawnableClass));
@@ -91,8 +102,10 @@ bool UPITS_WeakObjectPoolSubsystem::HasAvailablePooledObjects(const TSubclassOf<
 
 bool UPITS_WeakObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 {
+	// Validate input
 	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
 	{
+		// Check if actor is in the pool and return result
 		const FPITS_FixedActorPool_Weak* Pool = GetObjectPool(Class);
 		return Pool->IsObjectPooled(Actor);
 	}

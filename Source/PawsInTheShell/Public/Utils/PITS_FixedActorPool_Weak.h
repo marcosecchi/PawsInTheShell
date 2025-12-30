@@ -41,13 +41,13 @@ public:
 
 private:
 	/* The world context for spawning actors. */
-	UWorld* World = nullptr;
+	UWorld* TheWorld = nullptr;
 	
 	/* The class of actors to spawn and pool. */
-	TSubclassOf<AActor> SpawnableClass;
+	TSubclassOf<AActor> TheSpawnableClass;
 	
 	/* The pool of weak actor pointers. */
-	TArray<TWeakObjectPtr<AActor>> ActorPool;
+	TArray<TWeakObjectPtr<AActor>> TheActorPool;
 	
 	/* Stack of free indices for quick allocation. */
 	TArray<int32> FreeIndices;

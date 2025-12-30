@@ -8,8 +8,10 @@
 
 AActor* UPITS_FixedActorPool::GetObjectFromPool()
 {
-	for (TObjectPtr<AActor>& ActorPtr : ActorPool)
+	// Iterate through the pool to find an inactive (hidden) actor.
+	for (TObjectPtr<AActor>& ActorPtr : TheActorPool)
 	{
+		// Guard against null pointers.
 		if (ActorPtr)
 		{
 			// Check whether the actor is currently 'inactive' (hidden) and can be reused.
@@ -35,8 +37,10 @@ void UPITS_FixedActorPool::ReleaseObjectToPool(AActor* Actor)
 	// Macro to guard against null pointers and log a message if null.
 	CHECK_PTR_AND_LOG_RETURN(Actor);
 
-	for (TObjectPtr<AActor>& ActorPtr : ActorPool)
+	// Find the actor in the pool.
+	for (TObjectPtr<AActor>& ActorPtr : TheActorPool)
 	{
+		// Check if this is the actor being released.
 		if (ActorPtr && ActorPtr.Get() == Actor)
 		{
 			// Mark the actor as inactive so it can be reused later.
@@ -54,7 +58,8 @@ void UPITS_FixedActorPool::ReleaseObjectToPool(AActor* Actor)
 
 bool UPITS_FixedActorPool::HasAvailableObjectsInPool() const
 {
-	return ActorPool.ContainsByPredicate([](const TObjectPtr<AActor>& ActorPtr)
+	// Check if there is at least one actor in the pool that is currently 'inactive' (hidden).
+	return TheActorPool.ContainsByPredicate([](const TObjectPtr<AActor>& ActorPtr)
 	{
 		return ActorPtr && ActorPtr->IsHidden();
 	});
@@ -62,16 +67,25 @@ bool UPITS_FixedActorPool::HasAvailableObjectsInPool() const
 
 bool UPITS_FixedActorPool::IsObjectPooled(const AActor* Actor) const
 {
-	return (ActorPool.Contains(Actor));
+	// Macro to guard against null pointers and log a message if null.
+	if (Actor == nullptr) 
+	{
+		UE_LOG(LogPITS, Warning, TEXT("IsObjectPooled called with null Actor in pool %s"), *GetName());
+		return false;
+	}
+	// Check if the actor exists in the pool and return the result.
+	return (TheActorPool.Contains(Actor));
 }
 
 void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
+	// Validate input parameters.
 	if (!SpawnableClass)
 	{
 		UE_LOG(LogPITS, Warning, TEXT("SpawnableClass is not set in %s. Pool won't be initialized."), *GetName());
 		return;
 	}
+	// Store pool configuration.
 	ThePoolSize = PoolSize;
 	TheSpawnableClass = SpawnableClass;
 	
@@ -80,8 +94,10 @@ void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableCla
 	// Guard against missing world context.
 	CHECK_PTR_AND_LOG_RETURN(World);
 
-	ActorPool.Empty();
+	// Clear any existing pool entries.
+	TheActorPool.Empty();
 
+	// Pre-spawn the specified number of actors and add them to the pool.
 	for (int32 i = 0; i < ThePoolSize; ++i)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -96,7 +112,7 @@ void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableCla
 			NewActor->SetActorHiddenInGame(true);
 			// Prevent automatic destruction by zeroing lifespan.
 			NewActor->SetLifeSpan(0.f);
-			ActorPool.Add(NewActor);
+			TheActorPool.Add(NewActor);
 		}
 		else
 		{

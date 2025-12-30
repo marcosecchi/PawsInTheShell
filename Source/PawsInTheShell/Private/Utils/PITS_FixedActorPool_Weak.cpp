@@ -5,31 +5,41 @@
 #include "Utils/PITS_FixedActorPool_Weak.h"
 #include "Engine/World.h"
 #include "GameFramework/Actor.h"
+#include "Utils/PITS_Globals.h"
+#include "Utils/PITS_Logs.h"
 
 void FPITS_FixedActorPool_Weak::InitializePool(UWorld* InWorld, const TSubclassOf<AActor> InSpawnableClass, const int32 InPoolSize)
 {
-    World = InWorld;
-    SpawnableClass = InSpawnableClass;
+    // Store pool configuration
+    TheWorld = InWorld;
+    TheSpawnableClass = InSpawnableClass;
 
-    ActorPool.Reset();
+    // Clear any existing pool entries
+    TheActorPool.Reset();
     FreeIndices.Reset();
     ActorToIndex.Empty();
 
-    if (!World || !SpawnableClass || InPoolSize <= 0)
+    // Validate input parameters
+    if (!TheWorld || !TheSpawnableClass || InPoolSize <= 0)
     {
+        UE_LOG(LogPITS, Warning, TEXT("Invalid parameters provided to InitializePool. Pool won't be initialized."));
         return;
     }
 
-    ActorPool.Reserve(InPoolSize);
+    // Pre-spawn the specified number of actors and add them to the pool
+    TheActorPool.Reserve(InPoolSize);
     FreeIndices.Reserve(InPoolSize);
 
+    // Spawn parameters to always spawn actors
     FActorSpawnParameters Params;
     Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+    // Spawn actors and add them to the pool
     for (int32 i = 0; i < InPoolSize; ++i)
     {
-        AActor* NewActor = World->SpawnActor<AActor>(SpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, Params);
-        ActorPool.Add(TWeakObjectPtr<AActor>(NewActor));
+        AActor* NewActor = TheWorld->SpawnActor<AActor>(TheSpawnableClass, FVector::ZeroVector, FRotator::ZeroRotator, Params);
+        TheActorPool.Add(TWeakObjectPtr<AActor>(NewActor));
+        // If spawn succeeded, deactivate the actor and track its index
         if (NewActor)
         {
             // Put the actor into an 'inactive' state by default
@@ -45,13 +55,16 @@ void FPITS_FixedActorPool_Weak::InitializePool(UWorld* InWorld, const TSubclassO
 
 AActor* FPITS_FixedActorPool_Weak::GetObjectFromPool()
 {
+    // Pop indices until we find a valid actor or run out of free indices
     while (FreeIndices.Num() > 0)
     {
-        if (const int32 Index = FreeIndices.Pop(); ActorPool.IsValidIndex(Index))
+        // Try to get a free index
+        if (const int32 Index = FreeIndices.Pop(); TheActorPool.IsValidIndex(Index))
         {
-            if (TWeakObjectPtr<AActor> Weak = ActorPool[Index]; Weak.IsValid())
+            // Check if the weak pointer is still valid
+            if (TWeakObjectPtr<AActor> WeakActor = TheActorPool[Index]; WeakActor.IsValid())
             {
-                AActor* Actor = Weak.Get();
+                AActor* Actor = WeakActor.Get();
                 // Activate actor
                 Actor->SetActorHiddenInGame(false);
                 Actor->SetActorEnableCollision(true);
@@ -61,26 +74,29 @@ AActor* FPITS_FixedActorPool_Weak::GetObjectFromPool()
         }
         // invalid entry: continue popping
     }
-    // none available
+    // none available, return nullptr
     return nullptr;
 }
 
 void FPITS_FixedActorPool_Weak::ReleaseObjectToPool(AActor* Actor)
 {
-    if (!Actor)
-        return;
+    // Guard against null pointers
+    CHECK_PTR_AND_LOG_RETURN(Actor);
 
+    // Find the index of the actor in the pool
     const int32* FoundIndex = ActorToIndex.Find(Actor);
     if (!FoundIndex)
         return;
 
-    if (const int32 Index = *FoundIndex; ActorPool.IsValidIndex(Index))
+    // Validate index and ensure it refers to a valid actor
+    if (const int32 Index = *FoundIndex; TheActorPool.IsValidIndex(Index))
     {
         // Deactivate actor
         Actor->SetActorHiddenInGame(true);
         Actor->SetActorEnableCollision(false);
         Actor->SetActorTickEnabled(false);
 
+        // Push the index back onto the free stack
         FreeIndices.Push(Index);
     }
 }
@@ -90,7 +106,8 @@ bool FPITS_FixedActorPool_Weak::HasAvailableObjectsInPool() const
     // Clean invalid indices lazily is left to user; here just check if any free index refers to a valid actor.
     for (int32 i = FreeIndices.Num() - 1; i >= 0; --i)
     {
-        if (const int32 Index = FreeIndices[i]; ActorPool.IsValidIndex(Index) && ActorPool[Index].IsValid())
+        // Check if the weak pointer at this index is still valid
+        if (const int32 Index = FreeIndices[i]; TheActorPool.IsValidIndex(Index) && TheActorPool[Index].IsValid())
             return true;
     }
     return false;
