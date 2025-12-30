@@ -8,6 +8,8 @@
 #include "Components/StateTreeAIComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "Utils/PITS_Globals.h"
+#include "Utils/PITS_Logs.h"
 
 APITS_BaseEnemyAIController::APITS_BaseEnemyAIController()
 {
@@ -15,6 +17,7 @@ APITS_BaseEnemyAIController::APITS_BaseEnemyAIController()
 	
 	// create the StateTree component
 	StateTreeAI = CreateDefaultSubobject<UStateTreeAIComponent>(TEXT("StateTreeAI"));
+	StateTreeAI->SetComponentTickEnabled(true);
 
 	// create the AI perception component. It will be configured in BP
 	AIPerception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerception"));
@@ -46,14 +49,23 @@ void APITS_BaseEnemyAIController::OnPossess(APawn* InPawn)
 	}
 }
 
+void APITS_BaseEnemyAIController::OnUnPossess()
+{
+	Super::OnUnPossess();
+
+	// Ensure StateTree component is valid
+	CHECK_PTR_AND_LOG_RETURN(StateTreeAI);
+	
+	// stop StateTree logic
+	StateTreeAI->StopLogic(FString("Unpossess Event"));
+
+}
+
 void APITS_BaseEnemyAIController::OnDeath(AActor* DeadActor)
 {
 	// stop movement
 	GetPathFollowingComponent()->AbortMove(*this, FPathFollowingResultFlags::UserAbort);
-
-	// stop StateTree logic
-	StateTreeAI->StopLogic(FString(""));
-
+	
 	// unpossess the pawn
 	UnPossess();
 
