@@ -29,7 +29,6 @@ AActor* UPITS_FixedActorPool::GetObjectFromPool()
 	// No available inactive actors found in the pool.
 	UE_LOG(LogPITS, Warning, TEXT("No available actors in pool %s"), *GetName());
 	return nullptr;
-
 }
 
 void UPITS_FixedActorPool::ReleaseObjectToPool(AActor* Actor)
@@ -79,13 +78,6 @@ bool UPITS_FixedActorPool::IsObjectPooled(const AActor* Actor) const
 
 void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
-	// Validate input parameters.
-	if (!SpawnableClass)
-	{
-		UE_LOG(LogPITS, Warning, TEXT("SpawnableClass is not set in %s. Pool won't be initialized."), *GetName());
-		return;
-	}
-	
 	// Validate input parameters
 	if (!SpawnableClass || PoolSize <= 0)
 	{
