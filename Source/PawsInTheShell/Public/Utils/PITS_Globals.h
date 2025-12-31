@@ -58,7 +58,7 @@ class PAWSINTHESHELL_API UPITS_Globals : public UBlueprintFunctionLibrary
 private:
 
 public:
-	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	UFUNCTION(BlueprintPure, Category="PawsInTheShell|Globals")
 	static FString GetProjectVersion() { return PITS_PROJECT_VERSION;}
 
 
@@ -70,16 +70,16 @@ private:
 	static constexpr const TCHAR* PickupTag = TEXT("Pickup");
 
 public:
-	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	UFUNCTION(BlueprintPure, Category="PawsInTheShell|Globals")
 	static FName GetPlayerTag() { return PlayerTag;}
 
-	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	UFUNCTION(BlueprintPure, Category="PawsInTheShell|Globals")
 	static FName GetEnemyTag() { return EnemyTag;}
 
-	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	UFUNCTION(BlueprintPure, Category="PawsInTheShell|Globals")
 	static FName GetBulletTag() { return BulletTag;}
 
-	UFUNCTION(BlueprintPure, Category="Paws In The Shell|Globals")
+	UFUNCTION(BlueprintPure, Category="PawsInTheShell|Globals")
 	static FName GetPickupTag() { return PickupTag;}
 #pragma endregion
 	

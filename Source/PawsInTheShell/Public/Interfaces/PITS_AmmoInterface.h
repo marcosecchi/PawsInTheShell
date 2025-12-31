@@ -8,7 +8,7 @@
 #include "UObject/Interface.h"
 #include "PITS_AmmoInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable, Category="Paws In The Shell")
+UINTERFACE(BlueprintType, Blueprintable, Category="PawsInTheShell")
 class UPITS_AmmoInterface : public UInterface
 {
 	GENERATED_BODY()

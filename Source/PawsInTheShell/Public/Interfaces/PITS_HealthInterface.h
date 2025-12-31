@@ -8,7 +8,7 @@
 #include "UObject/Interface.h"
 #include "PITS_HealthInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable, Category="Paws In The Shell")
+UINTERFACE(BlueprintType, Blueprintable, Category="PawsInTheShell")
 class UPITS_HealthInterface : public UInterface
 {
 	GENERATED_BODY()
