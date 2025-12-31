@@ -6,25 +6,22 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "PITS_HackableInterface.generated.h"
+#include "PITS_ShooterInterface.generated.h"
 
 /**
  * 
  */
 UINTERFACE(BlueprintType, Blueprintable, Category="Paws In The Shell")
-class UPITS_HackableInterface : public UInterface
+class UPITS_ShooterInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- *  Common interface for hackable actors
- */
-class PAWSINTHESHELL_API IPITS_HackableInterface
+class IPITS_ShooterInterface
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Hack")
-	void Hack();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|Weapon")
+	void Shoot();
 };

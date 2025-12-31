@@ -11,7 +11,7 @@
 /**
  * 
  */
-UINTERFACE(BlueprintType, Blueprintable)
+UINTERFACE(BlueprintType, Blueprintable, Category="Paws In The Shell")
 class UPITS_PooledObjectInterface : public UInterface
 {
 	GENERATED_BODY()

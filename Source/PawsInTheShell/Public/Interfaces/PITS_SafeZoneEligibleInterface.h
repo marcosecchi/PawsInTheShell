@@ -8,7 +8,7 @@
 
 #include "PITS_SafeZoneEligibleInterface.generated.h"
 
-UINTERFACE(BlueprintType, Blueprintable)
+UINTERFACE(BlueprintType, Blueprintable, Category="Paws In The Shell")
 class UPITS_SafeZoneEligibleInterface : public UInterface
 {
 	GENERATED_BODY()
