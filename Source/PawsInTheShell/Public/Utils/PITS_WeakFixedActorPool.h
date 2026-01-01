@@ -17,6 +17,10 @@
  *   pointers to detect destroyed actors.
  * - Caller must ensure the provided UWorld remains valid while the pool is used.
  * - Not thread-safe.
+ * 
+ * Important Note: This class is intended for educational purposes and may require enhancements for production use.
+ * In particular, GC will eventually clean up actors that are only weakly referenced,
+ * so the pool will need extra logic to make sure the actors are kept alive as needed.
  */
 class FPITS_WeakFixedActorPool
 {
