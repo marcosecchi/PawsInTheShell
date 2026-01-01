@@ -30,6 +30,11 @@ class PAWSINTHESHELL_API UPITS_ObjectPoolSubsystem : public UPITS_WorldSubsystem
 	UPROPERTY()
 	TMap<TSubclassOf<AActor>, TObjectPtr<class UPITS_FixedActorPool>> ActorsPoolMap;
 
+protected:
+	/** Retrieves the object pool for the specified actor class. */
+	UFUNCTION(Category="PawsInTheShell|Subsystems")
+	UPITS_FixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
+
 public:
 	
 	/** Creates an object pool for the specified actor class with the given pool size. */
@@ -40,10 +45,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasObjectPool(TSubclassOf<AActor> SpawnableClass) const;
 	
-	/** Retrieves the object pool for the specified actor class. */
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	UPITS_FixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
-
 	/** Checks if there are available pooled objects for the specified actor class. */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const;

@@ -28,6 +28,10 @@ class PAWSINTHESHELL_API UPITS_WeakObjectPoolSubsystem : public UWorldSubsystem
 	// TUniquePtr is not a reflected type, so we don't add UPROPERTY() here.
 	TMap<TSubclassOf<AActor>, TUniquePtr<FPITS_WeakFixedActorPool>> ActorsPoolMap;
 
+protected:
+	/** Retrieves the object pool for the specified actor class. */
+	FPITS_WeakFixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
+
 public:
 	
 	/** Creates an object pool for the specified actor class with the given pool size. */
@@ -38,9 +42,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasObjectPool(TSubclassOf<AActor> SpawnableClass) const;
 	
-	/** Retrieves the object pool for the specified actor class. */
-	FPITS_WeakFixedActorPool* GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const;
-
 	/** Checks if there are available pooled objects for the specified actor class. */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	bool HasAvailablePooledObjects(const TSubclassOf<AActor> SpawnableClass) const;
