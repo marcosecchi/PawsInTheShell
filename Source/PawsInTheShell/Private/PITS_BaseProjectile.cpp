@@ -56,7 +56,7 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 
 	HandleProjectileHit(Hit);
 
-	OnDestruction();
+	OnHitComplete();
 }
 
 void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation,
@@ -70,7 +70,7 @@ void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* Hit
 	}
 }
 
-void APITS_BaseProjectile::OnDestruction()
+void APITS_BaseProjectile::OnHitComplete()
 {
 	UPITS_ObjectPoolSubsystem* PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
 	CHECK_PTR_AND_LOG(PoolSubsystem);

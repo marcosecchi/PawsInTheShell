@@ -67,7 +67,7 @@ protected:
 	void HandleProjectileHit(const FHitResult& Hit);
 
 	/** Called from the destruction timer to destroy this projectile */
-	void OnDestruction();
+	void OnHitComplete();
 
 // IPITS_PooledObjectInterface implementations
 public:
