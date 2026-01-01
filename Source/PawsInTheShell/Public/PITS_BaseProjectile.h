@@ -12,6 +12,7 @@
 class UBoxComponent;
 class UProjectileMovementComponent;
 class UDamageType;
+class UPrimitiveComponent;
 
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor, public IPITS_PooledObjectInterface
@@ -56,7 +57,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	/** Handles collision */
-	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+	virtual void NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	/** Processes a projectile hit for the given actor */
 	void ProcessHit(AActor* HitActor, UPrimitiveComponent* HitComp, const FVector& HitLocation, const FVector& HitDirection);
