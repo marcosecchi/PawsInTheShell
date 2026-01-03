@@ -22,15 +22,12 @@ void UPITS_WeaponSpawnPointComponent::Shoot()
 {
 	if (CurrentProjectileClass)
 	{
-		if (UWorld* World = GetWorld())
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = GetOwner();
-			const FVector SpawnLocation = GetComponentLocation();
-			const FRotator SpawnRotation = GetComponentRotation();
-			const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
-			PoolSubsystem->AcquirePooledObject(CurrentProjectileClass, SpawnTransform);
-		}
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = GetOwner();
+		const FVector SpawnLocation = GetComponentLocation();
+		const FRotator SpawnRotation = GetComponentRotation();
+		const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
+		PoolSubsystem->AcquirePooledObject(CurrentProjectileClass, SpawnTransform);
 	}
 }
 
