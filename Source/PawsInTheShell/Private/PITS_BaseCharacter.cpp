@@ -7,6 +7,7 @@
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Components/PITS_WeaponSpawnPointComponent.h"
+#include "Damage/PITS_DamageType_ArmourPiercing.h"
 #include "Damage/PITS_DamageType_CyberTech.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -103,6 +104,11 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEv
 			}
 			// PicoTech damage ignores armor for cybernetic characters
 			Health->RemoveHealth(EffectiveAmount);
+		}
+		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_ArmourPiercing::StaticClass()))
+		{
+			// Armour Piercing damage ignores armour
+			Health->RemoveHealth(DamageAmount);
 		}
 		else
 		{
