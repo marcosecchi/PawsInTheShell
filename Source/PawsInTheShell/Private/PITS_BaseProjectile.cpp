@@ -40,7 +40,7 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	InitialLifeSpan = 0.0f;
 	
 	RootComponent = CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
-	CollisionComponent->InitBoxExtent(FVector(50.0f, 50.0f, 50.0f));
+	CollisionComponent->InitBoxExtent(FVector(150.0f, 50.0f, 50.0f));
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	CollisionComponent->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_No;
