@@ -12,6 +12,24 @@
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
+#include "Structs/PITS_ProjectileDataTableRow.h"
+
+void APITS_BaseProjectile::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	
+	if (const FPITS_ProjectileDataTableRow* ProjectileData = ProjectileDataType.GetRow<FPITS_ProjectileDataTableRow>(FString()))
+	{
+		if (ProjectileData->ProjectileMesh)
+		{
+			Mesh->SetStaticMesh(ProjectileData->ProjectileMesh);
+		}
+		HitDamage = ProjectileData->Damage;
+		PhysicsForce = ProjectileData->PhysicsForce;
+		HitDamageType = ProjectileData->DamageType;
+		ProjectileName = ProjectileData->ProjectileName;
+	}
+}
 
 APITS_BaseProjectile::APITS_BaseProjectile()
 {
@@ -20,7 +38,6 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	InitialLifeSpan = 0.0f;
 	
 	RootComponent = CollisionComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Component"));
-	// Set up collision box size
 	CollisionComponent->InitBoxExtent(FVector(50.0f, 50.0f, 50.0f));
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
@@ -44,7 +61,11 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 void APITS_BaseProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionComponent->IgnoreActorWhenMoving(GetInstigator(), true);
+	// Ignore collision with instigator
+	if (!bDamageOwner && GetInstigator())
+	{
+		CollisionComponent->IgnoreActorWhenMoving(GetInstigator(), true);
+	}
 }
 
 void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
@@ -64,6 +85,7 @@ void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* Hit
 {
 	UGameplayStatics::ApplyDamage(HitActor, HitDamage, nullptr, this, HitDamageType);
 
+	// Apply physics impulse if applicable
 	if (HitComp->IsSimulatingPhysics())
 	{
 		HitComp->AddImpulseAtLocation(HitDirection * PhysicsForce, HitLocation);
@@ -72,8 +94,10 @@ void APITS_BaseProjectile::ProcessHit(AActor* HitActor, UPrimitiveComponent* Hit
 
 void APITS_BaseProjectile::OnHitComplete()
 {
+	// Check if this projectile is pooled
 	UPITS_ObjectPoolSubsystem* PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
 	CHECK_PTR_AND_LOG(PoolSubsystem);
+	// Release to pool or destroy
 	if (PoolSubsystem->IsObjectPooled(this))
 	{
 		PoolSubsystem->ReleasePooledObject(this);

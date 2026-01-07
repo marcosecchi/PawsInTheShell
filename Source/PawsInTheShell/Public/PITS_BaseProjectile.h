@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/PITS_PooledObjectInterface.h"
+#include "Structs/PITS_ProjectileDataTableRow.h"
 #include "PITS_BaseProjectile.generated.h"
 
 class UBoxComponent;
@@ -32,16 +33,23 @@ class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor, public IPITS_Pool
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 protected:
+	/** Data table row containing projectile properties */
+	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Stats")
+	FDataTableRowHandle ProjectileDataType;
+
+	UPROPERTY()
+	FText ProjectileName = FText::FromString("DefaultProjectile");
+
 	/** Type of damage to apply. Can be used to represent specific types of damage such as fire, explosion, etc. */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
+	UPROPERTY()
 	TSubclassOf<UDamageType> HitDamageType;
 
 	/** Physics force to apply on hit */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 50000))
+	UPROPERTY()
 	float PhysicsForce = 100.0f;
 
 	/** Damage to apply on hit */
-	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile", meta = (ClampMin = 0, ClampMax = 100))
+	UPROPERTY()
 	float HitDamage = 25.0f;
 
 	/** If true, the projectile can damage the character that shot it */
@@ -49,9 +57,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Projectile")
 	bool bDamageOwner = false;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+	
 public:
-	// Sets default values for this actor's properties
 	APITS_BaseProjectile();
+	
+	FText GetProjectileName() const { return ProjectileName; }	
 
 protected:
 	virtual void BeginPlay() override;
