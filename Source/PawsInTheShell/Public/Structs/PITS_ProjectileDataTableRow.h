@@ -26,6 +26,9 @@ struct FPITS_ProjectileDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Damage dealt by this projectile upon impact"))
 	float Damage = 100.0f;
 
+	UPROPERTY(EditAnywhere, meta=(ToolTip="Speed of the projectile when fired"))
+	float Speed = 3000.0f;
+
 	UPROPERTY(EditAnywhere, meta = (ClampMin = 0, ClampMax = 50000),
 		meta=(ToolTip="Physics force to apply on hit"))
 	float PhysicsForce = 100.0f;

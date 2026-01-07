@@ -28,6 +28,8 @@ void APITS_BaseProjectile::OnConstruction(const FTransform& Transform)
 		PhysicsForce = ProjectileData->PhysicsForce;
 		HitDamageType = ProjectileData->DamageType;
 		ProjectileName = ProjectileData->ProjectileName;
+		ProjectileMovement->InitialSpeed = ProjectileData->Speed;
+		ProjectileMovement->MaxSpeed = ProjectileData->Speed;
 	}
 }
 
@@ -48,8 +50,8 @@ APITS_BaseProjectile::APITS_BaseProjectile()
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
-	ProjectileMovement->InitialSpeed = 3000.0f;
-	ProjectileMovement->MaxSpeed = 3000.0f;
+	ProjectileMovement->InitialSpeed = 3000.f;
+	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->ProjectileGravityScale = 0.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
