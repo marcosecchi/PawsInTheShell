@@ -9,6 +9,7 @@
 #include "GameFramework/PlayerController.h"
 #include "PITS_PlayerController.generated.h"
 
+class APITS_BasePlayerCharacter;
 /**
  * 
  */
@@ -30,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|UI")
 	TSubclassOf<UUserWidget> MainWidgetClass;
 	
+	UFUNCTION()
+	void HandleUpdateWeapon();
+
 	void UpdateMainWidget() const;
 	
 	virtual void BeginPlay() override;

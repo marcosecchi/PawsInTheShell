@@ -120,6 +120,19 @@ void APITS_BasePlayerCharacter::Shoot()
 		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot shoot while cooling down!"), *GetNameSafe(this));
 		return;
 	}
+	if (AmmoAmount <= 0)
+	{
+		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot shoot with no ammo!"), *GetNameSafe(this));
+		return;
+	}
+	AmmoAmount--;
+	if (const UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	{
+		WorldSubsystem->NotifyUpdateWeapon();
+	}
+
+	UE_LOG(LogPITS, Log, TEXT("'%s' Shooting! Ammo left: %d / %d"), *GetNameSafe(this), AmmoAmount, MaxAmmoAmount);
+
 	// Will play montage only if character is still
 	if (ShootMontage && GetMesh() && GetVelocity().Size() <= KINDA_SMALL_NUMBER)
 	{
@@ -151,7 +164,7 @@ void APITS_BasePlayerCharacter::ChangeCharacter()
 		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while outside safe zone!"), *GetNameSafe(this));
 		return;
 	}
-	if (UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	if (const UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
 	{
 		WorldSubsystem->ChangeCharacter();
 	}

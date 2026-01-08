@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Interfaces/PITS_StatsWidgetInterface.h"
 #include "PawsInTheShell/Public/Utils/PITS_Logs.h"
+#include "Subsystems/PITS_WorldSubsystem.h"
 
 class UEnhancedInputLocalPlayerSubsystem;
 
@@ -24,6 +25,11 @@ void APITS_PlayerController::BeginPlay()
 			UE_LOG(LogPITS, Log, TEXT("'%s' Created Main Menu Widget '%s'"), *GetNameSafe(this), *GetNameSafe(MainWidget));
 		}
 	}
+	if (UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	{
+		WorldSubsystem->OnCharacterUpdateWeapon.AddDynamic(this, &APITS_PlayerController::HandleUpdateWeapon);
+	}
+
 	UpdateMainWidget();
 }
 
@@ -49,6 +55,11 @@ void APITS_PlayerController::SetupInputComponent()
 void APITS_PlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	UpdateMainWidget();
+}
+
+void APITS_PlayerController::HandleUpdateWeapon()
+{
 	UpdateMainWidget();
 }
 

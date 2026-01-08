@@ -10,7 +10,7 @@
 #include "Utils/PITS_FixedActorPool.h"
 #include "Utils/PITS_Globals.h"
 
-void UPITS_WorldSubsystem::ChangeCharacter()
+void UPITS_WorldSubsystem::ChangeCharacter() const
 {
 	UE_LOG(LogPITS, Log, TEXT("UPITS_WorldSubsystem::ChangeCharacter()"));
 	
@@ -31,6 +31,7 @@ void UPITS_WorldSubsystem::ChangeCharacter()
 			if (APITS_BasePlayerCharacter* NewCharacter = Cast<APITS_BasePlayerCharacter>(FoundCharacters[RandomIndex]))
 			{
 				Controller->Possess(NewCharacter);
+				NotifyUpdateWeapon();
 				UE_LOG(LogPITS, Log, TEXT("'%s' Possessed Character '%s'"), *GetNameSafe(this), *GetNameSafe(NewCharacter));
 			}
 		}
@@ -39,14 +40,19 @@ void UPITS_WorldSubsystem::ChangeCharacter()
 
 #pragma region "Damage"
 
-void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount)
+void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount) const
 {
-	OnDamageTaken.Broadcast(DamageType, Amount);
+	OnCharacterDamageTaken.Broadcast(DamageType, Amount);
 }
 
-void UPITS_WorldSubsystem::NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType)
+void UPITS_WorldSubsystem::NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType) const
 {
-	OnDamageEnd.Broadcast(DamageType);
+	OnCharacterDamageEnd.Broadcast(DamageType);
+}
+
+void UPITS_WorldSubsystem::NotifyUpdateWeapon() const
+{
+	OnCharacterUpdateWeapon.Broadcast();
 }
 
 #pragma endregion 
