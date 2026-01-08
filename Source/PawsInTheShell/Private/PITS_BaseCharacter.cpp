@@ -139,9 +139,9 @@ void APITS_BaseCharacter::BeginPlay()
 		}
 	}
 	
-	Health->OnFullHealth.BindDynamic(this, &APITS_BaseCharacter::HandleFullHealth);
-	Health->OnZeroHealth.BindDynamic(this, &APITS_BaseCharacter::HandleZeroHealth);
-	Health->OnUpdateHealth.BindDynamic(this, &APITS_BaseCharacter::HandleUpdateHealth);
+	Health->OnFullHealth.AddDynamic(this, &APITS_BaseCharacter::HandleFullHealth);
+	Health->OnZeroHealth.AddDynamic(this, &APITS_BaseCharacter::HandleZeroHealth);
+	Health->OnUpdateHealth.AddDynamic(this, &APITS_BaseCharacter::HandleUpdateHealth);
 }
 
 #pragma region HealthInterface Implementations

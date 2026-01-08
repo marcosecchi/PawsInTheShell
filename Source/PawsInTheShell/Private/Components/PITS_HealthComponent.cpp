@@ -10,7 +10,6 @@ UPITS_HealthComponent::UPITS_HealthComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 void UPITS_HealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -22,9 +21,9 @@ void UPITS_HealthComponent::AddHealth(const float HealthToAdd)
 
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealthToAdd, 0.0f, MaxHealth);
 	UE_LOG(LogPITS, Log, TEXT("'%s' Health changed by %f. Current Health: %f/%f"), *GetNameSafe(this), HealthToAdd, CurrentHealth, MaxHealth);
-	if (IsDead()) OnZeroHealth.ExecuteIfBound();
-	if (GetHealthPercentage() == 1.0f) OnFullHealth.ExecuteIfBound();
-	OnUpdateHealth.Execute(GetHealthPercentage());
+	if (IsDead()) OnZeroHealth.Broadcast();
+	if (GetHealthPercentage() == 1.0f) OnFullHealth.Broadcast();
+	OnUpdateHealth.Broadcast(GetHealthPercentage());
 }
 
 void UPITS_HealthComponent::RemoveHealth(const float HealthToRemove)
