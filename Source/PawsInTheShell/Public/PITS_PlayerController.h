@@ -32,9 +32,7 @@ protected:
 	TSubclassOf<UUserWidget> MainWidgetClass;
 	
 	UFUNCTION()
-	void HandleUpdateWeapon();
-
-	void UpdateMainWidget() const;
+	void UpdateMainWidget();
 	
 	virtual void BeginPlay() override;
 	

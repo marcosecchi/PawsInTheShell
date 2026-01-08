@@ -59,11 +59,15 @@ void APITS_BasePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+	CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
+	
 	// Sets the ammo amounts based on weapon data table
 	if (const FPITS_WeaponDataTableRow* WeaponData = WeaponStatsType.GetRow<FPITS_WeaponDataTableRow>(FString()))
 	{
 		AmmoAmount = MaxAmmoAmount = WeaponData->MaxAmmo;
 	}
+	WorldSubsystem->NotifyUpdateWeapon();
 }
 
 void APITS_BasePlayerCharacter::Move(const FInputActionValue& Value)
@@ -126,10 +130,8 @@ void APITS_BasePlayerCharacter::Shoot()
 		return;
 	}
 	AmmoAmount--;
-	if (const UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
-	{
-		WorldSubsystem->NotifyUpdateWeapon();
-	}
+	CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
+	WorldSubsystem->NotifyUpdateWeapon();
 
 	UE_LOG(LogPITS, Log, TEXT("'%s' Shooting! Ammo left: %d / %d"), *GetNameSafe(this), AmmoAmount, MaxAmmoAmount);
 
@@ -164,10 +166,8 @@ void APITS_BasePlayerCharacter::ChangeCharacter()
 		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while outside safe zone!"), *GetNameSafe(this));
 		return;
 	}
-	if (const UPITS_WorldSubsystem* WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
-	{
-		WorldSubsystem->ChangeCharacter();
-	}
+	CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
+	WorldSubsystem->ChangeCharacter();
 }
 
 void APITS_BasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

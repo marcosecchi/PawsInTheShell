@@ -13,6 +13,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class UPITS_WorldSubsystem;
 struct FInputActionValue;
 
 UCLASS(Abstract, BlueprintType, Blueprintable)
@@ -27,6 +28,9 @@ class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter,
 	/** Camera boom */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> CameraBoom;
+
+	UPROPERTY()
+	TObjectPtr<UPITS_WorldSubsystem> WorldSubsystem;
 
 public:
 	APITS_BasePlayerCharacter();

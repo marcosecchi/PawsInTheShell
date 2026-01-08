@@ -27,7 +27,7 @@ void APITS_PlayerController::BeginPlay()
 	}
 	if (UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
 	{
-		WorldSubsystem->OnCharacterUpdateWeapon.AddDynamic(this, &APITS_PlayerController::HandleUpdateWeapon);
+		WorldSubsystem->OnCharacterUpdateWeapon.AddDynamic(this, &APITS_PlayerController::UpdateMainWidget);
 	}
 
 	UpdateMainWidget();
@@ -58,12 +58,7 @@ void APITS_PlayerController::OnPossess(APawn* InPawn)
 	UpdateMainWidget();
 }
 
-void APITS_PlayerController::HandleUpdateWeapon()
-{
-	UpdateMainWidget();
-}
-
-void APITS_PlayerController::UpdateMainWidget() const
+void APITS_PlayerController::UpdateMainWidget()
 {
 	APawn* NewPawn = GetPawn();
 	if (!NewPawn) return;
