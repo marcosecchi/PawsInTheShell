@@ -33,5 +33,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|UI")
 	void UpdateHealth(const float Value);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="PawsInTheShell|UI")
+	void UpdateWeaponData(const FText &WeaponName, const int32 CurrentAmmo, const int32 MaxAmmo);
 };
 

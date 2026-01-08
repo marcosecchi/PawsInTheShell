@@ -30,7 +30,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|UI")
 	TSubclassOf<UUserWidget> MainWidgetClass;
 	
-	void UpdateMainWidget();
+	void UpdateMainWidget() const;
 	
 	virtual void BeginPlay() override;
 	

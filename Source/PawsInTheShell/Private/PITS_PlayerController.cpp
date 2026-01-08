@@ -52,12 +52,11 @@ void APITS_PlayerController::OnPossess(APawn* InPawn)
 	UpdateMainWidget();
 }
 
-void APITS_PlayerController::UpdateMainWidget()
+void APITS_PlayerController::UpdateMainWidget() const
 {
 	APawn* NewPawn = GetPawn();
 	if (!NewPawn) return;
 	
-	// cast to character
 	const APITS_BasePlayerCharacter* PossessedCharacter = Cast<APITS_BasePlayerCharacter>(NewPawn);
 	if (!PossessedCharacter)
 	{
@@ -70,5 +69,16 @@ void APITS_PlayerController::UpdateMainWidget()
 		IPITS_StatsWidgetInterface::Execute_UpdateName(MainWidget, PossessedCharacter->GetCharacterName());
 		IPITS_StatsWidgetInterface::Execute_UpdateDescription(MainWidget, PossessedCharacter->GetCharacterDescription());
 		IPITS_StatsWidgetInterface::Execute_UpdateIcon(MainWidget, PossessedCharacter->GetCharacterIcon());
+		if (PossessedCharacter->GetClass()->ImplementsInterface(UPITS_AmmoInterface::StaticClass()))
+		{
+			const int32 CurrentAmmo = IPITS_AmmoInterface::Execute_GetCurrentAmmoAmount(PossessedCharacter);
+			UE_LOG(LogPITS, Warning, TEXT("'%s' UpdateMainWidget(): Current Ammo for '%s' is %d"), *GetNameSafe(this), *GetNameSafe(PossessedCharacter), CurrentAmmo);
+			const int32 MaxAmmo = IPITS_AmmoInterface::Execute_GetMaxAmmoAmount(PossessedCharacter);
+			IPITS_StatsWidgetInterface::Execute_UpdateWeaponData(MainWidget, PossessedCharacter->GetWeaponName(), CurrentAmmo, MaxAmmo);
+		}
+		else
+		{
+			UE_LOG(LogPITS, Warning, TEXT("'%s' UpdateMainWidget(): Possessed Character '%s' does not implement IPITS_AmmoInterface"), *GetNameSafe(this), *GetNameSafe(PossessedCharacter));
+		}
 	}
 }
