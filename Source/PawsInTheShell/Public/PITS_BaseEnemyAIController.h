@@ -13,8 +13,8 @@ class UStateTreeAIComponent;
 class UAIPerceptionComponent;
 struct FAIStimulus;
 
-DECLARE_DELEGATE_TwoParams(FShooterPerceptionUpdatedSignature, AActor*, const FAIStimulus&);
-DECLARE_DELEGATE_OneParam(FShooterPerceptionForgottenSignature, AActor*);
+DECLARE_DELEGATE_TwoParams(FShooterPerceptionUpdatedSignature, AActor* /* PerceivedActor */, const FAIStimulus& /* Stimulus */);
+DECLARE_DELEGATE_OneParam(FShooterPerceptionForgottenSignature, AActor* /* ForgottenActor */);
 
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_BaseEnemyAIController : public AAIController
