@@ -10,12 +10,12 @@
 
 class UPITS_FixedActorPool;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterDamageTaken, TSubclassOf<UDamageType>, DamageEvent, float, Amount);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDamageEnd, TSubclassOf<UDamageType>, DamageEvent);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterUpdateWeapon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterDamageTakenSignature, TSubclassOf<UDamageType>, DamageEvent, float, Amount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDamageEndSignature, TSubclassOf<UDamageType>, DamageEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterUpdateWeaponSignature);
 
 /**
- * 
+ *  World subsystem that manages global events related to the player character
  */
 UCLASS()
 class PAWSINTHESHELL_API UPITS_WorldSubsystem : public UWorldSubsystem
@@ -38,13 +38,13 @@ public:
 	void NotifyUpdateWeapon() const;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
-	FOnCharacterDamageTaken OnCharacterDamageTaken;
+	FOnCharacterDamageTakenSignature OnCharacterDamageTaken;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
-	FOnCharacterDamageEnd OnCharacterDamageEnd;
+	FOnCharacterDamageEndSignature OnCharacterDamageEnd;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Subsystems")
-	FOnCharacterUpdateWeapon OnCharacterUpdateWeapon;
+	FOnCharacterUpdateWeaponSignature OnCharacterUpdateWeapon;
 #pragma endregion
 	
 

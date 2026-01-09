@@ -9,10 +9,10 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PITS_MissionSubsystem.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMissionComplete, UPITS_MissionDataAsset*, Mission);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMissionUpdate, UPITS_MissionDataAsset*, Mission, int, CurrentProgress);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllMissionsComplete);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMissionsInitialize);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMissionCompleteSignature, UPITS_MissionDataAsset*, Mission);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMissionUpdateSignature, UPITS_MissionDataAsset*, Mission, int, CurrentProgress);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllMissionsCompleteSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMissionsInitializeSignature);
 
 /**
  * 
@@ -43,14 +43,14 @@ public:
 	void UpdateMission(UPITS_MissionDataAsset* Mission, const int ProgressIncrement = 1);
 	
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
-	FOnMissionComplete OnMissionComplete;
+	FOnMissionCompleteSignature OnMissionComplete;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
-	FOnMissionUpdate OnMissionUpdate;
+	FOnMissionUpdateSignature OnMissionUpdate;
 	
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
-	FOnMissionsInitialize OnMissionsInitialize;
+	FOnMissionsInitializeSignature OnMissionsInitialize;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
-	FOnAllMissionsComplete OnAllMissionsComplete;
+	FOnAllMissionsCompleteSignature OnAllMissionsComplete;
 };

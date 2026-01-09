@@ -13,8 +13,8 @@ class UStateTreeAIComponent;
 class UAIPerceptionComponent;
 struct FAIStimulus;
 
-DECLARE_DELEGATE_TwoParams(FShooterPerceptionUpdatedDelegate, AActor*, const FAIStimulus&);
-DECLARE_DELEGATE_OneParam(FShooterPerceptionForgottenDelegate, AActor*);
+DECLARE_DELEGATE_TwoParams(FShooterPerceptionUpdatedSignature, AActor*, const FAIStimulus&);
+DECLARE_DELEGATE_OneParam(FShooterPerceptionForgottenSignature, AActor*);
 
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_BaseEnemyAIController : public AAIController
@@ -34,10 +34,10 @@ public:
 	APITS_BaseEnemyAIController();
 
 	/** Called when an AI perception has been updated. StateTree task delegate hook */
-	FShooterPerceptionUpdatedDelegate OnShooterPerceptionUpdated;
+	FShooterPerceptionUpdatedSignature OnShooterPerceptionUpdated;
 
 	/** Called when an AI perception has been forgotten. StateTree task delegate hook */
-	FShooterPerceptionForgottenDelegate OnShooterPerceptionForgotten;
+	FShooterPerceptionForgottenSignature OnShooterPerceptionForgotten;
 
 	/** Sets the targeted enemy */
 	void SetCurrentTarget(APITS_BasePlayerCharacter* Target);

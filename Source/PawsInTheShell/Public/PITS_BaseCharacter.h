@@ -12,8 +12,8 @@
 
 class UPITS_HealthComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthUpdateDelegate, float, HealthPercentage);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterDeathDelegate, AActor*, DeadCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthUpdateSignature, float, HealthPercentage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterDeathSignature, AActor*, DeadCharacter);
 
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
@@ -29,10 +29,10 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
-	FCharacterHealthUpdateDelegate OnUpdateHealth;
+	FCharacterHealthUpdateSignature OnUpdateHealth;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
-	FCharacterDeathDelegate OnDeath;
+	FCharacterDeathSignature OnDeath;
 
 protected:
 	virtual void BeginPlay() override;
