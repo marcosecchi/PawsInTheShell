@@ -21,9 +21,9 @@ void UPITS_HealthComponent::AddHealth(const float HealthToAdd)
 
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealthToAdd, 0.0f, MaxHealth);
 	UE_LOG(LogPITS, Log, TEXT("'%s' Health changed by %f. Current Health: %f/%f"), *GetNameSafe(this), HealthToAdd, CurrentHealth, MaxHealth);
-	if (IsDead()) OnZeroHealth.Broadcast();
-	if (GetHealthPercentage() == 1.0f) OnFullHealth.Broadcast();
-	OnUpdateHealth.Broadcast(GetHealthPercentage());
+	if (IsDead()) OnZeroHealth.ExecuteIfBound();
+	if (GetHealthPercentage() == 1.0f) OnFullHealth.ExecuteIfBound();
+	OnUpdateHealth.ExecuteIfBound(GetHealthPercentage());
 }
 
 void UPITS_HealthComponent::RemoveHealth(const float HealthToRemove)

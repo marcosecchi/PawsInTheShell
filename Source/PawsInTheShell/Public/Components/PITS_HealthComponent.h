@@ -9,11 +9,11 @@
 #include "PITS_HealthComponent.generated.h"
 
 // Declare delegates for health component
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FZeroHealthSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFullHealthSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHealthUpdateSignature, float, HealthPercentage);
+DECLARE_DELEGATE(FZeroHealthSignature);
+DECLARE_DELEGATE(FFullHealthSignature);
+DECLARE_DELEGATE_OneParam(FHealthUpdateSignature, float /* HealthPercentage */);
 
-UCLASS(Blueprintable, BlueprintType, DisplayName="Health", ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, DisplayName="Health", ClassGroup=("PawsInTheShell"))
 class PAWSINTHESHELL_API UPITS_HealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -61,17 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Health")
 	void RemoveHealth(const float HealthToRemove);	
 	
-#pragma region Delegate Broadcasts
+#pragma region "Delegates"
 public:
-	UPROPERTY(BlueprintAssignable, Category="Health")
 	FZeroHealthSignature OnZeroHealth;
-
-	UPROPERTY(BlueprintAssignable, Category="Health")
 	FFullHealthSignature OnFullHealth;
-
-	UPROPERTY(BlueprintAssignable, Category="Health")
 	FHealthUpdateSignature OnUpdateHealth;
-
 #pragma endregion
 
 };

@@ -75,17 +75,6 @@ protected:
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-#pragma region Delegates
-	UFUNCTION()
-	void HandleFullHealth();
-	
-	UFUNCTION()
-	void HandleZeroHealth();
-	
-	UFUNCTION()
-	void HandleUpdateHealth(float HealthPercentage);
-#pragma endregion
-	
 #pragma region Property Getters and Setters
 public:
 	/* Returns the character name from the data table */

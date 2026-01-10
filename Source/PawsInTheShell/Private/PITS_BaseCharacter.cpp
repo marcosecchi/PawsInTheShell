@@ -139,9 +139,19 @@ void APITS_BaseCharacter::BeginPlay()
 		}
 	}
 	
-	Health->OnFullHealth.AddDynamic(this, &APITS_BaseCharacter::HandleFullHealth);
-	Health->OnZeroHealth.AddDynamic(this, &APITS_BaseCharacter::HandleZeroHealth);
-	Health->OnUpdateHealth.AddDynamic(this, &APITS_BaseCharacter::HandleUpdateHealth);
+	Health->OnFullHealth.BindLambda([this]()
+	{
+		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+	});
+	Health->OnZeroHealth.BindLambda([this]()
+	{
+		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+		OnDeath.Broadcast(this);
+	});
+	Health->OnUpdateHealth.BindLambda([this](const float HealthPercentage)
+	{
+		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+	});
 }
 
 #pragma region HealthInterface Implementations
@@ -172,22 +182,4 @@ bool APITS_BaseCharacter::IsCybernetic_Implementation() const
 	return bIsCybernetic;
 }
 #pragma endregion
-
-#pragma region Delegates
-void APITS_BaseCharacter::HandleFullHealth()
-{
-	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-}
-
-void APITS_BaseCharacter::HandleZeroHealth()
-{
-	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-	OnDeath.Broadcast(this);
-}
-
-void APITS_BaseCharacter::HandleUpdateHealth(float HealthPercentage)
-{
-	OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-}
-#pragma endregion 
 
