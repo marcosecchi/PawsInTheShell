@@ -161,6 +161,7 @@ void APITS_BasePlayerCharacter::ChangeCharacter()
 		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while moving or jumping!"), *GetNameSafe(this));
 		return;
 	}
+	// Check if in safe zone
 	if (!bInSafeZone)
 	{
 		UE_LOG(LogPITS, Warning, TEXT("'%s' Cannot change character while outside safe zone!"), *GetNameSafe(this));

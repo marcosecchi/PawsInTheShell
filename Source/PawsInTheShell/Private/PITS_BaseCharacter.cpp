@@ -138,7 +138,6 @@ void APITS_BaseCharacter::BeginPlay()
 			SpawnPoint->SetCurrentProjectileClass(WeaponData->ProjectileClass);
 		}
 	}
-	
 	Health->OnFullHealth.BindLambda([this]()
 	{
 		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
