@@ -59,7 +59,7 @@ void APITS_BasePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	WorldSubsystem = Controller->GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
+	WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
 	CHECK_PTR_AND_LOG_RETURN(WorldSubsystem);
 	
 	// Sets the ammo amounts based on weapon data table
