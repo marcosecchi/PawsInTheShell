@@ -11,6 +11,7 @@
 #include "PITS_BaseCharacter.generated.h"
 
 class UPITS_HealthComponent;
+struct FDamageEvent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthStatusUpdateSignature, float, HealthPercentage);
 // TODO: Declare death delegate
@@ -26,7 +27,7 @@ class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_H
 public:
 	APITS_BaseCharacter();
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
 	FCharacterHealthStatusUpdateSignature OnUpdateHealthStatus;
