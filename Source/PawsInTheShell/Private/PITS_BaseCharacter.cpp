@@ -57,7 +57,7 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		GetCharacterMovement()->BrakingDecelerationFalling = CharacterData->BrakingDecelerationFalling;
 
 		Health->SetMaxHealth(CharacterData->MaxHealth);
-		Health->SetCurrentHealth(CharacterData->StartingHealth);
+		Health->SetCurrentHealth(CharacterData->MaxHealth);
 		Health->SetCanRegenerate(CharacterData->bCanRegenerate);
 		
 		ArmourAmount = CharacterData->ArmourAmount;
@@ -144,7 +144,11 @@ void APITS_BaseCharacter::BeginPlay()
 		{
 			OnUpdateHealthStatus.Broadcast(Health->GetHealthPercentage());
 		}
+		// TODO: Implement death logic
+		HandleUpdateHealth(Health->GetHealthPercentage());
 	});
+	// Initial health update
+	HandleUpdateHealth(Health->GetHealthPercentage());
 }
 
 #pragma region HealthInterface Implementations

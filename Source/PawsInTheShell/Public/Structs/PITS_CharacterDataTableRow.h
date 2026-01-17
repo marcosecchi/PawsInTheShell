@@ -28,9 +28,6 @@ struct FPITS_CharacterDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Maximum health reachable by the character"))
 	float MaxHealth = 100.0f;
 
-	UPROPERTY(EditAnywhere, meta=(ToolTip="Character health at the start of the game"))
-	float StartingHealth = 100.0f;
-
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Character defensive amount that reduces incoming damage"))
 	float ArmourAmount = 0.0f;
 

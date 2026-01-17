@@ -13,6 +13,7 @@
 class UPITS_HealthComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthStatusUpdateSignature, float, HealthPercentage);
+// TODO: Declare death delegate
 
 UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
@@ -67,7 +68,10 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Weapon")
 	void HandleShoot();
-	
+
+	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Weapon")
+	void HandleUpdateHealth(const float HealthPercentage);
+
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
