@@ -48,21 +48,21 @@ public:
 	UFUNCTION()
 	void SetCanRegenerate(const bool bNewCanRegenerate) {  bCanRegenerate = bNewCanRegenerate; }
 
-	UFUNCTION(BlueprintCallable, Category="Health")
-	bool CanRegenerate() const { return bCanRegenerate; }
-
-	UFUNCTION(BlueprintCallable, Category="Health")
-	float GetHealthPercentage() const { return (MaxHealth > 0.0f) ? (CurrentHealth / MaxHealth) : 0.0f; }
-
-	UFUNCTION(BlueprintCallable, Category="Health")
-	bool IsDead() const { return CurrentHealth <= 0.0f; }
-
-	UFUNCTION(BlueprintCallable, Category="Health")
+	UFUNCTION()
 	void AddHealth(const float HealthToAdd);
 
-	UFUNCTION(BlueprintCallable, Category="Health")
+	UFUNCTION()
 	void RemoveHealth(const float HealthToRemove);	
-	
+
+	UFUNCTION()
+	bool CanRegenerate() const { return bCanRegenerate; }
+
+	UFUNCTION()
+	float GetHealthPercentage() const { return (MaxHealth > 0.0f) ? (CurrentHealth / MaxHealth) : 0.0f; }
+
+	UFUNCTION()
+	bool IsDead() const { return CurrentHealth <= 0.0f; }
+
 #pragma region "Delegates"
 public:
 	FHealthUpdateSignature OnUpdateHealth;

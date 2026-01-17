@@ -13,6 +13,8 @@ UPITS_HealthComponent::UPITS_HealthComponent()
 void UPITS_HealthComponent::AddHealth(const float HealthToAdd)
 {
 	if (IsDead()) return;
+	if (HealthToAdd == 0.0f) return;
+	if (CurrentHealth == MaxHealth) return;
 
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealthToAdd, 0.0f, MaxHealth);
 	UE_LOG(LogPITS, Log, TEXT("'%s' Health changed by %f. Current Health: %f/%f"), *GetNameSafe(this), HealthToAdd, CurrentHealth, MaxHealth);
