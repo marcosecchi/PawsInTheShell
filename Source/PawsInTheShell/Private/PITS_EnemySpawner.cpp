@@ -40,18 +40,10 @@ void APITS_EnemySpawner::ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) con
     PoolSubsystem->ReleasePooledObject(Enemy);
 }
 
-void APITS_EnemySpawner::OnEnemyDeath(AActor* DeadEnemy)
-{
-    APITS_BaseEnemyCharacter* Enemy = Cast<APITS_BaseEnemyCharacter>(DeadEnemy);
-    Enemy->OnDeath.RemoveDynamic(this, &APITS_EnemySpawner::OnEnemyDeath);
-    ReleaseEnemyToPool(Enemy);
-}
-
 void APITS_EnemySpawner::SpawnEnemy()
 {
     APITS_BaseEnemyCharacter* Enemy = AcquireEnemyFromPool(GetSpawnTransform());
     CHECK_PTR_AND_LOG_RETURN(Enemy);
-    Enemy->OnDeath.AddDynamic(this, &APITS_EnemySpawner::OnEnemyDeath);
 }
 
 // Called when the game starts or when spawned.

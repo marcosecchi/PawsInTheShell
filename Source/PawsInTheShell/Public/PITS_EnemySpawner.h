@@ -45,7 +45,4 @@ protected:
 	UFUNCTION()
 	void ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) const;
 	
-	UFUNCTION()
-	void OnEnemyDeath(AActor* DeadEnemy);
-
 };

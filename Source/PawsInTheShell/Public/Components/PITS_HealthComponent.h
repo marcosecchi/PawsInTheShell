@@ -8,24 +8,26 @@
 #include "Components/ActorComponent.h"
 #include "PITS_HealthComponent.generated.h"
 
-// Declare delegates for health component
-DECLARE_DELEGATE(FZeroHealthSignature);
-DECLARE_DELEGATE(FFullHealthSignature);
-DECLARE_DELEGATE_OneParam(FHealthUpdateSignature, float /* HealthPercentage */);
+UENUM(BlueprintType)
+enum class EPITS_HealthStatus : uint8
+{
+	Update		UMETA(DisplayName="Update"),
+	Maximum		UMETA(DisplayName="Maximum"),
+	Death		UMETA(DisplayName="Death"),
+};
 
-UCLASS(Blueprintable, BlueprintType, DisplayName="Health", ClassGroup=("PawsInTheShell"))
-class PAWSINTHESHELL_API UPITS_HealthComponent : public UActorComponent
+// Declare delegate for health component
+DECLARE_DELEGATE_OneParam(FHealthUpdateSignature, EPITS_HealthStatus /* HealthStatus */);
+
+UCLASS(BlueprintType, DisplayName="Health", ClassGroup=("PawsInTheShell"))
+class PAWSINTHESHELL_API UPITS_HealthComponent final : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UPITS_HealthComponent();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
 	UPROPERTY()
 	float CurrentHealth = 1.0f;
 
@@ -63,8 +65,6 @@ public:
 	
 #pragma region "Delegates"
 public:
-	FZeroHealthSignature OnZeroHealth;
-	FFullHealthSignature OnFullHealth;
 	FHealthUpdateSignature OnUpdateHealth;
 #pragma endregion
 

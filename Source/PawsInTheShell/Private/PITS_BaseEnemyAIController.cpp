@@ -40,13 +40,6 @@ void APITS_BaseEnemyAIController::ClearCurrentTarget()
 void APITS_BaseEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-
-	// ensure we're possessing an NPC
-	if (APITS_BaseEnemyCharacter* Enemy = Cast<APITS_BaseEnemyCharacter>(InPawn))
-	{
-		// subscribe to the pawn's OnDeath delegate
-		Enemy->OnDeath.AddDynamic(this, &APITS_BaseEnemyAIController::OnDeath);
-	}
 }
 
 void APITS_BaseEnemyAIController::OnUnPossess()

@@ -2,16 +2,16 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "Components/PITS_MissionHolder.h"
+#include "Components/PITS_MissionHolderComponent.h"
 
 #include "Subsystems/PITS_MissionSubsystem.h"
 
-UPITS_MissionHolder::UPITS_MissionHolder()
+UPITS_MissionHolderComponent::UPITS_MissionHolderComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UPITS_MissionHolder::DispatchMissionUpdate()
+void UPITS_MissionHolderComponent::DispatchMissionUpdate()
 {
 	if (UPITS_MissionSubsystem *MissionSubsystem = GetWorld()->GetSubsystem<UPITS_MissionSubsystem>())
 	{

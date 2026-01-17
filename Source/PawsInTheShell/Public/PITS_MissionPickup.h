@@ -8,7 +8,7 @@
 #include "PITS_BaseTrigger.h"
 #include "PITS_MissionPickup.generated.h"
 
-class UPITS_MissionHolder;
+class UPITS_MissionHolderComponent;
 
 UCLASS(Abstract)
 class PAWSINTHESHELL_API APITS_MissionPickup : public APITS_BaseTrigger
@@ -21,11 +21,11 @@ public:
 protected:
 	
 	UPROPERTY(EditAnywhere, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UPITS_MissionHolder> MissionHolderComponent;
+	TObjectPtr<UPITS_MissionHolderComponent> MissionHolderComponent;
 	
 	virtual void HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter) override;
 	
 public:
-	FORCEINLINE UPITS_MissionHolder* GetMissionHolderComponent() const { return MissionHolderComponent; }
+	FORCEINLINE UPITS_MissionHolderComponent* GetMissionHolderComponent() const { return MissionHolderComponent; }
 	
 };

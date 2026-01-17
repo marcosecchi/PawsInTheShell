@@ -6,7 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PITS_MissionHolder.generated.h"
+#include "PITS_MissionHolderComponent.generated.h"
 
 
 class UPITS_MissionDataAsset;
@@ -15,13 +15,13 @@ class UPITS_MissionDataAsset;
  * Component that holds a mission reference and can dispatch mission updates
  */
 UCLASS(Blueprintable, BlueprintType, DisplayName="MissionHolder", ClassGroup=("PawsInTheShell"), meta=(BlueprintSpawnableComponent))
-class PAWSINTHESHELL_API UPITS_MissionHolder : public UActorComponent
+class PAWSINTHESHELL_API UPITS_MissionHolderComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
-	UPITS_MissionHolder();
+	UPITS_MissionHolderComponent();
 
 protected:
 	// Reference to the mission data asset

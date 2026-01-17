@@ -138,18 +138,12 @@ void APITS_BaseCharacter::BeginPlay()
 			SpawnPoint->SetCurrentProjectileClass(WeaponData->ProjectileClass);
 		}
 	}
-	Health->OnFullHealth.BindLambda([this]()
+	Health->OnUpdateHealth.BindLambda([this](const EPITS_HealthStatus Status)
 	{
-		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-	});
-	Health->OnZeroHealth.BindLambda([this]()
-	{
-		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
-		OnDeath.Broadcast(this);
-	});
-	Health->OnUpdateHealth.BindLambda([this](const float HealthPercentage)
-	{
-		OnUpdateHealth.Broadcast(Health->GetHealthPercentage());
+		if (Status != EPITS_HealthStatus::Death)
+		{
+			OnUpdateHealthStatus.Broadcast(Health->GetHealthPercentage());
+		}
 	});
 }
 
