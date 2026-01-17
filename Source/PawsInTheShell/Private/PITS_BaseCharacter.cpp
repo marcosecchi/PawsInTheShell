@@ -145,10 +145,10 @@ void APITS_BaseCharacter::BeginPlay()
 			OnUpdateHealthStatus.Broadcast(Health->GetHealthPercentage());
 		}
 		// TODO: Implement death logic
-		HandleUpdateHealth(Health->GetHealthPercentage());
+		HandleUpdateHealthStatus(Health->GetHealthPercentage());
 	});
 	// Initial health update
-	HandleUpdateHealth(Health->GetHealthPercentage());
+	HandleUpdateHealthStatus(Health->GetHealthPercentage());
 }
 
 #pragma region HealthInterface Implementations

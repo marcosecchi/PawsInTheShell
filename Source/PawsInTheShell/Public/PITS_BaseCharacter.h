@@ -70,7 +70,7 @@ protected:
 	void HandleShoot();
 
 	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Weapon")
-	void HandleUpdateHealth(const float HealthPercentage);
+	void HandleUpdateHealthStatus(const float HealthPercentage);
 
 	/** Native construction script */
 	virtual void OnConstruction(const FTransform& Transform) override;
