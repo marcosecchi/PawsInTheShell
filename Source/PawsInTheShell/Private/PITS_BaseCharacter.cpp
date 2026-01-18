@@ -3,16 +3,17 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseCharacter.h"
+
+#include "Components/PITS_ArmourComponent.h"
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "Damage/PITS_DamageType_Regeneration.h"
 #include "Components/PITS_HealthComponent.h"
 #include "Components/PITS_WeaponSpawnPointComponent.h"
-#include "Damage/PITS_DamageType_ArmourPiercing.h"
-#include "Damage/PITS_DamageType_CyberTech.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Structs/PITS_CharacterDataTableRow.h"
 #include "Structs/PITS_WeaponDataTableRow.h"
+#include "Utils/PITS_Logs.h"
 
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
@@ -20,6 +21,7 @@ APITS_BaseCharacter::APITS_BaseCharacter()
 	PrimaryActorTick.bCanEverTick = false;
 
 	Health = CreateDefaultSubobject<UPITS_HealthComponent>(FName("Health"));
+	Armour = CreateDefaultSubobject<UPITS_ArmourComponent>(FName("Armour"));
 }
 
 void APITS_BaseCharacter::HandleShoot()
@@ -60,7 +62,9 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 		Health->SetCurrentHealth(CharacterData->MaxHealth);
 		Health->SetCanRegenerate(CharacterData->bCanRegenerate);
 		
-		ArmourAmount = CharacterData->ArmourAmount;
+		Armour->SetArmourAmount(CharacterData->ArmourAmount);
+		Armour->SetIsCybernetic(CharacterData->bCyberAugmented);
+
 		bIsCybernetic = CharacterData->bCyberAugmented;
 		CharacterName = CharacterData->CharacterName;
 		CharacterDescription = CharacterData->CharacterDescription;
@@ -80,46 +84,34 @@ void APITS_BaseCharacter::OnConstruction(const FTransform& Transform)
 	}
 }
 
-float APITS_BaseCharacter::TakeDamage(const float DamageAmount, struct FDamageEvent const& DamageEvent,
+float APITS_BaseCharacter::TakeDamage(const float DamageAmount, FDamageEvent const& DamageEvent,
                                       AController* EventInstigator, AActor* DamageCauser)
 {
-	UPITS_WorldSubsystem *WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>();
-
 	float EffectiveAmount = DamageAmount;
 	
+	UClass* DamageTypeClass = UDamageType::StaticClass();
 	if (DamageEvent.DamageTypeClass != nullptr)
 	{
-		// Check if damage type is regeneration
-		if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_Regeneration::StaticClass()))
-		{
-			Health->AddHealth(EffectiveAmount);
-		}
-		// Check if damage type is cybertech
-		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_CyberTech::StaticClass()))
-		{
-			if (!bIsCybernetic)
-			{
-				// Non-cybernetic characters are unaffected by CyberTech damage
-				return 0.0f;
-			}
-			// PicoTech damage ignores armor for cybernetic characters
-			Health->RemoveHealth(EffectiveAmount);
-		}
-		else if (DamageEvent.DamageTypeClass->IsChildOf(UPITS_DamageType_ArmourPiercing::StaticClass()))
-		{
-			// Armour Piercing damage ignores armour
-			Health->RemoveHealth(DamageAmount);
-		}
-		else
-		{
-			// Apply armor reduction
-			EffectiveAmount = FMath::Max(0.0f, DamageAmount - ArmourAmount);
-			Health->RemoveHealth(EffectiveAmount);
-		}
+		DamageTypeClass = DamageEvent.DamageTypeClass;
 	}
-	if (WorldSubsystem)
+	
+	// Check if damage type is regeneration
+	if (DamageTypeClass->IsChildOf(UPITS_DamageType_Regeneration::StaticClass()))
 	{
-		WorldSubsystem->NotifyDamageTaken(DamageEvent.DamageTypeClass, EffectiveAmount);
+		UE_LOG(LogPITS, Log, TEXT("Regeneration damage type detected, healing character."));
+		Health->AddHealth(EffectiveAmount);
+	}
+	else
+	{
+		// Apply armour calculations
+		EffectiveAmount = Armour->GetActualDamage(DamageAmount, DamageTypeClass);
+		UE_LOG(LogPITS, Log, TEXT("Taking damage: Original Amount = %f, Effective Amount after Armour = %f"), DamageAmount, EffectiveAmount);
+		Health->RemoveHealth(EffectiveAmount);
+	}
+
+	if (const UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	{
+		WorldSubsystem->NotifyDamageTaken(DamageTypeClass, EffectiveAmount);
 	}
 	return EffectiveAmount;
 }
@@ -171,7 +163,7 @@ bool APITS_BaseCharacter::CanRegenerate_Implementation() const
 #pragma region DefenceInterface Implementations
 float APITS_BaseCharacter::GetArmourAmount_Implementation() const
 {
-	return ArmourAmount;
+	return Armour->GetArmourAmount();
 }
 
 bool APITS_BaseCharacter::IsCybernetic_Implementation() const

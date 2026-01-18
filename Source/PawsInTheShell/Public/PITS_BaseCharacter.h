@@ -11,6 +11,7 @@
 #include "PITS_BaseCharacter.generated.h"
 
 class UPITS_HealthComponent;
+class UPITS_ArmourComponent;
 struct FDamageEvent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthStatusUpdateSignature, float, HealthPercentage);
@@ -23,6 +24,9 @@ class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_H
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPITS_HealthComponent> Health;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPITS_ArmourComponent> Armour;
 
 public:
 	APITS_BaseCharacter();
@@ -61,9 +65,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Weapon")
 	float ShootDelay = 0.0f;
 	
-	UPROPERTY()
-	float ArmourAmount = 0.0f;
-
 	UPROPERTY()
 	bool bIsCybernetic = false;
 
