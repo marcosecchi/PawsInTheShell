@@ -24,7 +24,7 @@ UCLASS(Abstract, NotBlueprintable, NotBlueprintType)
 class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_HealthInterface, public IPITS_DefenceInterface
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPITS_HealthComponent> Health;
 
@@ -52,12 +52,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Stats")
 	FDataTableRowHandle WeaponStatsType;
 	
+	/** Name of the character retrieved from a data table */
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText CharacterName = FText::FromString("Unnamed");
 
+	/** Description of the character retrieved from a data table */
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	FText CharacterDescription = FText::FromString("");
 
+	/** Icon representing the character used in the UI */
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|Stats")
 	UTexture2D* CharacterIcon = nullptr;
 
@@ -70,12 +73,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Weapon")
 	float ShootDelay = 0.0f;
 	
+	/** Whether the character has cybernetic enhancements */
 	UPROPERTY()
 	bool bIsCybernetic = false;
 
+	/** Handles the shooting logic */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Weapon")
 	void HandleShoot();
 
+	/** Handles updating the health status */
 	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Weapon")
 	void HandleUpdateHealthStatus(const float HealthPercentage);
 
