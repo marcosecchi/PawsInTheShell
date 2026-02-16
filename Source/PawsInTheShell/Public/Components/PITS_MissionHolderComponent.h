@@ -30,7 +30,7 @@ protected:
 
 	// Amount to increment the mission progress by when dispatching an update
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|Missions")
-	int MissionIncrement = 1;
+	int32 MissionIncrement = 1;
 	
 public:
 	// Dispatch a mission update to the Mission Subsystem

@@ -30,7 +30,7 @@ void UPITS_MissionSubsystem::InitializeMissions(const TArray<UPITS_MissionDataAs
 	OnMissionsInitialize.Broadcast();
 }
 
-void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, const int ProgressIncrement)
+void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, const int32 ProgressIncrement)
 {
 	// Check if the mission exists in the map
 	if (MissionMap.Contains(Mission))
