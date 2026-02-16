@@ -174,6 +174,7 @@ void APITS_BasePlayerCharacter::ChangeCharacter()
 void APITS_BasePlayerCharacter::UsePower()
 {
 	// TODO: Implement character power usage logic.
+	UE_LOG(LogPITS, Log, TEXT("'%s' Using character power!"), *GetNameSafe(this));
 }
 
 void APITS_BasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
