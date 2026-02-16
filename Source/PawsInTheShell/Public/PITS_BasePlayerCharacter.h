@@ -69,6 +69,10 @@ protected:
 	/** Input Action: Change Character */
 	UPROPERTY(EditAnywhere, Category ="Input")
 	UInputAction* ChangeCharacterAction;
+
+	/** Input Action: Use Power */
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* UsePowerAction;
 #pragma endregion
 
 	UPROPERTY()
@@ -104,6 +108,10 @@ protected:
 	/** Handles change character inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
 	virtual void ChangeCharacter();
+
+	/** Handles change character inputs from either controls or UI interfaces */
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Input")
+	virtual void UsePower();
 
 #pragma region Property Getters and Setters
 public:
