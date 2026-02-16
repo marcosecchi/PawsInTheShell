@@ -171,6 +171,11 @@ void APITS_BasePlayerCharacter::ChangeCharacter()
 	WorldSubsystem->ChangeCharacter();
 }
 
+void APITS_BasePlayerCharacter::UsePower()
+{
+	// TODO: Implement character power usage logic.
+}
+
 void APITS_BasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
@@ -190,6 +195,7 @@ void APITS_BasePlayerCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 		// Additional bindings
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &APITS_BasePlayerCharacter::Shoot);
 		EnhancedInputComponent->BindAction(ChangeCharacterAction, ETriggerEvent::Triggered, this, &APITS_BasePlayerCharacter::ChangeCharacter);
+		EnhancedInputComponent->BindAction(UsePowerAction, ETriggerEvent::Triggered, this, &APITS_BasePlayerCharacter::UsePower);
 	}
 	else
 	{
