@@ -22,8 +22,6 @@ void UPITS_WeaponSpawnPointComponent::Shoot()
 {
 	if (CurrentProjectileClass)
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = GetOwner();
 		const FVector SpawnLocation = GetComponentLocation();
 		const FRotator SpawnRotation = GetComponentRotation();
 		const FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
