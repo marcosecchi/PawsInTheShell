@@ -1,0 +1,23 @@
+﻿{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "MazeGenerator",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Marco Secchi",
+	"CreatedByURL": "http://marcosecchi.it",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "MazeGenerator",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
