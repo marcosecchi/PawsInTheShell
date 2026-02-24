@@ -15,18 +15,24 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllMissionsCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMissionsInitializeSignature);
 
 /**
- * 
+ * World subsystem that manages the missions of the game, their progress and completion
+ * This subsystem is responsible for managing the missions of the game, their progress and completion.
+ * It provides functions to initialize the missions, update their progress and notify when a mission is completed or when all missions are completed.
+ * It also provides delegates to notify other systems when a mission is updated or completed.
  */
 UCLASS()
 class PAWSINTHESHELL_API UPITS_MissionSubsystem final : public UWorldSubsystem
 {
 	GENERATED_BODY()
 
+	/**
+	 * List of active missions.
+	 */
 	UPROPERTY()
 	TArray<UPITS_MissionDataAsset*> ActiveMissionList;
 
 protected:
-	/* List of Active Missions */
+	/* List of all missions */
 	UPROPERTY(BlueprintReadOnly, Category="PawsInTheShell|MissionSubsystem")
 	TArray<UPITS_MissionDataAsset*> MissionList;
 	
@@ -35,13 +41,18 @@ protected:
 	TMap<UPITS_MissionDataAsset*, int32> MissionMap;
 
 public:
-
+	/**
+	 * Initializes the missions of the game.
+	 */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|MissionSubsystem")
 	void InitializeMissions(const TArray<UPITS_MissionDataAsset*> Missions);
 
+	/**
+	 * Updates the progress of a mission.
+	 */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|MissionSubsystem")
 	void UpdateMission(UPITS_MissionDataAsset* Mission, const int32 ProgressIncrement = 1);
-	
+
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|MissionSubsystem")
 	FOnMissionCompleteSignature OnMissionComplete;
 
