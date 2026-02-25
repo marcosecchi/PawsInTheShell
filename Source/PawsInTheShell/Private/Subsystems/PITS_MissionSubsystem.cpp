@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Subsystems/PITS_MissionSubsystem.h"
-
 #include "Utils/PITS_Logs.h"
 
 void UPITS_MissionSubsystem::InitializeMissions(const TArray<UPITS_MissionDataAsset*> Missions)
@@ -45,7 +44,6 @@ void UPITS_MissionSubsystem::UpdateMission(UPITS_MissionDataAsset* Mission, cons
 			// Notify mission complete and perform cleanup
 			UE_LOG(LogPITS, Log, TEXT("'%s' Mission '%s' completed"), *GetNameSafe(this), *GetNameSafe(Mission));
 			OnMissionComplete.Broadcast(Mission);
-	//		MissionMap.Remove(Mission);
 			ActiveMissionList.Remove(Mission);
 			
 			// Check if all missions are complete

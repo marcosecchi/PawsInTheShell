@@ -15,9 +15,6 @@ APITS_MissionPickup::APITS_MissionPickup()
 
 void APITS_MissionPickup::HandleTrigger_Implementation(APITS_BasePlayerCharacter* OverlappedCharacter)
 {
-	if(UPITS_MissionSubsystem* MissionSubsystem = GetWorld()->GetSubsystem<UPITS_MissionSubsystem>())
-	{
-		MissionSubsystem->UpdateMission(MissionHolderComponent->GetMission(), MissionHolderComponent->GetMissionIncrement());
-	}
+	MissionHolderComponent->DispatchMissionUpdate();
 }
 

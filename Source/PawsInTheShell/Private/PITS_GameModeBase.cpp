@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_GameModeBase.h"
-
 #include "Subsystems/PITS_MissionSubsystem.h"
 
 void APITS_GameModeBase::BeginPlay()
