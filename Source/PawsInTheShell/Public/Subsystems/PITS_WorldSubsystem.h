@@ -10,7 +10,7 @@
 
 class UPITS_FixedActorPool;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterDamageTakenSignature, TSubclassOf<UDamageType>, DamageEvent, float, Amount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCharacterDamageTakenSignature, TSubclassOf<UDamageType>, DamageEvent, float, Amount, APawn*, DamagedPawn);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDamageEndSignature, TSubclassOf<UDamageType>, DamageEvent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCharacterUpdateWeaponSignature);
 
@@ -29,7 +29,7 @@ public:
 	
 #pragma region "Damage"
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount) const;
+	void NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount, APawn* DamagedPawn) const;
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType) const;

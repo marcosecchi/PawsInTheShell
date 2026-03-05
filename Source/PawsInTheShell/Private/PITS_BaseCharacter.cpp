@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseCharacter.h"
-
 #include "Components/PITS_ArmourComponent.h"
 #include "Subsystems/PITS_WorldSubsystem.h"
 #include "Damage/PITS_DamageType_Regeneration.h"
@@ -111,7 +110,7 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, FDamageEvent con
 
 	if (const UPITS_WorldSubsystem* WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
 	{
-		WorldSubsystem->NotifyDamageTaken(DamageTypeClass, EffectiveAmount);
+		WorldSubsystem->NotifyDamageTaken(DamageTypeClass, EffectiveAmount, this);
 	}
 	return EffectiveAmount;
 }

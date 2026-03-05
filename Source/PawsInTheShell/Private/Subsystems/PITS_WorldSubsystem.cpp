@@ -40,9 +40,9 @@ void UPITS_WorldSubsystem::ChangeCharacter() const
 
 #pragma region "Damage"
 
-void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount) const
+void UPITS_WorldSubsystem::NotifyDamageTaken(const TSubclassOf<UDamageType>& DamageType, const float Amount, APawn* DamagedPawn) const
 {
-	OnCharacterDamageTaken.Broadcast(DamageType, Amount);
+	OnCharacterDamageTaken.Broadcast(DamageType, Amount, DamagedPawn);
 }
 
 void UPITS_WorldSubsystem::NotifyDamageEnd(const TSubclassOf<UDamageType>& DamageType) const
