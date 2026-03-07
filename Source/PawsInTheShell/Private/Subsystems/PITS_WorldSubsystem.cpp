@@ -7,6 +7,7 @@
 #include "EngineUtils.h"
 #include "PITS_BasePlayerCharacter.h"
 #include "Engine/StaticMeshActor.h"
+#include "Engine/TriggerVolume.h"
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utils/PITS_Logs.h"
@@ -61,61 +62,56 @@ void UPITS_WorldSubsystem::NotifyUpdateWeapon() const
 	
 #pragma region "Spawners"
 
-void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount)
+void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea)
 {
-	// On game thread: gather actor bounds & combined bounding box
-	FBox CombinedBox(EForceInit::ForceInit);
 	UWorld* World = GetWorld();
 	CHECK_PTR_AND_LOG_RETURN(World);
 	CHECK_PTR_AND_LOG_RETURN(SpawnableActorClass);
-	if (!World || !SpawnableActorClass) return;
-
-	for (TActorIterator<AActor> It(World); It; ++It)
-	{
-		if (const AActor* Actor = *It)
-	    {
-	        constexpr bool bOnlyCollidingComponents = false;
-	        FBox BoundingBox = Actor->GetComponentsBoundingBox(bOnlyCollidingComponents);
-	        CombinedBox += BoundingBox;
-	    }
-	}
-
+	
+	FBox SpawnBox = SpawnArea->GetComponentsBoundingBox(false);
+	
 	// Move heavy computation to async thread with only plain data
-	Async(EAsyncExecution::ThreadPool, [World, SpawnableActorClass, CombinedBox, MinAmount, MaxAmount]()
+	Async(EAsyncExecution::ThreadPool, [World, SpawnableActorClass, SpawnBox, MinAmount, MaxAmount]()
 	{
+		UE_LOG(LogPITS, Log, TEXT("Computing spawn locations asynchronously..."));
+		
 	    // Heavy computation (spawn count, random locations in CombinedBox)
 	    const int32 ClampedMin = FMath::Max(0, MinAmount);
 	    const int32 ClampedMax = FMath::Max(ClampedMin, MaxAmount);
 	    const int32 SpawnCount = FMath::RandRange(ClampedMin, ClampedMax);
 	    
 	    TArray<FVector> SpawnLocations;
+		UE_LOG(LogPITS, Log, TEXT("Calculated %d potential spawn locations..."), SpawnCount);
 	    // Async: Just compute approximate locations heuristically, no UObject calls here
 	    for (int32 i = 0; i < SpawnCount; ++i)
 	    {
 	        // Compute random spawn location inside CombinedBox bounds but no trace or physics here
 	        FVector Location(
-	          FMath::FRandRange(CombinedBox.Min.X, CombinedBox.Max.X),
-	          FMath::FRandRange(CombinedBox.Min.Y, CombinedBox.Max.Y),
-	          CombinedBox.Max.Z + 100.0f // Temporarily high Z; adjust later on game thread
+	          FMath::FRandRange(SpawnBox.Min.X, SpawnBox.Max.X),
+	          FMath::FRandRange(SpawnBox.Min.Y, SpawnBox.Max.Y),
+	          SpawnBox.Max.Z + 100.0f // Start above the box to trace down later
 	        );
 	        SpawnLocations.Add(Location);
 	    }
 
+		UE_LOG(LogPITS, Log, TEXT("Finished computing spawn locations asynchronously. Now validating on Game Thread..."));
 	    // Schedule actual line traces and final location validation on game thread
-	    AsyncTask(ENamedThreads::GameThread, [World = World, SpawnableActorClass, SpawnLocations, CombinedBox]()
+	    AsyncTask(ENamedThreads::GameThread, [World = World, SpawnableActorClass, SpawnLocations, SpawnBox]()
 	    {
+	    	UE_LOG(LogPITS, Log, TEXT("Validating spawn locations on Game Thread..."));
 	        TArray<FVector> ValidatedLocations;
-	        for (FVector Location : SpawnLocations)
+	        for (const FVector Location : SpawnLocations)
 	        {
 	            FHitResult HitResult;
 	            FVector TraceStart = Location;
-	            FVector TraceEnd(TraceStart.X, TraceStart.Y, CombinedBox.Min.Z); // Trace down
-
+	            FVector TraceEnd(TraceStart.X, TraceStart.Y, SpawnBox.Min.Z);
+	        	
 	            if (const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility))
 	            {
 	                ValidatedLocations.Add(HitResult.Location);
 	            }
 	        }
+	    	UE_LOG(LogPITS, Log, TEXT("Validated %d spawn locations. Now spawning actors on Game Thread..."), ValidatedLocations.Num());
 	        SpawnActorsOnGameThread(World, SpawnableActorClass, ValidatedLocations);
 	    });
 	});
