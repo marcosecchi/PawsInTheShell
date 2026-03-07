@@ -8,6 +8,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "PITS_WorldSubsystem.generated.h"
 
+class ATriggerVolume;
 class UPITS_FixedActorPool;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnCharacterDamageTakenSignature, TSubclassOf<UDamageType>, DamageEvent, float, Amount, APawn*, DamagedPawn);
@@ -56,7 +57,7 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, int32 MinAmount, int32 MaxAmount);
+	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, int32 MinAmount, int32 MaxAmount, ATriggerVolume* SpawnArea);
 #pragma endregion
 
 
