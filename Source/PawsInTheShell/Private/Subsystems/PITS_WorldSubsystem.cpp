@@ -3,15 +3,10 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Subsystems/PITS_WorldSubsystem.h"
-
-#include "EngineUtils.h"
 #include "PITS_BasePlayerCharacter.h"
-#include "Engine/StaticMeshActor.h"
 #include "Engine/TriggerVolume.h"
-#include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Utils/PITS_Logs.h"
-#include "Utils/PITS_FixedActorPool.h"
 #include "Utils/PITS_Globals.h"
 
 void UPITS_WorldSubsystem::ChangeCharacter() const
