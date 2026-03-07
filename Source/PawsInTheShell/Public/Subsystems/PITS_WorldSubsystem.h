@@ -47,5 +47,17 @@ public:
 	FOnCharacterUpdateWeaponSignature OnCharacterUpdateWeapon;
 #pragma endregion
 	
+#pragma region "Spawners"
+	
+protected:
+	
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
+	static void SpawnActorsOnGameThread(UWorld* World, const TSubclassOf<AActor> SpawnableActorClass, TArray<FVector> SpawnLocations);
+	
+public:
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
+	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, int32 MinAmount, int32 MaxAmount);
+#pragma endregion
+
 
 };
