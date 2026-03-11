@@ -3,6 +3,8 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Subsystems/PITS_WorldSubsystem.h"
+
+#include "NavigationSystem.h"
 #include "PITS_BasePlayerCharacter.h"
 #include "Engine/TriggerVolume.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,6 +58,17 @@ void UPITS_WorldSubsystem::NotifyUpdateWeapon() const
 #pragma endregion
 	
 #pragma region "Spawners"
+
+void UPITS_WorldSubsystem::SpawnActorsOnGameThread(UWorld* World, const TSubclassOf<AActor> SpawnableActorClass, TArray<FVector> SpawnLocations)
+{
+	UE_LOG(LogPITS, Log, TEXT("Spawning %d actors on the Game Thread..."), SpawnLocations.Num());
+	for (const FVector& Location : SpawnLocations)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		World->SpawnActor<AActor>(SpawnableActorClass, Location, FRotator::ZeroRotator, SpawnParams);
+	}
+}
 
 void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea)
 {
@@ -111,15 +124,36 @@ void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableA
 	    });
 	});
 }
- 
-void UPITS_WorldSubsystem::SpawnActorsOnGameThread(UWorld* World, const TSubclassOf<AActor> SpawnableActorClass, TArray<FVector> SpawnLocations)
+
+void UPITS_WorldSubsystem::SpawnActorsParallel(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount,
+	const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius)
 {
-	UE_LOG(LogPITS, Log, TEXT("Spawning %d actors on the Game Thread..."), SpawnLocations.Num());
-	for (const FVector& Location : SpawnLocations)
+	const int32 ClampedMin = FMath::Max(0, MinAmount);
+	const int32 ClampedMax = FMath::Max(ClampedMin, MaxAmount);
+	const int32 SpawnCount = FMath::RandRange(ClampedMin, ClampedMax);
+
+	// Note: This method is not truly parallel and may cause performance issues if SpawnCount is large,
+	// as it spawns actors immediately on the game thread.
+	// For true parallel spawning, consider batching spawn requests and processing them in a more optimized way
+
+	for (int32 i = 0; i < SpawnCount; ++i)
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		World->SpawnActor<AActor>(SpawnableActorClass, Location, FRotator::ZeroRotator, SpawnParams);
+		UWorld* World = GetWorld();
+		CHECK_PTR_AND_LOG_RETURN(World);
+		
+		UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+		CHECK_PTR_AND_LOG_RETURN(NavSys);
+
+		FVector Extent = FVector(SpawnRadius, SpawnRadius, 0.0f);
+		if (FNavLocation NavLocation; NavSys->ProjectPointToNavigation(SpawnCenterLocation, NavLocation, Extent))
+		{
+			FVector SpawnLocation = NavLocation.Location;
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			World->SpawnActor<AActor>(SpawnableActorClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams);
+			UE_LOG(LogPITS, Log, TEXT("Spawned actor at location %s"), *SpawnLocation.ToString());
+		}
 	}
 }
+
 #pragma endregion 

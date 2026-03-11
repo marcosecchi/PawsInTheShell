@@ -57,7 +57,10 @@ protected:
 	
 public:
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, int32 MinAmount, int32 MaxAmount, ATriggerVolume* SpawnArea);
+	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea);
+
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
+	void SpawnActorsParallel(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius);
 #pragma endregion
 
 

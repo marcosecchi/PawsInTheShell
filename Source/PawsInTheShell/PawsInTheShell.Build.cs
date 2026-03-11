@@ -18,7 +18,8 @@ public class PawsInTheShell : ModuleRules
 			"UMG",
 			"AIModule",
 			"StateTreeModule",
-			"GameplayStateTreeModule"
+			"GameplayStateTreeModule",
+			"NavigationSystem"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
