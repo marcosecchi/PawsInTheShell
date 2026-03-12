@@ -70,60 +70,80 @@ void UPITS_WorldSubsystem::SpawnActorsOnGameThread(UWorld* World, const TSubclas
 	}
 }
 
+// Asynchronously compute a set of random spawn locations inside the bounds of a TriggerVolume,
+// validate those locations on the Game Thread with line traces, and finally spawn actors there.
 void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea)
 {
-	UWorld* World = GetWorld();
-	CHECK_PTR_AND_LOG_RETURN(World);
-	CHECK_PTR_AND_LOG_RETURN(SpawnableActorClass);
-	
-	FBox SpawnBox = SpawnArea->GetComponentsBoundingBox(false);
-	
-	// Move heavy computation to async thread with only plain data
-	Async(EAsyncExecution::ThreadPool, [World, SpawnableActorClass, SpawnBox, MinAmount, MaxAmount]()
-	{
-		UE_LOG(LogPITS, Log, TEXT("Computing spawn locations asynchronously..."));
-		
-	    // Heavy computation (spawn count, random locations in CombinedBox)
-	    const int32 ClampedMin = FMath::Max(0, MinAmount);
-	    const int32 ClampedMax = FMath::Max(ClampedMin, MaxAmount);
-	    const int32 SpawnCount = FMath::RandRange(ClampedMin, ClampedMax);
-	    
-	    TArray<FVector> SpawnLocations;
-		UE_LOG(LogPITS, Log, TEXT("Calculated %d potential spawn locations..."), SpawnCount);
-	    // Async: Just compute approximate locations heuristically, no UObject calls here
-	    for (int32 i = 0; i < SpawnCount; ++i)
-	    {
-	        // Compute random spawn location inside CombinedBox bounds but no trace or physics here
-	        FVector Location(
-	          FMath::FRandRange(SpawnBox.Min.X, SpawnBox.Max.X),
-	          FMath::FRandRange(SpawnBox.Min.Y, SpawnBox.Max.Y),
-	          SpawnBox.Max.Z + 100.0f // Start above the box to trace down later
-	        );
-	        SpawnLocations.Add(Location);
-	    }
+    UWorld* World = GetWorld();
+    CHECK_PTR_AND_LOG_RETURN(World);                // Ensure the world exists
+    CHECK_PTR_AND_LOG_RETURN(SpawnableActorClass);  // Ensure a valid actor class was provided
 
-		UE_LOG(LogPITS, Log, TEXT("Finished computing spawn locations asynchronously. Now validating on Game Thread..."));
-	    // Schedule actual line traces and final location validation on game thread
-	    AsyncTask(ENamedThreads::GameThread, [World = World, SpawnableActorClass, SpawnLocations, SpawnBox]()
-	    {
-	    	UE_LOG(LogPITS, Log, TEXT("Validating spawn locations on Game Thread..."));
-	        TArray<FVector> ValidatedLocations;
-	        for (const FVector Location : SpawnLocations)
-	        {
-	            FHitResult HitResult;
-	            FVector TraceStart = Location;
-	            FVector TraceEnd(TraceStart.X, TraceStart.Y, SpawnBox.Min.Z);
-	        	
-	            if (const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility))
-	            {
-	                ValidatedLocations.Add(HitResult.Location);
-	            }
-	        }
-	    	UE_LOG(LogPITS, Log, TEXT("Validated %d spawn locations. Now spawning actors on Game Thread..."), ValidatedLocations.Num());
-	        SpawnActorsOnGameThread(World, SpawnableActorClass, ValidatedLocations);
-	    });
-	});
+    // Get a plain-data bounding box for the SpawnArea. We compute this on the Game Thread
+    // so the async lambda doesn't need to touch the SpawnArea UObject.
+    FBox SpawnBox = SpawnArea->GetComponentsBoundingBox(false);
+    
+    // Launch heavy/CPU-bound computations on a ThreadPool thread. The lambda captures only
+    // plain data (World pointer, SpawnableActorClass, SpawnBox, and integer amounts).
+    // NOTE: we capture by value to avoid accessing UObjects directly on the worker thread.
+    Async(EAsyncExecution::ThreadPool, [World, SpawnableActorClass, SpawnBox, MinAmount, MaxAmount]()
+    {
+        UE_LOG(LogPITS, Log, TEXT("Computing spawn locations asynchronously..."));
+        
+        // Clamp min/max to sane values and pick how many actors to attempt to spawn.
+        const int32 ClampedMin = FMath::Max(0, MinAmount);
+        const int32 ClampedMax = FMath::Max(ClampedMin, MaxAmount);
+        const int32 SpawnCount = FMath::RandRange(ClampedMin, ClampedMax);
+        
+        TArray<FVector> SpawnLocations;
+        UE_LOG(LogPITS, Log, TEXT("Calculated %d potential spawn locations..."), SpawnCount);
+
+        // Compute a set of approximate spawn positions inside the box.
+        // IMPORTANT: This loop does NOT call any UObject APIs or do physics traces;
+        // it only uses plain FVector and FMath so it's safe to run on a worker thread.
+        for (int32 i = 0; i < SpawnCount; ++i)
+        {
+            // Pick random X/Y inside the box, start Z above the box so we can trace down later.
+            FVector Location(
+              FMath::FRandRange(SpawnBox.Min.X, SpawnBox.Max.X),
+              FMath::FRandRange(SpawnBox.Min.Y, SpawnBox.Max.Y),
+              SpawnBox.Max.Z + 100.0f // Start above the box to trace down later
+            );
+            SpawnLocations.Add(Location);
+        }
+
+        UE_LOG(LogPITS, Log, TEXT("Finished computing spawn locations asynchronously. Now validating on Game Thread..."));
+
+        // Switch back to the Game Thread to perform any engine/physics/UObject work (line traces and spawning).
+        // We capture the plain SpawnLocations array and the World pointer by value here.
+        AsyncTask(ENamedThreads::GameThread, [World = World, SpawnableActorClass, SpawnLocations, SpawnBox]()
+        {
+            UE_LOG(LogPITS, Log, TEXT("Validating spawn locations on Game Thread..."));
+
+            TArray<FVector> ValidatedLocations;
+
+            // For each candidate location, perform a line trace down to find a valid surface point.
+            // This must run on the Game Thread because it calls UWorld::LineTraceSingleByChannel.
+            for (const FVector Location : SpawnLocations)
+            {
+                FHitResult HitResult;
+                FVector TraceStart = Location;
+                FVector TraceEnd(TraceStart.X, TraceStart.Y, SpawnBox.Min.Z); // trace down to the bottom of the box
+                
+                // Perform a visibility trace. If we hit something, take that hit location as valid.
+                if (const bool bHit = World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility))
+                {
+                    ValidatedLocations.Add(HitResult.Location);
+                }
+            }
+
+            UE_LOG(LogPITS, Log, TEXT("Validated %d spawn locations. Now spawning actors on Game Thread..."), ValidatedLocations.Num());
+
+            // Spawn the actors at validated locations (still on Game Thread).
+            SpawnActorsOnGameThread(World, SpawnableActorClass, ValidatedLocations);
+        });
+    });
 }
+
 
 void UPITS_WorldSubsystem::SpawnActorsParallel(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount,
 	const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius)
