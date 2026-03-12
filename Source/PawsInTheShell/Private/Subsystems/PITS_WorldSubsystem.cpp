@@ -132,7 +132,7 @@ void UPITS_WorldSubsystem::SpawnActorsParallel(TSubclassOf<AActor> SpawnableActo
 	const int32 ClampedMax = FMath::Max(ClampedMin, MaxAmount);
 	const int32 SpawnCount = FMath::RandRange(ClampedMin, ClampedMax);
 
-	// Note: This method is not truly parallel and may cause performance issues if SpawnCount is large,
+	// IMPORTANT NOTE: This method is not truly parallel and may cause performance issues if SpawnCount is large,
 	// as it spawns actors immediately on the game thread.
 	// For true parallel spawning, consider batching spawn requests and processing them in a more optimized way
 
@@ -144,8 +144,11 @@ void UPITS_WorldSubsystem::SpawnActorsParallel(TSubclassOf<AActor> SpawnableActo
 		UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
 		CHECK_PTR_AND_LOG_RETURN(NavSys);
 
-		FVector Extent = FVector(SpawnRadius, SpawnRadius, 0.0f);
-		if (FNavLocation NavLocation; NavSys->ProjectPointToNavigation(SpawnCenterLocation, NavLocation, Extent))
+		FVector2D RandomOffset = FMath::RandPointInCircle(SpawnRadius);
+		FVector RandomLocation = SpawnCenterLocation + FVector(RandomOffset.X, RandomOffset.Y, 0.f);
+
+		FVector Extent = FVector(200.f, 200.f, 100.f);
+		if (FNavLocation NavLocation; NavSys->ProjectPointToNavigation(RandomLocation, NavLocation, Extent))
 		{
 			FVector SpawnLocation = NavLocation.Location;
 			FActorSpawnParameters SpawnParams;
