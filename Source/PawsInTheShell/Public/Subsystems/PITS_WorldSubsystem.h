@@ -52,7 +52,6 @@ public:
 	
 protected:
 	
-	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	static void SpawnActorsOnGameThread(UWorld* World, const TSubclassOf<AActor> SpawnableActorClass, TArray<FVector> SpawnLocations);
 	
 public:
