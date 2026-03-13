@@ -59,7 +59,7 @@ public:
 	void SpawnActorsAsync(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea);
 
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
-	void SpawnActorsParallel(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius);
+	void SpawnActorsOnNavMesh(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius);
 #pragma endregion
 
 

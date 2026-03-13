@@ -70,13 +70,11 @@ void UPITS_WorldSubsystem::SpawnActorsOnGameThread(UWorld* World, const TSubclas
 	}
 }
 
-// Asynchronously compute a set of random spawn locations inside the bounds of a TriggerVolume,
-// validate those locations on the Game Thread with line traces, and finally spawn actors there.
 void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount, const int32 MaxAmount, ATriggerVolume* SpawnArea)
 {
     UWorld* World = GetWorld();
-    CHECK_PTR_AND_LOG_RETURN(World);                // Ensure the world exists
-    CHECK_PTR_AND_LOG_RETURN(SpawnableActorClass);  // Ensure a valid actor class was provided
+    CHECK_PTR_AND_LOG_RETURN(World);
+    CHECK_PTR_AND_LOG_RETURN(SpawnableActorClass);
 
     // Get a plain-data bounding box for the SpawnArea. We compute this on the Game Thread
     // so the async lambda doesn't need to touch the SpawnArea UObject.
@@ -145,7 +143,7 @@ void UPITS_WorldSubsystem::SpawnActorsAsync(const TSubclassOf<AActor> SpawnableA
 }
 
 
-void UPITS_WorldSubsystem::SpawnActorsParallel(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount,
+void UPITS_WorldSubsystem::SpawnActorsOnNavMesh(TSubclassOf<AActor> SpawnableActorClass, const int32 MinAmount,
 	const int32 MaxAmount, const FVector SpawnCenterLocation, const float SpawnRadius)
 {
 	const int32 ClampedMin = FMath::Max(0, MinAmount);
