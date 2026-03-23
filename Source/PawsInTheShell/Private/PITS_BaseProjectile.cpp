@@ -31,6 +31,7 @@ void APITS_BaseProjectile::OnConstruction(const FTransform& Transform)
 		ProjectileMovement->InitialSpeed = ProjectileData->Speed;
 		ProjectileMovement->MaxSpeed = ProjectileData->Speed;
 	}
+	UE_VLOG(this, LogPITS, Log, TEXT("Projectile of type '%s' constructed."), *GetNameSafe(this));
 }
 
 APITS_BaseProjectile::APITS_BaseProjectile()
