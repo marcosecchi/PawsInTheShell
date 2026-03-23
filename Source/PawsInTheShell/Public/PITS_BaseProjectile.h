@@ -7,7 +7,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/PITS_PooledObjectInterface.h"
-#include "Structs/PITS_ProjectileDataTableRow.h"
 #include "PITS_BaseProjectile.generated.h"
 
 class UBoxComponent;
