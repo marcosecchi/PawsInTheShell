@@ -3,8 +3,6 @@
 #include "CoreMinimal.h"
 #include "MazeGenerationData.generated.h"
 
-enum class EMazeType : uint8;
-
 /**
  * This struct is used to hold the data required for maze generation.
  * It includes the number of rows and columns, a selection percentage for long paths,
