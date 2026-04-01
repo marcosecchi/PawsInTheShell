@@ -41,4 +41,11 @@ public:
 	
 	/* Check whether the given actor belongs to this pool. */
 	bool IsObjectPooled(const AActor* Actor) const;
+	
+#if WITH_DEV_AUTOMATION_TESTS
+public:
+	/* Get the number of actors currently in the pool. */
+	int32 GetPoolSize() const { return TheActorPool.Num(); }
+#endif
+	
 };
