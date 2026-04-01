@@ -57,4 +57,25 @@ TEST_CLASS(PITS_FixedActorPool, "PawsInTheShell.Utils")
 		ASSERT_THAT(IsTrue(Actor != nullptr));
 	}
 
+	TEST_METHOD(Pool_HasNoPooledObjects)
+	{
+		TestPool->InitializePool(AActor::StaticClass(), PoolSize);
+		for (int32 i = 0; i < PoolSize; i++)
+		{
+			TestPool->GetObjectFromPool();
+		}
+		ASSERT_THAT(IsFalse(TestPool->HasAvailableObjectsInPool()));
+	}
+
+	TEST_METHOD(Pool_HasReleasedObjectFromPool)
+	{
+		TestPool->InitializePool(AActor::StaticClass(), PoolSize);
+		for (int32 i = 0; i < PoolSize - 1; i++)
+		{
+			TestPool->GetObjectFromPool();
+		}
+		AActor* Actor = TestPool->GetObjectFromPool();
+		TestPool->ReleaseObjectToPool(Actor);
+		ASSERT_THAT(IsTrue(TestPool->HasAvailableObjectsInPool()));
+	}
 };
