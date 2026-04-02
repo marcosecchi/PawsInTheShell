@@ -10,6 +10,7 @@
 void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::PrepareTest()
 {
 	Super::PrepareTest();
+	PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
 }
 
 void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
@@ -22,7 +23,6 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 		return;
 	}
 
-	PoolSubsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
 	if (PoolSubsystem == nullptr)
 	{
 		FinishTest(EFunctionalTestResult::Failed, TEXT("UPITS_ObjectPoolSubsystem is null"));
@@ -44,11 +44,6 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 		return;
 	}
 	
-	for (int i = 0; i < PoolSize; i++)
-	{
-		AActor* Actor = PoolSubsystem->AcquirePooledObject(SpawnableClass, FTransform::Identity);
-		RegisterAutoDestroyActor(Actor);
-	}
 	PoolSubsystem->CleanupObjectPool(SpawnableClass);
 	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Pool subsystem functional test passed"));
 }

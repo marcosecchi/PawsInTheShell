@@ -83,4 +83,9 @@ protected:
 public:
 	virtual void HandleAcquire_Implementation() override;
 	virtual void HandleRelease_Implementation() override;
+	
+// Component getters
+	FORCEINLINE UBoxComponent* GetCollisionComponent() const { return CollisionComponent; }
+	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
+	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 };

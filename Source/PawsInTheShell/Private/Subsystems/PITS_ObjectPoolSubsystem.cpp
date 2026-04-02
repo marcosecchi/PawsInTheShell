@@ -118,6 +118,7 @@ void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> Spaw
 {
 	if (!HasObjectPool(SpawnableClass)) return;
 	TObjectPtr<UPITS_FixedActorPool> Pool;
+
 	
 	// remove pool from map
 	ActorsPoolMap.RemoveAndCopyValue(SpawnableClass, Pool);

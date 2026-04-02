@@ -1,4 +1,6 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Mastering Unreal Engine 5 Game Development with C++ Scripting
+// Packt Publishing 2025
+// Author: Marco Secchi (https://github.com/marcosecchi)
 
 #pragma once
 
@@ -6,20 +8,25 @@
 #include "FunctionalTest.h"
 #include "PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.generated.h"
 
+class APITS_BaseProjectile;
+class UPITS_ObjectPoolSubsystem;
+
 UCLASS()
 class PAWSINTHESHELL_API APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest : public AFunctionalTest
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this actor's properties
-	APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest();
+	UPROPERTY()
+	TObjectPtr<UPITS_ObjectPoolSubsystem> PoolSubsystem;
+	
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
+	int32 PoolSize = 10;
+	
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
+	TSubclassOf<APITS_BaseProjectile> SpawnableClass;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void PrepareTest() override;
+	
+	virtual void StartTest() override;
 };
