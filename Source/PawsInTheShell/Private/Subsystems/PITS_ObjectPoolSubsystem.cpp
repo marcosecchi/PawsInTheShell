@@ -106,3 +106,22 @@ bool UPITS_ObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 	}
 	return false;
 }
+
+#if WITH_DEV_AUTOMATION_TESTS
+int32 UPITS_ObjectPoolSubsystem::GetPoolSize(const TSubclassOf<AActor> SpawnableClass) const
+{
+	const UPITS_FixedActorPool* Pool = GetObjectPool(SpawnableClass);
+	return Pool->GetPoolSize();
+}
+
+void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> SpawnableClass)
+{
+	if (!HasObjectPool(SpawnableClass)) return;
+	TObjectPtr<UPITS_FixedActorPool> Pool;
+	
+	// remove pool from map
+	ActorsPoolMap.RemoveAndCopyValue(SpawnableClass, Pool);
+	Pool->Empty();
+	Pool = nullptr;
+}
+#endif
