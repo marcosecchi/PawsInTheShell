@@ -47,7 +47,14 @@ public:
 	/* Get the number of actors currently in the pool. */
 	int32 GetPoolSize() const { return TheActorPool.Num(); }
 	
-	void Empty() { TheActorPool.Empty(); }
+	void Empty()
+	{
+		for (AActor* Actor : TheActorPool)
+		{
+			Actor->Destroy();
+		}
+		TheActorPool.Empty();
+	}
 #endif
 	
 };
