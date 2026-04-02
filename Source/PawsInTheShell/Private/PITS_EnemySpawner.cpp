@@ -6,7 +6,6 @@
 
 #include "PITS_BaseEnemyCharacter.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
-#include "Subsystems/PITS_WorldSubsystem.h"
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
@@ -42,7 +41,7 @@ void APITS_EnemySpawner::ReleaseEnemyToPool(APITS_BaseEnemyCharacter* Enemy) con
 
 void APITS_EnemySpawner::SpawnEnemy()
 {
-    APITS_BaseEnemyCharacter* Enemy = AcquireEnemyFromPool(GetSpawnTransform());
+    const APITS_BaseEnemyCharacter* Enemy = AcquireEnemyFromPool(GetSpawnTransform());
     CHECK_PTR_AND_LOG_RETURN(Enemy);
 }
 

@@ -60,4 +60,13 @@ public:
 	/** Releases the specified actor back to its object pool. */
 	UFUNCTION(BlueprintCallable, Category="PawsInTheShell|Subsystems")
 	void ReleasePooledObject(AActor* Actor);
+	
+#if WITH_DEV_AUTOMATION_TESTS
+public:
+	/* Get the number of actors currently in the pool. */
+	int32 GetPoolSize(const TSubclassOf<AActor> SpawnableClass) const;
+	
+	void CleanupObjectPool(TSubclassOf<AActor> SpawnableClass);
+#endif
+
 };
