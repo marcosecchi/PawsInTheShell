@@ -46,13 +46,15 @@ void APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest::StartTest()
 	{
 		FinishTest(EFunctionalTestResult::Failed, TEXT("Projectile movement is not active"));
 	}
-	
-//	PoolSubsystem->ReleasePooledObject(PooledEnemy);
-//	if (ProjectileMovement->IsActive())
-//	{
-//		FinishTest(EFunctionalTestResult::Failed, TEXT("Projectile movement should be inactive after release"));
-//	}
-	
+
+	if (bReleaseAfterAcquire)
+	{
+		PoolSubsystem->ReleasePooledObject(PooledEnemy);
+		if (ProjectileMovement->IsActive())
+		{
+			FinishTest(EFunctionalTestResult::Failed, TEXT("Projectile movement should be inactive after release"));
+		}
+	}	
 //		RegisterAutoDestroyActor(Actor);
 	PoolSubsystem->CleanupObjectPool(SpawnableClass);
 	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Pool subsystem functional test passed"));

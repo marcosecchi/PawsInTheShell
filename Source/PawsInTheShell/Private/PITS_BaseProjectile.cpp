@@ -137,7 +137,13 @@ void APITS_BaseProjectile::HandleAcquire_Implementation()
 
 void APITS_BaseProjectile::HandleRelease_Implementation()
 {
+	// ProjectileMovement->StopMovementImmediately(); Not needed as Deactivate will call this function
+	
 	ProjectileMovement->StopMovementImmediately();
+	ProjectileMovement->Deactivate();
+	ProjectileMovement->ResetInterpolation();
+	ProjectileMovement->SetComponentTickEnabled(false);
+
 	UE_LOG(LogPITS, Log, TEXT("'%s' Released to pool."), *GetNameSafe(this));
 }
 
