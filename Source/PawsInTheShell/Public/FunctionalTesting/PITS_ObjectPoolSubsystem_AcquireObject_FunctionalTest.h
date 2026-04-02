@@ -25,6 +25,9 @@ class PAWSINTHESHELL_API APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest 
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
 	TSubclassOf<APITS_BaseProjectile> SpawnableClass;
 
+	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
+	bool bReleaseAfterAcquire = false;
+	
 protected:
 	virtual void PrepareTest() override;
 	
