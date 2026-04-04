@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PawsInTheShell/Public/FunctionalTesting/PITS_ObjectPoolSubsystem_CreatePool_FunctionalTest.h"
-#include "PITS_BaseEnemyCharacter.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Utils/PITS_Logs.h"
 
