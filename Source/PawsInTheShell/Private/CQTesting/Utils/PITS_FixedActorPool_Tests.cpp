@@ -43,7 +43,7 @@ TEST_CLASS(PITS_FixedActorPool, "PawsInTheShell.Utils")
 		TestPool->InitializePool(AActor::StaticClass(), PoolSize);
 		ASSERT_THAT(IsTrue(TestPool->GetPoolSize() == PoolSize));
 	}
-
+	
 	TEST_METHOD(Pool_HasPooledObjects)
 	{
 		TestPool->InitializePool(AActor::StaticClass(), PoolSize);
