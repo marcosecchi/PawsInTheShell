@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType, ClassGroup="PawsInTheShell|Tests")
 class PAWSINTHESHELL_API APITS_TestPoolableActor : public AActor, public IPITS_PooledObjectInterface
 {
 	GENERATED_BODY()

@@ -3,9 +3,8 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Tests/FunctionalTesting/PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.h"
-#include "PITS_BaseProjectile.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
+#include "Tests/Helpers/PITS_TestPoolableActor.h"
 
 void APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest::PrepareTest()
 {
@@ -35,24 +34,23 @@ void APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest::StartTest()
 	}
 
 	AActor* Enemy = PoolSubsystem->AcquirePooledObject(SpawnableClass, FTransform::Identity);
-	APITS_BaseProjectile* PooledEnemy = Cast<APITS_BaseProjectile>(Enemy);
-	if (PooledEnemy == nullptr)
+	APITS_TestPoolableActor* PooledObject = Cast<APITS_TestPoolableActor>(Enemy);
+	if (PooledObject == nullptr)
 	{
 		FinishTest(EFunctionalTestResult::Failed, TEXT("Failed to acquire pooled object"));
 		return;
 	}
-	const UProjectileMovementComponent* ProjectileMovement = PooledEnemy->GetProjectileMovement();
-	if (!ProjectileMovement->IsActive())
+	if (PooledObject->IsHidden())
 	{
-		FinishTest(EFunctionalTestResult::Failed, TEXT("Projectile movement is not active"));
+		FinishTest(EFunctionalTestResult::Failed, TEXT("Actor has not been correctly acquired from pool"));
 	}
 
 	if (bReleaseAfterAcquire)
 	{
-		PoolSubsystem->ReleasePooledObject(PooledEnemy);
-		if (ProjectileMovement->IsActive())
+		PoolSubsystem->ReleasePooledObject(PooledObject);
+		if (!PooledObject->IsHidden())
 		{
-			FinishTest(EFunctionalTestResult::Failed, TEXT("Projectile movement should be inactive after release"));
+			FinishTest(EFunctionalTestResult::Failed, TEXT("Actor has not been correctly released from pool"));
 		}
 	}	
 //		RegisterAutoDestroyActor(Actor);
