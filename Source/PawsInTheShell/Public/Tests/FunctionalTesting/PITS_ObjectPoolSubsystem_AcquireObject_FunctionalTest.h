@@ -8,6 +8,7 @@
 #include "FunctionalTest.h"
 #include "PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.generated.h"
 
+class APITS_TestPoolableActor;
 class APITS_BaseProjectile;
 class UPITS_ObjectPoolSubsystem;
 
@@ -32,7 +33,7 @@ class PAWSINTHESHELL_API APITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest 
 	
 	// The projectile class to pool and acquire during the test. Must be set in the editor.
 	UPROPERTY(EditAnywhere, Category="PawsInTheShell|PoolSystem")
-	TSubclassOf<APITS_BaseProjectile> SpawnableClass;
+	TSubclassOf<APITS_TestPoolableActor> SpawnableClass;
 
 	// When true, the test also releases the acquired object back to the pool and verifies
 	// that the projectile actor is correctly deactivated after release.

@@ -7,7 +7,7 @@
 #include "Engine/World.h"
 #include "Utils/PITS_FixedActorPool.h"
 
-TEST_CLASS(PITS_FixedActorPool, "PawsInTheShell.Utils")
+TEST_CLASS(PITS_EmptyFixedActorPool, "PawsInTheShell.Utils")
 {
     UPITS_FixedActorPool* TestPool = nullptr;
 	int32 PoolSize = 0;
