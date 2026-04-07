@@ -2,7 +2,7 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "FunctionalTesting/PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.h"
+#include "Tests/FunctionalTesting/PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.h"
 #include "PITS_BaseProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"

@@ -2,7 +2,7 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "PawsInTheShell/Public/FunctionalTesting/PITS_ObjectPoolSubsystem_CreatePool_FunctionalTest.h"
+#include "PawsInTheShell/Public/Tests/FunctionalTesting/PITS_ObjectPoolSubsystem_CreatePool_FunctionalTest.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Utils/PITS_Logs.h"
 
