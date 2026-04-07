@@ -2,7 +2,7 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "Tests/FunctionalTesting/PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.h"
+#include "Tests/FunctionalTesting/Subsystems/PITS_ObjectPoolSubsystem_AcquireObject_FunctionalTest.h"
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Tests/Helpers/PITS_TestPoolableActor.h"
 
