@@ -81,7 +81,7 @@ void UPITS_FixedActorPool::InitializePool(const TSubclassOf<AActor> SpawnableCla
 	// Validate input parameters
 	if (!SpawnableClass || PoolSize <= 0)
 	{
-		UE_LOG(LogPITS, Warning, TEXT("Invalid parameters provided to InitializePool. Pool won't be initialized."));
+		// UE_LOG(LogPITS, Warning, TEXT("Invalid parameters provided to InitializePool. Pool won't be initialized."));
 		return;
 	}
 	

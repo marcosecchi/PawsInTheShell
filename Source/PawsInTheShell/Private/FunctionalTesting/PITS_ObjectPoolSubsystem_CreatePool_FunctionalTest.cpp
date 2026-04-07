@@ -42,6 +42,11 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 		FinishTest(EFunctionalTestResult::Failed, TEXT("Pool size does not match expected value"));
 		return;
 	}
+	if (PoolSubsystem->GetPoolSize(SpawnableClass) == 0)
+	{
+		FinishTest(EFunctionalTestResult::Failed, TEXT("Pool size should have at least one object"));
+		return;
+	}
 	
 	PoolSubsystem->CleanupObjectPool(SpawnableClass);
 	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Pool subsystem functional test passed"));
