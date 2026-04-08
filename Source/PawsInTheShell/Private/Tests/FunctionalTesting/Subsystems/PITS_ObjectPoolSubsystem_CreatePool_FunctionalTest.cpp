@@ -15,16 +15,16 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::PrepareTest()
 void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 {
 	Super::StartTest();
+	
+	if (PoolSubsystem == nullptr)
+	{
+		FinishTest(EFunctionalTestResult::Failed, TEXT("UPITS_ObjectPoolSubsystem is null"));
+		return;
+	}
 
 	if (SpawnableClass == nullptr)
 	{
 		FinishTest(EFunctionalTestResult::Failed, TEXT("SpawnableClass is null"));
-		return;
-	}
-
-	if (PoolSubsystem == nullptr)
-	{
-		FinishTest(EFunctionalTestResult::Failed, TEXT("UPITS_ObjectPoolSubsystem is null"));
 		return;
 	}
 
