@@ -9,11 +9,11 @@
 
 TEST_CLASS(PITS_FixedActorPool, "PawsInTheShell.Utils")
 {
-    UPITS_FixedActorPool* TestPool = nullptr;
+    TObjectPtr<UPITS_FixedActorPool> TestPool = nullptr;
 	int32 PoolSize = 5;
 	
-	BEFORE_ALL()
-	{}
+	//BEFORE_ALL()
+	//{}
 	
 	BEFORE_EACH()
 	{
@@ -30,8 +30,8 @@ TEST_CLASS(PITS_FixedActorPool, "PawsInTheShell.Utils")
         }
     }
 
-	AFTER_ALL()
-	{}
+	//AFTER_ALL()
+	//{}
 
 	TEST_METHOD(Pool_Exists)
 	{
