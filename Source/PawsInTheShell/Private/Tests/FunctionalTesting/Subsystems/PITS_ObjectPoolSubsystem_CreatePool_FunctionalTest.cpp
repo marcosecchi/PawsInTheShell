@@ -28,14 +28,8 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 		return;
 	}
 
-	if (!PoolSubsystem->HasObjectPool(SpawnableClass))
-	{
-		PoolSubsystem->CreateObjectPool(SpawnableClass, PoolSize);
-	}
-	else
-	{
-		UE_LOG(LogPITS, Warning, TEXT("Pool for class %s already exists at test start"), *GetNameSafe(SpawnableClass));
-	}
+	PoolSubsystem->CleanupObjectPool(SpawnableClass);
+	PoolSubsystem->CreateObjectPool(SpawnableClass, PoolSize);
 	
 	if (PoolSubsystem->GetPoolSize(SpawnableClass) != PoolSize)
 	{
@@ -48,6 +42,5 @@ void APITS_ObjectPoolSubsystem_CreatePool_FunctionalTest::StartTest()
 		return;
 	}
 	
-	PoolSubsystem->CleanupObjectPool(SpawnableClass);
 	FinishTest(EFunctionalTestResult::Succeeded, TEXT("Pool subsystem functional test passed"));
 }

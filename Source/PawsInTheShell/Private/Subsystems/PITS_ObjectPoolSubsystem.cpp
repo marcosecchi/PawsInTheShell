@@ -3,6 +3,8 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Subsystems/PITS_ObjectPoolSubsystem.h"
+
+#include "SNegativeActionButton.h"
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Utils/PITS_FixedActorPool.h"
 #include "Utils/PITS_Globals.h"
@@ -121,6 +123,12 @@ void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> Spaw
 	
 	// remove pool from map
 	ActorsPoolMap.RemoveAndCopyValue(SpawnableClass, Pool);
+	
+	if (HasObjectPool(SpawnableClass))
+	{
+		UE_LOG(LogPITS, Warning, TEXT("Failed to remove pool for class %s"), *GetNameSafe(SpawnableClass));
+	}
+	
 	
 	// Cleanup pool
 	Pool->Empty();
