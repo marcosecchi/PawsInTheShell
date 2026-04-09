@@ -8,7 +8,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PITS_Globals.generated.h"
 
-#define PITS_PROJECT_VERSION "alpha 9.0.0"
+#define PITS_PROJECT_VERSION "alpha 11.0.0"
 
 #define PITS_LOG_PROJECT_VERSION UE_LOG(LogTemp, Log, TEXT("Paws In The Shell - Project Version: %s"), TEXT(PITS_PROJECT_VERSION))
 
