@@ -12,5 +12,7 @@ APITS_BaseEnemyCharacter::APITS_BaseEnemyCharacter()
 	Tags.Add(UPITS_Globals::GetEnemyTag());
 	
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->MaxAcceleration = 1500.f;
+	GetCharacterMovement()->GetNavMovementProperties()->bUseAccelerationForPaths = true;
 }
 
