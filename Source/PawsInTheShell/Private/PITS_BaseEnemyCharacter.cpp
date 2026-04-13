@@ -3,11 +3,14 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseEnemyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Utils/PITS_Globals.h"
 
 APITS_BaseEnemyCharacter::APITS_BaseEnemyCharacter()
 {
 	// Assign the enemy tag
 	Tags.Add(UPITS_Globals::GetEnemyTag());
+	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
