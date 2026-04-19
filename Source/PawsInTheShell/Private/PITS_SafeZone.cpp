@@ -3,9 +3,12 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_SafeZone.h"
+
+#include "PITS_BasePlayerCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Interfaces/PITS_SafeZoneEligibleInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Utils/PITS_Logs.h"
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -28,7 +31,6 @@ void APITS_SafeZone::HandleActorEndOverlap(AActor* OverlappedActor, AActor* Othe
 	}
 }
 
-// Sets default values
 APITS_SafeZone::APITS_SafeZone()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -49,3 +51,21 @@ APITS_SafeZone::APITS_SafeZone()
 	OnActorEndOverlap.AddDynamic(this, &APITS_SafeZone::HandleActorEndOverlap);
 }
 
+void APITS_SafeZone::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	UE_LOG(LogPITS, Log, TEXT("'%s' Performing initial safe zone overlap check for all player characters..."), *GetNameSafe(this));
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APITS_BasePlayerCharacter::StaticClass(), PlayerCharacters);
+	for (AActor* PlayerCharacter : PlayerCharacters)
+	{
+		if (
+			PlayerCharacter->GetClass()->ImplementsInterface(UPITS_SafeZoneEligibleInterface::StaticClass()) &&
+			FVector::Distance(PlayerCharacter->GetActorLocation(), GetActorLocation()) < SafeZoneVolume->GetScaledSphereRadius())
+		{
+			IPITS_SafeZoneEligibleInterface::Execute_SetIsInSafeZone(PlayerCharacter, true);
+			UE_LOG(LogPITS, Log, TEXT("'%s' Initial overlap check for actor '%s': Inside safe zone"), *GetNameSafe(this), *GetNameSafe(PlayerCharacter));
+		}
+	}
+}

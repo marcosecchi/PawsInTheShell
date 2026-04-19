@@ -78,7 +78,7 @@ void APITS_PlayerController::UpdateMainWidget()
 		if (PossessedCharacter->GetClass()->ImplementsInterface(UPITS_AmmoInterface::StaticClass()))
 		{
 			const int32 CurrentAmmo = IPITS_AmmoInterface::Execute_GetCurrentAmmoAmount(PossessedCharacter);
-			UE_LOG(LogPITS, Warning, TEXT("'%s' UpdateMainWidget(): Current Ammo for '%s' is %d"), *GetNameSafe(this), *GetNameSafe(PossessedCharacter), CurrentAmmo);
+			UE_LOG(LogPITS, Log, TEXT("'%s' UpdateMainWidget(): Current Ammo for '%s' is %d"), *GetNameSafe(this), *GetNameSafe(PossessedCharacter), CurrentAmmo);
 			const int32 MaxAmmo = IPITS_AmmoInterface::Execute_GetMaxAmmoAmount(PossessedCharacter);
 			IPITS_StatsWidgetInterface::Execute_UpdateWeaponData(MainWidget, PossessedCharacter->GetWeaponName(), CurrentAmmo, MaxAmmo);
 		}

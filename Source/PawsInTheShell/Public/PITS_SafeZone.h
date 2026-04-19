@@ -20,6 +20,8 @@ public:
 	APITS_SafeZone();
 
 protected:
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
 	TObjectPtr<USphereComponent> SafeZoneVolume;
 
