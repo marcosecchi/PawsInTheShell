@@ -22,7 +22,7 @@ void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> Spawn
 	// Check if pool already exists
 	if (HasObjectPool(SpawnableClass))
 	{
-		UE_LOG(LogPITS, Warning, TEXT("Object pool for class %s already exists"), *GetNameSafe(SpawnableClass));
+		UE_LOG(LogPITS, Log, TEXT("Object pool for class %s already exists. Skipping creation as it is a fixed object pool."), *GetNameSafe(SpawnableClass));
 		return;
 	}
 
