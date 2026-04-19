@@ -5,6 +5,7 @@
 #include "PITS_SafeZone.h"
 
 #include "PITS_BasePlayerCharacter.h"
+#include "PITS_BaseProjectile.h"
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 #include "Interfaces/PITS_SafeZoneEligibleInterface.h"
@@ -13,11 +14,17 @@
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
-	// Check if actor implements the Defence Interface
+	// Check if overlapping actor implements the Defence Interface
 	if (OtherActor->GetClass()->ImplementsInterface(UPITS_SafeZoneEligibleInterface::StaticClass()))
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Actor '%s' entered a safe zone"), *GetNameSafe(this), *GetNameSafe(OtherActor));
 		IPITS_SafeZoneEligibleInterface::Execute_SetIsInSafeZone(OtherActor, true);
+	}
+	// Check if overlapping actor is a APITS_BaseProjectile class
+	if (OtherActor->IsA(APITS_BaseProjectile::StaticClass()))
+	{
+		UE_LOG(LogPITS, Log, TEXT("'%s' Projectile '%s' entered a safe zone and will be destroyed"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		OtherActor->Destroy();
 	}
 }
 
