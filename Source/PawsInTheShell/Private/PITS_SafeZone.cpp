@@ -4,6 +4,7 @@
 
 #include "PITS_SafeZone.h"
 
+#include "NiagaraFunctionLibrary.h"
 #include "PITS_BasePlayerCharacter.h"
 #include "PITS_BaseProjectile.h"
 #include "Components/ArrowComponent.h"
@@ -24,6 +25,18 @@ void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* Ot
 	if (OtherActor->IsA(APITS_BaseProjectile::StaticClass()))
 	{
 		UE_LOG(LogPITS, Log, TEXT("'%s' Projectile '%s' entered a safe zone and will be destroyed"), *GetNameSafe(this), *GetNameSafe(OtherActor));
+		const FVector SpawnLocation = OtherActor->GetActorLocation();
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			VfxHit,
+			SpawnLocation,
+			FRotator::ZeroRotator,
+			FVector::OneVector,
+			true,
+			true
+		);
+
+
 		OtherActor->Destroy();
 	}
 }
