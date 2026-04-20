@@ -32,7 +32,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
-	UPROPERTY(EditAnywhere, Category="Components")
+	UPROPERTY(EditAnywhere, Category="Safe Zone")
 	TObjectPtr<UNiagaraSystem> VfxHit;
 
 	UFUNCTION()

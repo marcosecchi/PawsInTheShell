@@ -3,6 +3,8 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "PITS_BaseProjectile.h"
+
+#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -30,6 +32,7 @@ void APITS_BaseProjectile::OnConstruction(const FTransform& Transform)
 		ProjectileName = ProjectileData->ProjectileName;
 		ProjectileMovement->InitialSpeed = ProjectileData->Speed;
 		ProjectileMovement->MaxSpeed = ProjectileData->Speed;
+		VfxHit = ProjectileData->VfxHit;
 	}
 	UE_VLOG(this, LogPITS, Log, TEXT("Projectile of type '%s' constructed."), *GetNameSafe(this));
 }
@@ -77,9 +80,7 @@ void APITS_BaseProjectile::NotifyHit(class UPrimitiveComponent* MyComp, AActor* 
 	UE_LOG(LogPITS, Log, TEXT("'%s' hit '%s'."), *GetNameSafe(this), *GetNameSafe(Other));
 	
 	ProcessHit(Other, OtherComp, Hit.ImpactPoint, -Hit.ImpactNormal);
-
 	HandleProjectileHit(Hit);
-
 	OnHitComplete();
 }
 
@@ -109,6 +110,18 @@ void APITS_BaseProjectile::OnHitComplete()
 	{
 		Destroy();
 	}
+	
+	CHECK_PTR_AND_LOG_RETURN(VfxHit);
+	const FVector SpawnLocation = GetActorLocation();
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		this,
+		VfxHit,
+		SpawnLocation,
+		FRotator::ZeroRotator,
+		FVector::OneVector,
+		true,
+		true
+	);
 }
 
 void APITS_BaseProjectile::HandleAcquire_Implementation()
@@ -138,6 +151,7 @@ void APITS_BaseProjectile::HandleAcquire_Implementation()
 void APITS_BaseProjectile::HandleRelease_Implementation()
 {
 	// ProjectileMovement->StopMovementImmediately(); Not needed as Deactivate will call this function
+	
 	
 	ProjectileMovement->StopMovementImmediately();
 	ProjectileMovement->Deactivate();

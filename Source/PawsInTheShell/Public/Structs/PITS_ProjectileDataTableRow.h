@@ -9,6 +9,8 @@
 #include "UObject/Object.h"
 #include "PITS_ProjectileDataTableRow.generated.h"
 
+class UNiagaraSystem;
+
 /**
  * Holds information about projectile stats and properties
  */
@@ -36,6 +38,9 @@ struct FPITS_ProjectileDataTableRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Type of damage provoked by the bullet"))
 	TSubclassOf<UDamageType> DamageType = nullptr;
 	
+	UPROPERTY(EditAnywhere, meta=(ToolTip="VFX to spawn when the bullet hits something"))
+	TObjectPtr<UNiagaraSystem> VfxHit;
+
 	UPROPERTY(EditAnywhere, meta=(ToolTip="Additional notes about this bullet"))
 	FString Notes;
 };

@@ -9,6 +9,7 @@
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "PITS_BaseProjectile.generated.h"
 
+class UNiagaraSystem;
 class UBoxComponent;
 class UProjectileMovementComponent;
 class UDamageType;
@@ -30,6 +31,9 @@ class PAWSINTHESHELL_API APITS_BaseProjectile : public AActor, public IPITS_Pool
 	/** Handles movement for the projectile */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> Mesh;
+
+	UPROPERTY()
+	TObjectPtr<UNiagaraSystem> VfxHit;
 
 protected:
 	/** Data table row containing projectile properties */
