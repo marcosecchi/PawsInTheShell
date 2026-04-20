@@ -11,6 +11,7 @@
 #include "Components/SphereComponent.h"
 #include "Interfaces/PITS_SafeZoneEligibleInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystems/PITS_ObjectPoolSubsystem.h"
 #include "Utils/PITS_Logs.h"
 
 void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -36,8 +37,16 @@ void APITS_SafeZone::HandleActorBeginOverlap(AActor* OverlappedActor, AActor* Ot
 			true
 		);
 
-
-		OtherActor->Destroy();
+		if (OtherActor->GetClass()->ImplementsInterface(UPITS_PooledObjectInterface::StaticClass()))
+		{
+			IPITS_PooledObjectInterface::Execute_HandleRelease(OtherActor);
+			UPITS_ObjectPoolSubsystem* Subsystem = GetWorld()->GetSubsystem<UPITS_ObjectPoolSubsystem>();
+			Subsystem->ReleasePooledObject(OtherActor);
+		}
+		else
+		{
+			OtherActor->Destroy();
+		}
 	}
 }
 
