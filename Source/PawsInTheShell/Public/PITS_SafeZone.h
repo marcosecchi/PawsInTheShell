@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "PITS_SafeZone.generated.h"
 
+class UNiagaraSystem;
 class UArrowComponent;
 class USphereComponent;
 
@@ -30,7 +31,10 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category="Components")
 	TObjectPtr<UStaticMeshComponent> Mesh;
-	
+
+	UPROPERTY(EditAnywhere, Category="Components")
+	TObjectPtr<UNiagaraSystem> VfxHit;
+
 	UFUNCTION()
 	virtual void HandleActorBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	UFUNCTION()

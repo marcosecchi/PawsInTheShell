@@ -21,7 +21,8 @@ public class PawsInTheShell : ModuleRules
 			"GameplayStateTreeModule",
 			"NavigationSystem",
 			"CQTest",
-			"FunctionalTesting"
+			"FunctionalTesting",
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
