@@ -117,7 +117,7 @@ void APITS_BaseProjectile::OnHitComplete()
 		this,
 		VfxHit,
 		SpawnLocation,
-		FRotator::ZeroRotator,
+		GetActorRotation(),
 		FVector::OneVector,
 		true,
 		true
