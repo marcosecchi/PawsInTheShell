@@ -11,7 +11,7 @@
 USTRUCT(BlueprintType, meta=(DisplayName="MazeGenerationData"))
 struct MAZEGENERATOR_API FMazeGenerationData
 {
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
 	// The number of rows of the maze
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(UIMin=1, UIMax=33, ClampMin=1, ClampMax=33))
