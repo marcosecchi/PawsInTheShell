@@ -5,10 +5,9 @@ Unreal Engine version: 5.7
 
 The book is available on Amazon: https://www.amazon.com/Mastering-Unreal-Engine-Development-Scripting-ebook/dp/B0FM47XR59/
 
-![book cover](https://github.com/PacktPublishing/Mastering-Unreal-Engine-5-Game-Development-with-C-Scripting/blob/main/book_cover.jpg)
-
-![image1](https://github.com/PacktPublishing/Mastering-Unreal-Engine-5-Game-Development-with-C-Scripting/blob/main/image_01.png)
-![image2](https://github.com/PacktPublishing/Mastering-Unreal-Engine-5-Game-Development-with-C-Scripting/blob/main/image_02.png)
+![book cover](https://github.com/marcosecchi/PawsInTheShell/blob/master/Images/book_cover.jpg)
+![image1](https://github.com/marcosecchi/PawsInTheShell/blob/master/Images/image_01.png)
+![image2](https://github.com/marcosecchi/PawsInTheShell/blob/master/Images/image_02.png)
 
 ## Credits
 * **Ultimate Space Kit** and **Cyberpunk Game Kit** assets by [Quaternius](https://quaternius.com/)
