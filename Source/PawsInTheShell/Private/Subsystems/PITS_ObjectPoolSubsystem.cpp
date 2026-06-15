@@ -8,6 +8,7 @@
 #include "Interfaces/PITS_PooledObjectInterface.h"
 #include "Utils/PITS_FixedActorPool.h"
 #include "Utils/PITS_Globals.h"
+#include "Utils/PITS_LazyActorPool.h"
 #include "Utils/PITS_Logs.h"
 
 void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
@@ -22,16 +23,32 @@ void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> Spawn
 	// Check if pool already exists
 	if (HasObjectPool(SpawnableClass))
 	{
-		UE_LOG(LogPITS, Log, TEXT("Object pool for class %s already exists. Skipping creation as it is a fixed object pool."), *GetNameSafe(SpawnableClass));
+		UE_LOG(LogPITS, Log, TEXT("Object pool for class %s already exists. Skipping creation."), *GetNameSafe(SpawnableClass));
 		return;
 	}
 
 	// Create and initialize new pool
-	if (UPITS_FixedActorPool* NewPool = NewObject<UPITS_FixedActorPool>(this))
+	if (UPITS_LazyActorPool* NewPool = NewObject<UPITS_LazyActorPool>(this))
 	{
 		NewPool->InitializePool(SpawnableClass, PoolSize);
 		ActorsPoolMap.Add(SpawnableClass, NewPool);
 		UE_LOG(LogPITS, Log, TEXT("Created object pool for class %s with size %d"), *GetNameSafe(SpawnableClass), PoolSize);
+	}
+}
+
+void UPITS_ObjectPoolSubsystem::AddObjectsToPool(const TSubclassOf<AActor> SpawnableClass, const int32 NumObjects, const bool bCreateIfNotFound)
+{
+	if (!HasObjectPool(SpawnableClass))
+	{
+		if (!bCreateIfNotFound)
+		{
+			UE_LOG(LogPITS, Warning, TEXT("No pool found for class %s. Set bCreateIfNotFound to true to create a new pool before adding objects."), *GetNameSafe(SpawnableClass));	
+		}
+		else
+		{
+			UE_LOG(LogPITS, Log, TEXT("No pool found for class %s. Creating new pool before adding objects."), *GetNameSafe(SpawnableClass));
+			CreateObjectPool(SpawnableClass, NumObjects);
+		}
 	}
 }
 
@@ -46,7 +63,7 @@ AActor* UPITS_ObjectPoolSubsystem::AcquirePooledObject(const TSubclassOf<AActor>
 	if (!HasObjectPool(SpawnableClass)) CreateObjectPool(SpawnableClass);
 	
 	// Try to get an object from the pool
-	if (AActor* PooledActor = GetObjectPool(SpawnableClass)->GetObjectFromPool())
+	if (AActor* PooledActor = GetObjectPool(SpawnableClass)->RequestObjectFromPool())
 	{
 		PooledActor->SetActorTransform(ObjectTransform);
 		// If Actor implements UPITS_PooledObjectInterface, notify that it has been acquired from the pool.
@@ -81,7 +98,7 @@ void UPITS_ObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 	}
 }
 
-UPITS_FixedActorPool* UPITS_ObjectPoolSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
+UPITS_LazyActorPool* UPITS_ObjectPoolSubsystem::GetObjectPool(const TSubclassOf<AActor> SpawnableClass) const
 {
 	return ActorsPoolMap.FindRef(SpawnableClass);
 }
@@ -103,7 +120,7 @@ bool UPITS_ObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 	if (const TSubclassOf<AActor> Class = Actor->GetClass(); HasObjectPool(Class))
 	{
 		// Check if actor is in the pool and return result
-		const UPITS_FixedActorPool* Pool = GetObjectPool(Class);
+		const UPITS_LazyActorPool* Pool = GetObjectPool(Class);
 		return Pool->IsObjectPooled(Actor);
 	}
 	return false;
@@ -112,14 +129,14 @@ bool UPITS_ObjectPoolSubsystem::IsObjectPooled(const AActor* Actor) const
 #if WITH_DEV_AUTOMATION_TESTS
 int32 UPITS_ObjectPoolSubsystem::GetPoolSize(const TSubclassOf<AActor> SpawnableClass) const
 {
-	const UPITS_FixedActorPool* Pool = GetObjectPool(SpawnableClass);
+	const UPITS_LazyActorPool* Pool = GetObjectPool(SpawnableClass);
 	return Pool->GetPoolSize();
 }
 
 void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> SpawnableClass)
 {
 	if (!HasObjectPool(SpawnableClass)) return;
-	TObjectPtr<UPITS_FixedActorPool> Pool;
+	TObjectPtr<UPITS_LazyActorPool> Pool;
 	
 	// remove pool from map
 	ActorsPoolMap.RemoveAndCopyValue(SpawnableClass, Pool);
@@ -128,7 +145,6 @@ void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> Spaw
 	{
 		UE_LOG(LogPITS, Warning, TEXT("Failed to remove pool for class %s"), *GetNameSafe(SpawnableClass));
 	}
-	
 	
 	// Cleanup pool
 	Pool->Empty();

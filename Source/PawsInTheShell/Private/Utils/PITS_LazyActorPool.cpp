@@ -2,12 +2,12 @@
 // Packt Publishing 2025
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
-#include "Utils/LazyActorPool.h"
+#include "Utils/PITS_LazyActorPool.h"
 
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
-void ULazyActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
+void UPITS_LazyActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, const int32 PoolSize)
 {
 	if (bIsPoolInitialized)
 	{
@@ -25,7 +25,7 @@ void ULazyActorPool::InitializePool(const TSubclassOf<AActor> SpawnableClass, co
 	}
 }
 
-AActor* ULazyActorPool::RequestObjectFromPool()
+AActor* UPITS_LazyActorPool::RequestObjectFromPool()
 {
 	// Iterate through the pool to find an inactive (hidden) actor.
 	for (TObjectPtr<AActor>& ActorPtr : TheActorPool)
@@ -50,7 +50,7 @@ AActor* ULazyActorPool::RequestObjectFromPool()
 	return nullptr;
 }
 
-void ULazyActorPool::ReleaseObjectToPool(AActor* Actor)
+void UPITS_LazyActorPool::ReleaseObjectToPool(AActor* Actor)
 {
 	// Macro to guard against null pointers and log a message if null.
 	CHECK_PTR_AND_LOG_RETURN(Actor);
@@ -74,7 +74,7 @@ void ULazyActorPool::ReleaseObjectToPool(AActor* Actor)
 	UE_LOG(LogPITS, Warning, TEXT("Attempted to release an actor not from this pool %s"), *GetName());
 }
 
-bool ULazyActorPool::HasAvailableObjectsInPool() const
+bool UPITS_LazyActorPool::HasAvailableObjectsInPool() const
 {
 	// Check if there is at least one actor in the pool that is currently 'inactive' (hidden).
 	return TheActorPool.ContainsByPredicate([](const TObjectPtr<AActor>& ActorPtr)
@@ -83,7 +83,7 @@ bool ULazyActorPool::HasAvailableObjectsInPool() const
 	});
 }
 
-bool ULazyActorPool::IsObjectPooled(const AActor* Actor) const
+bool UPITS_LazyActorPool::IsObjectPooled(const AActor* Actor) const
 {
 	// Macro to guard against null pointers and log a message if null.
 	if (Actor == nullptr) 
@@ -95,7 +95,7 @@ bool ULazyActorPool::IsObjectPooled(const AActor* Actor) const
 	return (TheActorPool.Contains(Actor));
 }
 
-AActor* ULazyActorPool::AddObjectToPool()
+AActor* UPITS_LazyActorPool::AddObjectToPool()
 {
 	// Get the world context from the UObject.
 	UWorld* World = GetWorld();
@@ -126,7 +126,7 @@ AActor* ULazyActorPool::AddObjectToPool()
 	return NewActor;
 }
 
-void ULazyActorPool::AddObjectsToPool(const int32 PoolSize)
+void UPITS_LazyActorPool::AddObjectsToPool(const int32 PoolSize)
 {
 	for (int32 i = 0; i < PoolSize; ++i)
 	{

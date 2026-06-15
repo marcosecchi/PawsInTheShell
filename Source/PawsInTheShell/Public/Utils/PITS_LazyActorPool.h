@@ -6,13 +6,13 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "LazyActorPool.generated.h"
+#include "PITS_LazyActorPool.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PAWSINTHESHELL_API ULazyActorPool : public UObject
+class PAWSINTHESHELL_API UPITS_LazyActorPool : public UObject
 {
 	GENERATED_BODY()
 
@@ -28,11 +28,11 @@ class PAWSINTHESHELL_API ULazyActorPool : public UObject
 
 	/* Add a new object to the pool */
 	AActor* AddObjectToPool();
-	
-	/* Add a set of objects to the pool */
-	void AddObjectsToPool(int32 PoolSize);
 
 public:
+	/* Add a set of objects to the pool */
+	void AddObjectsToPool(int32 PoolSize = 1);
+
 	/* Initialize with the actor class to spawn and desired pool size. */
 	void InitializePool(TSubclassOf<AActor> SpawnableClass, const int32 PoolSize = 0);
 	
@@ -48,11 +48,11 @@ public:
 	/* Check whether the given actor belongs to this pool. */
 	bool IsObjectPooled(const AActor* Actor) const;
 
-#if WITH_DEV_AUTOMATION_TESTS
-public:
 	/* Get the number of actors currently in the pool. */
 	int32 GetPoolSize() const { return TheActorPool.Num(); }
-	
+
+#if WITH_DEV_AUTOMATION_TESTS
+public:
 	void Empty()
 	{
 		for (AActor* Actor : TheActorPool)
