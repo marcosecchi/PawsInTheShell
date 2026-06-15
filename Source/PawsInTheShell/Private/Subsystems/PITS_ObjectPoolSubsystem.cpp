@@ -16,14 +16,22 @@ void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> Spawn
 	// Validate input
 	if (!SpawnableClass)
 	{
-		UE_LOG(LogPITS, Warning, TEXT("CreateObjectPool called with null SpawnableClass"));
+		UE_LOG(LogPITS, Warning, TEXT("CreateObjectPool called with null SpawnableClass."));
 		return;
 	}
 
 	// Check if pool already exists
 	if (HasObjectPool(SpawnableClass))
 	{
-		UE_LOG(LogPITS, Log, TEXT("Object pool for class %s already exists. Skipping creation."), *GetNameSafe(SpawnableClass));
+		if (const int32 ObjectsToAdd = PoolSize - GetObjectPool(SpawnableClass)->GetPoolSize(); ObjectsToAdd > 0)
+		{
+			UE_LOG(LogPITS, Log, TEXT("Pool for class %s already exists but has only %d objects. Adding %d more to reach desired pool size of %d."), *GetNameSafe(SpawnableClass), GetObjectPool(SpawnableClass)->GetPoolSize(), ObjectsToAdd, PoolSize);
+			GetObjectPool(SpawnableClass)->AddObjectsToPool(ObjectsToAdd);
+		}
+		else
+		{
+			UE_LOG(LogPITS, Log, TEXT("Object pool for class %s already exists. Skipping creation."), *GetNameSafe(SpawnableClass));
+		}
 		return;
 	}
 
@@ -32,7 +40,7 @@ void UPITS_ObjectPoolSubsystem::CreateObjectPool(const TSubclassOf<AActor> Spawn
 	{
 		NewPool->InitializePool(SpawnableClass, PoolSize);
 		ActorsPoolMap.Add(SpawnableClass, NewPool);
-		UE_LOG(LogPITS, Log, TEXT("Created object pool for class %s with size %d"), *GetNameSafe(SpawnableClass), PoolSize);
+		UE_LOG(LogPITS, Log, TEXT("Created object pool for class %s with size %d."), *GetNameSafe(SpawnableClass), PoolSize);
 	}
 }
 
@@ -94,7 +102,7 @@ void UPITS_ObjectPoolSubsystem::ReleasePooledObject(AActor* Actor)
 	}
 	else
 	{
-		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s when releasing actor %s"), *GetNameSafe(ActorClass), *GetNameSafe(Actor));
+		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s when releasing actor %s."), *GetNameSafe(ActorClass), *GetNameSafe(Actor));
 	}
 }
 
@@ -108,7 +116,7 @@ bool UPITS_ObjectPoolSubsystem::HasAvailablePooledObjects(const TSubclassOf<AAct
 	// Check pool existence
 	if (!HasObjectPool(SpawnableClass))
 	{
-		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s"), *GetNameSafe(SpawnableClass));
+		UE_LOG(LogPITS, Warning, TEXT("No object pool found for class %s."), *GetNameSafe(SpawnableClass));
 		return false;
 	}
 	return GetObjectPool(SpawnableClass)->HasAvailableObjectsInPool();
@@ -143,7 +151,7 @@ void UPITS_ObjectPoolSubsystem::CleanupObjectPool(const TSubclassOf<AActor> Spaw
 	
 	if (HasObjectPool(SpawnableClass))
 	{
-		UE_LOG(LogPITS, Warning, TEXT("Failed to remove pool for class %s"), *GetNameSafe(SpawnableClass));
+		UE_LOG(LogPITS, Warning, TEXT("Failed to remove pool for class %s."), *GetNameSafe(SpawnableClass));
 	}
 	
 	// Cleanup pool
