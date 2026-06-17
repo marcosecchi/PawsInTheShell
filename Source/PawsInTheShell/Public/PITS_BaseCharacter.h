@@ -15,6 +15,7 @@ class UPITS_ArmourComponent;
 struct FDamageEvent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCharacterHealthStatusUpdateSignature, float, HealthPercentage);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCharacterDeathSignature);
 // TODO: Declare death delegate
 
 /**
@@ -41,8 +42,13 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
 	FCharacterHealthStatusUpdateSignature OnUpdateHealthStatus;
 
-protected:
+	/** Delegate called when the health status is updated */
+	UPROPERTY(BlueprintAssignable, Category="PawsInTheShell|Health")
+	FCharacterDeathSignature OnDeath;
+
 	virtual void BeginPlay() override;
+
+protected:
 	
 	/** Data on the type of picked weapon and visuals of this pickup */
 	UPROPERTY(EditDefaultsOnly, Category="PawsInTheShell|Stats")

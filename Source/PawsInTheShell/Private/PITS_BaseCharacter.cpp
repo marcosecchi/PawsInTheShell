@@ -112,6 +112,7 @@ float APITS_BaseCharacter::TakeDamage(const float DamageAmount, FDamageEvent con
 	{
 		WorldSubsystem->NotifyDamageTaken(DamageTypeClass, EffectiveAmount, this);
 	}
+	
 	return EffectiveAmount;
 }
 
@@ -135,7 +136,10 @@ void APITS_BaseCharacter::BeginPlay()
 		{
 			OnUpdateHealthStatus.Broadcast(Health->GetHealthPercentage());
 		}
-		// TODO: Implement death logic
+		else
+		{
+			OnDeath.Broadcast();
+		}
 		HandleUpdateHealthStatus(Health->GetHealthPercentage());
 	});
 	// Initial health update

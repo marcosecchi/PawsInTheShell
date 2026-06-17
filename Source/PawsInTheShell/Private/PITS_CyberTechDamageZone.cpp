@@ -72,7 +72,7 @@ void APITS_CyberTechDamageZone::ProvokeDamage()
 void APITS_CyberTechDamageZone::StopDamaging()
 {
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimer);
-	if (UPITS_WorldSubsystem *WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
+	if (const UPITS_WorldSubsystem *WorldSubsystem = GetWorld()->GetSubsystem<UPITS_WorldSubsystem>())
 	{
 		WorldSubsystem->NotifyDamageEnd(UPITS_DamageType_CyberTech::StaticClass());
 	}

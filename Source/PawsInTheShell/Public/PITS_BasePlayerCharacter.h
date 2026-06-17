@@ -35,12 +35,12 @@ class PAWSINTHESHELL_API APITS_BasePlayerCharacter : public APITS_BaseCharacter,
 public:
 	APITS_BasePlayerCharacter();
 
-protected:
-
 	virtual void BeginPlay() override;
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="PawsInTheShell|Animations")
 	TObjectPtr<UAnimMontage> ShootMontage;
