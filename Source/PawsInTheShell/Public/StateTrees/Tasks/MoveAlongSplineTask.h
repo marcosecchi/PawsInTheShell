@@ -29,7 +29,7 @@ struct FMoveAlongSplineTaskInstanceData
 	UPROPERTY(EditAnywhere, Category = "Input")
 	bool bShouldRotateToDirection = true;
 
-	UPROPERTY(EditAnywhere, Category = "Input")
+	UPROPERTY(EditAnywhere, Category = "Input", meta=(ToolTip="If true, the movement will be backwards"))
 	bool bReverseMovement = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -48,7 +48,7 @@ struct FMoveAlongSplineTaskInstanceData
 /**
  *  Task that will move a Scene Component along a spline during a predefined time
  */
-USTRUCT(BlueprintType, meta=(DisplayName="Move Along Spline"))
+USTRUCT(BlueprintType, Category="Paws in the Shell", meta=(DisplayName="Move Along Spline"))
 struct PAWSINTHESHELL_API FMoveAlongSplineTask : public FStateTreeTaskCommonBase
 {
 	GENERATED_BODY()
