@@ -26,5 +26,4 @@ protected:
 public:
 	virtual void HandleAcquire_Implementation() override;
 	virtual void HandleRelease_Implementation() override;
-
 };
