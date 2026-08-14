@@ -3,7 +3,6 @@
 // Author: Marco Secchi (https://github.com/marcosecchi)
 
 #include "Utils/PITS_LazyActorPool.h"
-
 #include "Utils/PITS_Globals.h"
 #include "Utils/PITS_Logs.h"
 
