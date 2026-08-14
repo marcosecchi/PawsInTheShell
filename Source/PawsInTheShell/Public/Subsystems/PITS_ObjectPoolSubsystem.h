@@ -12,13 +12,13 @@ class UPITS_FixedActorPool;
 
 /**
  * World subsystem that manages fixed-size pools of actor instances using UObject-based
- * pool objects (UPITS_FixedActorPool). Each pool is stored in `ActorsPoolMap` and owned
+ * pool objects (UPITS_LazyActorPool). Each pool is stored in `ActorsPoolMap` and owned
  * by the Unreal object system via `TObjectPtr`.
  *
  * Implementation notes:
  * - `ActorsPoolMap` is marked with `UPROPERTY()` so the map and its UObject references
  *   are visible to the Garbage Collector.
- * - Pools are UObject-derived (`UPITS_FixedActorPool`) so they can be returned from
+ * - Pools are UObject-derived (`UPITS_LazyActorPool`) so they can be returned from
  *   `UFUNCTION`s and used in Blueprint.
  */
 UCLASS()
