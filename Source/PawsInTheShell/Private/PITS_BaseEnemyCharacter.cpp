@@ -15,4 +15,3 @@ APITS_BaseEnemyCharacter::APITS_BaseEnemyCharacter()
 	GetCharacterMovement()->MaxAcceleration = 1500.f;
 	GetCharacterMovement()->GetNavMovementProperties()->bUseAccelerationForPaths = true;
 }
-

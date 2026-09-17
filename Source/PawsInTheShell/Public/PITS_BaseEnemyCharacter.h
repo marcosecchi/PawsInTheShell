@@ -19,8 +19,11 @@ class PAWSINTHESHELL_API APITS_BaseEnemyCharacter : public APITS_BaseCharacter
 	TObjectPtr<APITS_EnemySpawner> OwningSpawner;
 	
 public:
-	// Sets default values for this character's properties
 	APITS_BaseEnemyCharacter();
+	
+	/** Handles shoot inputs. Must be implemented by derived classes to define the character's shooting behavior. */
+	UFUNCTION(BlueprintCallable, Category="PawsInTheShell")
+	virtual void Shoot(AActor* Target) {};
 	
 	void SetOwningSpawner(APITS_EnemySpawner* Spawner) { OwningSpawner = Spawner; }
 };

@@ -48,6 +48,9 @@ public:
 
 	virtual void BeginPlay() override;
 
+	/** Native construction script */
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 protected:
 	
 	/** Data on the type of picked weapon and visuals of this pickup */
@@ -90,9 +93,6 @@ protected:
 	/** Handles updating the health status */
 	UFUNCTION(BlueprintImplementableEvent, Category="PawsInTheShell|Weapon")
 	void HandleUpdateHealthStatus(const float HealthPercentage);
-
-	/** Native construction script */
-	virtual void OnConstruction(const FTransform& Transform) override;
 
 #pragma region Property Getters and Setters
 public:
