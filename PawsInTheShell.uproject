@@ -28,6 +28,10 @@
 		{
 			"Name": "GameplayStateTree",
 			"Enabled": true
+		},
+		{
+			"Name": "GameplayFeedbacks",
+			"Enabled": true
 		}
 	]
 }
