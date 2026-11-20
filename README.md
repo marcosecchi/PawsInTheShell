@@ -2,11 +2,17 @@
 
 ## Companion project for _Mastering Unreal Engine 5 Game Development with C++ Scripting_
 
-Unreal Engine version: 5.7
+Unreal Engine version: 5.8
 
 The book is available on Amazon: https://www.amazon.com/Mastering-Unreal-Engine-Development-Scripting-ebook/dp/B0FM47XR59/
 
 ![book cover](https://github.com/marcosecchi/PawsInTheShell/blob/master/Images/book_cover.jpg)
+
+## Gameplay Feedbacks Plugin
+
+Since _version 1.3.0_ the project is using the **Gameplay Feedbacks Plugin**, which is [available on FAB](https://fab.com/s/ddc5a2bb118f).
+
+_Note: for more information on Gameplay Feedbacks, please visit the official documentation available here:[https://marcosecchi.github.io/gameplayfeedbacks_docs/](https://marcosecchi.github.io/gameplayfeedbacks_docs/#/)_
 
 ## Credits
 
