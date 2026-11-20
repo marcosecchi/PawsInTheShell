@@ -12,7 +12,7 @@ The book is available on Amazon: https://www.amazon.com/Mastering-Unreal-Engine-
 
 Since _version 1.3.0_ the project is using the **Gameplay Feedbacks Plugin**, which is [available on FAB](https://fab.com/s/ddc5a2bb118f).
 
-_Note: for more information on Gameplay Feedbacks, please visit the official documentation available here:[https://marcosecchi.github.io/gameplayfeedbacks_docs/](https://marcosecchi.github.io/gameplayfeedbacks_docs/#/)_
+_Note: for more information on Gameplay Feedbacks, please visit the official documentation available here: [https://marcosecchi.github.io/gameplayfeedbacks_docs/](https://marcosecchi.github.io/gameplayfeedbacks_docs/#/)_
 
 ## Credits
 
