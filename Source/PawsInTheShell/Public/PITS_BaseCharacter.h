@@ -10,6 +10,7 @@
 #include "Interfaces/PITS_HealthInterface.h"
 #include "PITS_BaseCharacter.generated.h"
 
+class UGameplayFeedbacksPlayerComponent;
 class UPITS_HealthComponent;
 class UPITS_ArmourComponent;
 struct FDamageEvent;
@@ -31,6 +32,15 @@ class PAWSINTHESHELL_API APITS_BaseCharacter : public ACharacter, public IPITS_H
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPITS_ArmourComponent> Armour;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UGameplayFeedbacksPlayerComponent> AttackFeedbacksPlayer;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UGameplayFeedbacksPlayerComponent> WalkFeedbacksPlayer;	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UGameplayFeedbacksPlayerComponent> HitFeedbacksPlayer;	
 
 public:
 	APITS_BaseCharacter();

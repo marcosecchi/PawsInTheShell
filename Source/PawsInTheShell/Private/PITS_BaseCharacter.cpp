@@ -13,6 +13,7 @@
 #include "Structs/PITS_CharacterDataTableRow.h"
 #include "Structs/PITS_WeaponDataTableRow.h"
 #include "Utils/PITS_Logs.h"
+#include "Core/GameplayFeedbacksPlayerComponent.h"
 
 // Sets default values
 APITS_BaseCharacter::APITS_BaseCharacter()
@@ -21,6 +22,9 @@ APITS_BaseCharacter::APITS_BaseCharacter()
 
 	Health = CreateDefaultSubobject<UPITS_HealthComponent>(FName("Health"));
 	Armour = CreateDefaultSubobject<UPITS_ArmourComponent>(FName("Armour"));
+	AttackFeedbacksPlayer = CreateDefaultSubobject<UGameplayFeedbacksPlayerComponent>(FName("AttackFeedbacksPlayer"));
+	WalkFeedbacksPlayer = CreateDefaultSubobject<UGameplayFeedbacksPlayerComponent>(FName("WalkFeedbacksPlayer"));
+	HitFeedbacksPlayer = CreateDefaultSubobject<UGameplayFeedbacksPlayerComponent>(FName("HitFeedbacksPlayer"));
 }
 
 void APITS_BaseCharacter::HandleShoot()
